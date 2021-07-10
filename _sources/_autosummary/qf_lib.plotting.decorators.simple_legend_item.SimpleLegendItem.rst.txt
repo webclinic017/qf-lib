@@ -1,0 +1,9 @@
+SimpleLegendItem
+==============================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.simple_legend_item
+
+.. autoclass:: SimpleLegendItem
+	:show-inheritance:
+	:autosummary:
+	:members:

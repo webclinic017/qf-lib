@@ -1,0 +1,9 @@
+InitialRiskWithVolumePositionSizer
+============================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer
+
+.. autoclass:: InitialRiskWithVolumePositionSizer
+	:show-inheritance:
+	:autosummary:
+	:members:

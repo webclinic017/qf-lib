@@ -1,0 +1,9 @@
+OverfittingAnalysis
+==============================================================================
+
+.. currentmodule:: qf_lib.analysis.backtests_overfitting.overfitting_analysis
+
+.. autoclass:: OverfittingAnalysis
+	:show-inheritance:
+	:autosummary:
+	:members:

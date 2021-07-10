@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.documents_utils.email_publishing.email_publisher &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.documents_utils.email_publishing.email_publisher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.documents_utils.email_publishing.email_publisher</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">emails</span>
+<span class="kn">from</span> <span class="nn">emails.template</span> <span class="kn">import</span> <span class="n">JinjaTemplate</span> <span class="k">as</span> <span class="n">T</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.starting_dir</span> <span class="kn">import</span> <span class="n">get_starting_dir_abs_path</span>
+
+
+<div class="viewcode-block" id="EmailPublisher"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.html#qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher">[docs]</a><span class="k">class</span> <span class="nc">EmailPublisher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Used to create and send an e-mail from given templates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">smtp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templates_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_starting_dir_abs_path</span><span class="p">(),</span> <span class="n">settings</span><span class="o">.</span><span class="n">email_templates_directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EmailPublisher.publish"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.html#qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.publish">[docs]</a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mail_to</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">template_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">cc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bcc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attachments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+                <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">templates_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates and sends an e-mail from given templates. It&#39;s possible to add some attachments to the message.</span>
+<span class="sd">        Subject, e-mail addresses (to, cc, bcc) and message template may contain so called &quot;placeholders&quot; like</span>
+<span class="sd">        {{ username }} (they need to be placed in the double curly brackets). Later it&#39;s necessary to pass the context</span>
+<span class="sd">        parameter from which data will be taken to substitute placeholders</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mail_to</span>
+<span class="sd">            single e-mail address or the list/tuple of them. It denotes the primary recipients of an e-mail</span>
+<span class="sd">        subject</span>
+<span class="sd">            subject of the message</span>
+<span class="sd">        template_path</span>
+<span class="sd">            path (relative to the email_templates_directory set in the settings file) to the template from which</span>
+<span class="sd">            e-mail should be created</span>
+<span class="sd">        cc</span>
+<span class="sd">            the e-mail address (or list of them) of all the CC recipients</span>
+<span class="sd">        bcc</span>
+<span class="sd">            the e-mail address (or list of them) of all the CC recipients</span>
+<span class="sd">        attachments</span>
+<span class="sd">            a list of paths to the files which should be attached to an e-mail</span>
+<span class="sd">        context</span>
+<span class="sd">            dictionary with keys of type string. Keys&#39; names should correspond to the names of placeholders</span>
+<span class="sd">            in the template</span>
+<span class="sd">        templates_encoding</span>
+<span class="sd">            the encoding of the template. The default one is UTF-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sending email: &#39;</span><span class="si">{subject:s}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_email</span><span class="p">(</span>
+                <span class="n">mail_to</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">templates_encoding</span><span class="p">,</span> <span class="n">attachments</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send_email</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_sent_messages</span><span class="p">(</span><span class="n">attachments</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">mail_to</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failed to send emails!&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+    <span class="k">def</span> <span class="nf">_create_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mail_to</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">templates_encoding</span><span class="p">,</span> <span class="n">attachments</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_message_from_template</span><span class="p">(</span><span class="n">mail_to</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">templates_encoding</span><span class="p">)</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_attachments</span><span class="p">(</span><span class="n">attachments</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">_send_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">smtp_settings_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="s1">&#39;tls&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">tls</span><span class="p">,</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+            <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+            <span class="s1">&#39;fail_silently&#39;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="p">}</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">smtp</span><span class="o">=</span><span class="n">smtp_settings_dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_message_from_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mail_to</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">template_path</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">templates_encoding</span><span class="p">):</span>
+        <span class="n">mail_from</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smtp_settings</span><span class="o">.</span><span class="n">sender</span>
+
+        <span class="n">full_template_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">templates_path</span><span class="p">,</span> <span class="n">template_path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">full_template_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">templates_encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">template_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="n">emails</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span>
+            <span class="n">mail_from</span><span class="o">=</span><span class="n">mail_from</span><span class="p">,</span> <span class="n">mail_to</span><span class="o">=</span><span class="n">mail_to</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="o">=</span><span class="n">bcc</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">T</span><span class="p">(</span><span class="n">subject</span><span class="p">),</span> <span class="n">html</span><span class="o">=</span><span class="n">T</span><span class="p">(</span><span class="n">template_content</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">_add_attachments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attachments</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">attachments</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_log_sent_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attachments</span><span class="p">,</span> <span class="n">bcc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">mail_to</span><span class="p">):</span>
+        <span class="n">log_info_strings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">attachments</span><span class="p">:</span>
+            <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Files sent:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">attachments</span><span class="p">:</span>
+                <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--&gt; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attachment</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">mail_to</span><span class="p">:</span>
+            <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Mail receipents: &quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">receipent</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mail_to</span><span class="p">):</span>
+                <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--&gt; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">receipent</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">cc</span><span class="p">:</span>
+            <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CC recepients: &quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">receipent</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
+                <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--&gt; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">receipent</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">bcc</span><span class="p">:</span>
+            <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;BCC recepients: &quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">receipent</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">bcc</span><span class="p">):</span>
+                <span class="n">log_info_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--&gt; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">receipent</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_info_strings</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

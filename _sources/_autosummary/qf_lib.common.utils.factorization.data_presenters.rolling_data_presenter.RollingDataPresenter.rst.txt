@@ -1,0 +1,9 @@
+RollingDataPresenter
+=============================================================================================
+
+.. currentmodule:: qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter
+
+.. autoclass:: RollingDataPresenter
+	:show-inheritance:
+	:autosummary:
+	:members:

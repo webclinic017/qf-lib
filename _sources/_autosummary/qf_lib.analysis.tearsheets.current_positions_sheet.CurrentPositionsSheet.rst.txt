@@ -1,0 +1,9 @@
+CurrentPositionsSheet
+========================================================================
+
+.. currentmodule:: qf_lib.analysis.tearsheets.current_positions_sheet
+
+.. autoclass:: CurrentPositionsSheet
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,31 @@
+*.pyc
+*.pyc.*
+*.pyo
+*.cache
+
+build
+dist
+qf_lib.egg-info
+
+output
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# IDE specific
+.vscode/*
+.idea/*
+
+## File-based project format:
+*.iws
+
+$RECYCLE.BIN/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

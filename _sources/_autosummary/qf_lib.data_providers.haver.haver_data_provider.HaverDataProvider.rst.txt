@@ -1,0 +1,9 @@
+HaverDataProvider
+=================================================================
+
+.. currentmodule:: qf_lib.data_providers.haver.haver_data_provider
+
+.. autoclass:: HaverDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

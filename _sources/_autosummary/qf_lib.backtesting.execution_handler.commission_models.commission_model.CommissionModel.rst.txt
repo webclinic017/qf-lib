@@ -1,0 +1,9 @@
+CommissionModel
+=======================================================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.commission_models.commission_model
+
+.. autoclass:: CommissionModel
+	:show-inheritance:
+	:autosummary:
+	:members:

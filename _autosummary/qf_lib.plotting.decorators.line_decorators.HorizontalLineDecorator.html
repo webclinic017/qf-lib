@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>HorizontalLineDecorator &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VerticalLineDecorator" href="qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html" />
+    <link rel="prev" title="LegendDecorator" href="qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plotting.html">plotting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#charts">charts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plotting.html#decorators">decorators</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html">ChartDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator.html">AxesFormatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator.html">AxesLabelDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator.html">AxesLocatorDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator.html">AxesPositionDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator.html">AxisTickLabelsDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator.html">BarValuesDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.cone_decorator.ConeDecorator.html">ConeDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator.html">ConeProcessDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html">Coordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.DataCoordinate.html">DataCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.AxesCoordinate.html">AxesCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.FigureCoordinate.html">FigureCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.DisplayCoordinate.html">DisplayCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator.html">DataElementDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html">LegendDecorator</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">HorizontalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html">VerticalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html">DiagonalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator.html">PointEmphasisDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator.html">ScatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator.html">SeriesLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem.html">SimpleLegendItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.span_decorator.SpanDecorator.html">SpanDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.stem_decorator.StemDecorator.html">StemDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.text_decorator.TextDecorator.html">TextDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.title_decorator.TitleDecorator.html">TitleDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator.html">TopDrawdownDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator.html">VerticalSpanDecorator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#helpers">helpers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../plotting.html">plotting</a> &raquo;</li>
+        
+      <li>HorizontalLineDecorator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="horizontallinedecorator">
+<h1>HorizontalLineDecorator<a class="headerlink" href="#horizontallinedecorator" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.plotting.decorators.line_decorators.</code><code class="sig-name descname">HorizontalLineDecorator</code><span class="sig-paren">(</span><em class="sig-param">y: (&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'float'&gt;</em>, <em class="sig-param">&lt;class 'complex'&gt;</em>, <em class="sig-param">&lt;class 'int'&gt;</em>, <em class="sig-param">&lt;class 'bool'&gt;</em>, <em class="sig-param">&lt;class 'bytes'&gt;</em>, <em class="sig-param">&lt;class 'str'&gt;</em>, <em class="sig-param">&lt;class 'memoryview'&gt;</em>, <em class="sig-param">&lt;class 'numpy.complex256'&gt;</em>, <em class="sig-param">&lt;class 'numpy.float128'&gt;</em>, <em class="sig-param">&lt;class 'numpy.uint64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.int64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.str_'&gt;</em>, <em class="sig-param">&lt;class 'numpy.complex128'&gt;</em>, <em class="sig-param">&lt;class 'numpy.float64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.uint32'&gt;</em>, <em class="sig-param">&lt;class 'numpy.int32'&gt;</em>, <em class="sig-param">&lt;class 'numpy.bytes_'&gt;</em>, <em class="sig-param">&lt;class 'numpy.complex64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.float32'&gt;</em>, <em class="sig-param">&lt;class 'numpy.uint16'&gt;</em>, <em class="sig-param">&lt;class 'numpy.int16'&gt;</em>, <em class="sig-param">&lt;class 'numpy.bool_'&gt;</em>, <em class="sig-param">&lt;class 'numpy.timedelta64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.float16'&gt;</em>, <em class="sig-param">&lt;class 'numpy.uint8'&gt;</em>, <em class="sig-param">&lt;class 'numpy.int8'&gt;</em>, <em class="sig-param">&lt;class 'numpy.object_'&gt;</em>, <em class="sig-param">&lt;class 'numpy.datetime64'&gt;</em>, <em class="sig-param">&lt;class 'numpy.ulonglong'&gt;</em>, <em class="sig-param">&lt;class 'numpy.longlong'&gt;</em>, <em class="sig-param">&lt;class 'numpy.void'&gt;)</em>, <em class="sig-param">color: str = 'k'</em>, <em class="sig-param">key: str = None</em>, <em class="sig-param">**plot_settings: Any</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/plotting/decorators/line_decorators.html#HorizontalLineDecorator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html#qf_lib.plotting.decorators.chart_decorator.ChartDecorator" title="qf_lib.plotting.decorators.chart_decorator.ChartDecorator"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.plotting.decorators.chart_decorator.ChartDecorator</span></code></a>, <a class="reference internal" href="qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem.html#qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem" title="qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem</span></code></a></p>
+<p>A simple decorator that displays a horizontal line.</p>
+<p>Constructs a new horizontal line decorator. The <code class="docutils literal notranslate"><span class="pre">plot_settings</span></code> are passed directly to matplotlib’s
+<code class="docutils literal notranslate"><span class="pre">axhline</span></code>. See <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axhline">http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axhline</a> for valid settings.</p>
+<p>When plotting for the web, the <code class="docutils literal notranslate"><span class="pre">plot_settings</span></code> are passed directly to HighChart’s plotLines options.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate" title="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate</span></code></a>(chart)</p></td>
+<td><p>Modifies the axes object taken from the chart (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate_html" title="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate_html</span></code></a>(chart, chart_id)</p></td>
+<td><p>Constructs code to decorate an existing web chart.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate">
+<code class="sig-name descname">decorate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chart</span><span class="p">:</span> <span class="n">Chart</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/qf_lib/plotting/decorators/line_decorators.html#HorizontalLineDecorator.decorate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies the axes object taken from the chart (e.g. adds legend, draws cone, etc.).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate_html">
+<code class="sig-name descname">decorate_html</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chart</span><span class="p">:</span> <span class="n">Chart</span></em>, <em class="sig-param"><span class="n">chart_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/qf_lib/plotting/decorators/line_decorators.html#HorizontalLineDecorator.decorate_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs code to decorate an existing web chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chart</strong> (<a class="reference internal" href="qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart" title="qf_lib.plotting.charts.chart.Chart"><em>Chart</em></a>) – </p></li>
+<li><p><strong>chart_id</strong> (<em>str</em>) – A string identifying the specific chart. For the web, the &lt;div&gt; that represents this chart will typically
+use this as its id.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>JavaScript code that is called before the underlying chart is initialised. The code can modify the pre-defined
+options variable.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html" class="btn btn-neutral float-right" title="VerticalLineDecorator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html" class="btn btn-neutral float-left" title="LegendDecorator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

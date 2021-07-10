@@ -1,0 +1,9 @@
+CcyTicker
+=======================================
+
+.. currentmodule:: qf_lib.common.tickers.tickers
+
+.. autoclass:: CcyTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

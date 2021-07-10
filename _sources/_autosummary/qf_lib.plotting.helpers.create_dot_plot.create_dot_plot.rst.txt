@@ -1,0 +1,6 @@
+create_dot_plot
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_dot_plot
+
+.. autofunction:: create_dot_plot

@@ -1,0 +1,9 @@
+OrderCancellingException
+===================================================================
+
+.. currentmodule:: qf_lib.common.exceptions.broker_exceptions
+
+.. autoclass:: OrderCancellingException
+	:show-inheritance:
+	:autosummary:
+	:members:

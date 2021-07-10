@@ -1,0 +1,9 @@
+NonlinearFunctionOptimizer
+================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer
+
+.. autoclass:: NonlinearFunctionOptimizer
+	:show-inheritance:
+	:autosummary:
+	:members:

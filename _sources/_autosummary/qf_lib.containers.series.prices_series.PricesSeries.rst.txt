@@ -1,0 +1,9 @@
+PricesSeries
+===================================================
+
+.. currentmodule:: qf_lib.containers.series.prices_series
+
+.. autoclass:: PricesSeries
+	:show-inheritance:
+	:autosummary:
+	:members:

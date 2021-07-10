@@ -1,0 +1,9 @@
+QFDataArray
+===========================================
+
+.. currentmodule:: qf_lib.containers.qf_data_array
+
+.. autoclass:: QFDataArray
+	:show-inheritance:
+	:autosummary:
+	:members:

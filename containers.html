@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>containers &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="QFSeries" href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html" />
+    <link rel="prev" title="rolling_volatility" href="_autosummary/qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">common</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#series">Series</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html">QFSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.series.prices_series.PricesSeries.html">PricesSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.series.returns_series.ReturnsSeries.html">ReturnsSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html">SimpleReturnsSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.series.log_returns_series.LogReturnsSeries.html">LogReturnsSeries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dataframes">DataFrames</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html">QFDataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.log_returns_dataframe.LogReturnsDataFrame.html">LogReturnsDataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html">PricesDataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html">SimpleReturnsDataFrame</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dataarrays">DataArrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html">QFDataArray</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#futures">Futures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_chain.FuturesChain.html">FuturesChain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_contract.FutureContract.html">FutureContract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_tickers.future_ticker.FutureTicker.html">FutureTicker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_tickers.bloomberg_future_ticker.BloombergFutureTicker.html">BloombergFutureTicker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod.html">FuturesAdjustmentMethod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator.html">FuturesRollingOrdersGenerator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>containers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="containers">
+<h1>containers<a class="headerlink" href="#containers" title="Permalink to this headline">¶</a></h1>
+<section id="series">
+<h2>Series<a class="headerlink" href="#series" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series.qf_series.QFSeries</span></code></a></p></td>
+<td><p>Base class for all time-indexed series used in the quant-fin project.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series.prices_series.PricesSeries</span></code></a></p></td>
+<td><p>Series of prices (for example prices of the SPY).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.returns_series.ReturnsSeries.html#qf_lib.containers.series.returns_series.ReturnsSeries" title="qf_lib.containers.series.returns_series.ReturnsSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series.returns_series.ReturnsSeries</span></code></a></p></td>
+<td><p>Series of returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series.simple_returns_series.SimpleReturnsSeries</span></code></a></p></td>
+<td><p>Series of simple returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.log_returns_series.LogReturnsSeries.html#qf_lib.containers.series.log_returns_series.LogReturnsSeries" title="qf_lib.containers.series.log_returns_series.LogReturnsSeries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series.log_returns_series.LogReturnsSeries</span></code></a></p></td>
+<td><p>Series of log-returns.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dataframes">
+<h2>DataFrames<a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe.qf_dataframe.QFDataFrame</span></code></a></p></td>
+<td><p>Base class for all data frames (2-D matrix-like objects) used in the project.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.log_returns_dataframe.LogReturnsDataFrame.html#qf_lib.containers.dataframe.log_returns_dataframe.LogReturnsDataFrame" title="qf_lib.containers.dataframe.log_returns_dataframe.LogReturnsDataFrame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe.log_returns_dataframe.LogReturnsDataFrame</span></code></a></p></td>
+<td><p>DataFrame containing log-returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe.prices_dataframe.PricesDataFrame</span></code></a></p></td>
+<td><p>DataFrame containing prices (for example prices of the SPY).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</span></code></a></p></td>
+<td><p>DataFrame containing simple returns.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dataarrays">
+<h2>DataArrays<a class="headerlink" href="#dataarrays" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qf_data_array.QFDataArray</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="futures">
+<h2>Futures<a class="headerlink" href="#futures" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_chain.FuturesChain.html#qf_lib.containers.futures.futures_chain.FuturesChain" title="qf_lib.containers.futures.futures_chain.FuturesChain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.futures_chain.FuturesChain</span></code></a></p></td>
+<td><p>Class which facilitates the futures contracts management.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_contract.FutureContract.html#qf_lib.containers.futures.future_contract.FutureContract" title="qf_lib.containers.futures.future_contract.FutureContract"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.future_contract.FutureContract</span></code></a></p></td>
+<td><p>Class representing a single future contract.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_tickers.future_ticker.FutureTicker.html#qf_lib.containers.futures.future_tickers.future_ticker.FutureTicker" title="qf_lib.containers.futures.future_tickers.future_ticker.FutureTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.future_tickers.future_ticker.FutureTicker</span></code></a></p></td>
+<td><p>Class to represent a Ticker, which gathers multiple future contracts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.future_tickers.bloomberg_future_ticker.BloombergFutureTicker.html#qf_lib.containers.futures.future_tickers.bloomberg_future_ticker.BloombergFutureTicker" title="qf_lib.containers.futures.future_tickers.bloomberg_future_ticker.BloombergFutureTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.future_tickers.bloomberg_future_ticker.BloombergFutureTicker</span></code></a></p></td>
+<td><p>Representation of a Future Ticker, designed to be used by the BloombergDataProvider.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod.html#qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod" title="qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.futures_adjustment_method.FuturesAdjustmentMethod</span></code></a></p></td>
+<td><p>Method used to join the prices of different future contracts, belonging to one future chain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator.html#qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator" title="qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator</span></code></a></p></td>
+<td><p>Class responsible for generating close orders for expired future contracts.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html" class="btn btn-neutral float-right" title="QFSeries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="_autosummary/qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility.html" class="btn btn-neutral float-left" title="rolling_volatility" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

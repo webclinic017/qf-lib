@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.utils.confidence_interval.analytical_cone_base &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.utils.confidence_interval.analytical_cone_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.utils.confidence_interval.analytical_cone_base</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">exp</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+
+
+<div class="viewcode-block" id="AnalyticalConeBase"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html#qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase">[docs]</a><span class="k">class</span> <span class="nc">AnalyticalConeBase</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AnalyticalConeBase.get_expected_value"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html#qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.get_expected_value">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_expected_value</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">starting_price</span><span class="p">,</span> <span class="n">number_of_steps</span><span class="p">,</span> <span class="n">random_element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the mu and sigma calculated based on log returns:</span>
+<span class="sd">            S(t) = S(0)*exp( (mu-0.5*sigma^2)*t + sigma*N(0,1)*sqrt(t))</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mu</span>
+<span class="sd">            mean of the distribution of returns</span>
+<span class="sd">        sigma</span>
+<span class="sd">            standard deviation of the returns</span>
+<span class="sd">        starting_price</span>
+<span class="sd">            price of the stock at the beginning of the cone</span>
+<span class="sd">        number_of_steps</span>
+<span class="sd">            horizon for which the expected value is calculated</span>
+<span class="sd">        random_element</span>
+<span class="sd">            corresponds to the N(0,1). is expressed in number of standard deviations.</span>
+<span class="sd">            Use 1 to model 1std up move,</span>
+<span class="sd">            Use 0 to model expected vale of the stock</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Expected value of the stock after number_of_steps given the input parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">deterministic_part</span> <span class="o">=</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">number_of_steps</span>
+        <span class="n">random_part</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">random_element</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">number_of_steps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">starting_price</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">deterministic_part</span> <span class="o">+</span> <span class="n">random_part</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AnalyticalConeBase.calculate_simple_cone_for_process"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html#qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.calculate_simple_cone_for_process">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_simple_cone_for_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">number_of_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                          <span class="n">starting_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PricesSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a simple cone starting from a given date using the solution to the stochastic equation:</span>
+<span class="sd">        S(t) = S(0)*exp( (mu-0.5*sigma^2)*t + sigma*N(0,1)*sqrt(t) )</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mu</span>
+<span class="sd">            mean return of the process. expressed in the frequency of samples (not annualised)</span>
+<span class="sd">        sigma</span>
+<span class="sd">            std of returns of the process. expressed in the frequency of samples (not annualised)</span>
+<span class="sd">        number_of_std</span>
+<span class="sd">            corresponds to the randomness of the stochastic process. reflects number of standard deviations</span>
+<span class="sd">            to get expected values for. For example 1.0 means 1 standard deviation above the expected value.</span>
+<span class="sd">        number_of_steps</span>
+<span class="sd">            length of the cone that we are creating</span>
+<span class="sd">        starting_value</span>
+<span class="sd">            corresponds to the starting price of the instrument</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PriceSeries</span>
+<span class="sd">            expected values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">steps</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># a list [0, 1, 2, ... N]</span>
+
+        <span class="c1"># for each day OOS calculate the expected value at different point in time using the _get_expected_value()</span>
+        <span class="c1"># function that gives expectation in single point in time.</span>
+        <span class="n">expected_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">nr_of_days</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_expected_value</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">starting_value</span><span class="p">,</span> <span class="n">nr_of_days</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">),</span> <span class="n">steps</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">PricesSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">expected_values</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

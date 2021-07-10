@@ -1,0 +1,6 @@
+create_rolling_chart
+=================================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_rolling_chart
+
+.. autofunction:: create_rolling_chart

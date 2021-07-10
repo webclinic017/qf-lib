@@ -1,0 +1,9 @@
+IndexTranslator
+========================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.index_translator
+
+.. autoclass:: IndexTranslator
+	:show-inheritance:
+	:autosummary:
+	:members:

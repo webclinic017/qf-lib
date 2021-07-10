@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AbstractMonitor &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="BacktestMonitor" href="qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html" />
+    <link rel="prev" title="ScenariosGenerator" href="qf_lib.backtesting.fast_alpha_model_tester.scenarios_generator.ScenariosGenerator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../backtesting.html">backtesting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#data-handler">data_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#events">events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#execution-handler">execution_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AbstractMonitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html">BacktestMonitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.monitoring.backtest_result.BacktestResult.html">BacktestResult</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../backtesting.html">backtesting</a> &raquo;</li>
+        
+      <li>AbstractMonitor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="abstractmonitor">
+<h1>AbstractMonitor<a class="headerlink" href="#abstractmonitor" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.monitoring.abstract_monitor.</code><code class="sig-name descname">AbstractMonitor</code><a class="reference internal" href="../_modules/qf_lib/backtesting/monitoring/abstract_monitor.html#AbstractMonitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>AbstractMonitor is a class providing an interface for
+all inherited Monitor classes (live, historic, custom, etc).
+Monitor should be subclassed according to the use.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_day_update" title="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_day_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">end_of_day_update</span></code></a>(timestamp)</p></td>
+<td><p>Update the statistics after a whole day of trading.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_trading_update" title="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_trading_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">end_of_trading_update</span></code></a>(timestamp)</p></td>
+<td><p>Final update at the end of backtest session</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.real_time_update" title="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.real_time_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">real_time_update</span></code></a>(timestamp)</p></td>
+<td><p>Update a basic statistics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.record_transaction" title="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.record_transaction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_transaction</span></code></a>(transaction)</p></td>
+<td><p>This method is called every time ExecutionHandler creates a new Transaction</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_day_update">
+<em class="property">abstract </em><code class="sig-name descname">end_of_day_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/monitoring/abstract_monitor.html#AbstractMonitor.end_of_day_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_day_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the statistics after a whole day of trading. Should be used in live trading only</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_trading_update">
+<em class="property">abstract </em><code class="sig-name descname">end_of_trading_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime.datetime</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/monitoring/abstract_monitor.html#AbstractMonitor.end_of_trading_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.end_of_trading_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Final update at the end of backtest session</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.real_time_update">
+<em class="property">abstract </em><code class="sig-name descname">real_time_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/monitoring/abstract_monitor.html#AbstractMonitor.real_time_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.real_time_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a basic statistics.
+This method should be light as it might be called after every transaction or price update</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.record_transaction">
+<em class="property">abstract </em><code class="sig-name descname">record_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.portfolio.transaction.Transaction.html#qf_lib.backtesting.portfolio.transaction.Transaction" title="qf_lib.backtesting.portfolio.transaction.Transaction">qf_lib.backtesting.portfolio.transaction.Transaction</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/monitoring/abstract_monitor.html#AbstractMonitor.record_transaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.monitoring.abstract_monitor.AbstractMonitor.record_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called every time ExecutionHandler creates a new Transaction</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html" class="btn btn-neutral float-right" title="BacktestMonitor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.backtesting.fast_alpha_model_tester.scenarios_generator.ScenariosGenerator.html" class="btn btn-neutral float-left" title="ScenariosGenerator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

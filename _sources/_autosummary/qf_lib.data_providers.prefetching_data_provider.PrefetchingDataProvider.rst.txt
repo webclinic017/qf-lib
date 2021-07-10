@@ -1,0 +1,9 @@
+PrefetchingDataProvider
+=======================================================================
+
+.. currentmodule:: qf_lib.data_providers.prefetching_data_provider
+
+.. autoclass:: PrefetchingDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

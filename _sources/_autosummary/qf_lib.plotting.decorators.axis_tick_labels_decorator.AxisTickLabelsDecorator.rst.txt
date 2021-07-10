@@ -1,0 +1,9 @@
+AxisTickLabelsDecorator
+=============================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.axis_tick_labels_decorator
+
+.. autoclass:: AxisTickLabelsDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.position_sizer.position_sizer &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.position_sizer.position_sizer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.position_sizer.position_sizer</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.broker.broker</span> <span class="kn">import</span> <span class="n">Broker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract</span> <span class="kn">import</span> <span class="n">Contract</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signals_register</span> <span class="kn">import</span> <span class="n">SignalsRegister</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.execution_style</span> <span class="kn">import</span> <span class="n">StopOrder</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order_factory</span> <span class="kn">import</span> <span class="n">OrderFactory</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.time_in_force</span> <span class="kn">import</span> <span class="n">TimeInForce</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.numberutils.is_finite_number</span> <span class="kn">import</span> <span class="n">is_finite_number</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+
+
+<div class="viewcode-block" id="PositionSizer"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.position_sizer.position_sizer.PositionSizer.html#qf_lib.backtesting.position_sizer.position_sizer.PositionSizer">[docs]</a><span class="k">class</span> <span class="nc">PositionSizer</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The PositionSizer abstract class converts signals to orders with size specified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker</span><span class="p">:</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">:</span> <span class="n">OrderFactory</span><span class="p">,</span>
+                 <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">:</span> <span class="n">SignalsRegister</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_broker</span> <span class="o">=</span> <span class="n">broker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span> <span class="o">=</span> <span class="n">data_handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_order_factory</span> <span class="o">=</span> <span class="n">order_factory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span> <span class="o">=</span> <span class="n">contract_ticker_mapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signals_register</span> <span class="o">=</span> <span class="n">signals_register</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PositionSizer.size_signals"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.position_sizer.position_sizer.PositionSizer.html#qf_lib.backtesting.position_sizer.position_sizer.PositionSizer.size_signals">[docs]</a>    <span class="k">def</span> <span class="nf">size_signals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">],</span> <span class="n">use_stop_losses</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Based on the signals provided, creates a list of Orders where proper sizing has been applied</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        signals: List[Signal]</span>
+<span class="sd">            list of signals,  based on which the orders will be created</span>
+<span class="sd">        use_stop_losses: bool</span>
+<span class="sd">            if true, for each MarketOrder generated for a signal, additionally a StopOrder will be created</span>
+
+<span class="sd">        StopOrders details</span>
+<span class="sd">        -------------------</span>
+<span class="sd">        For each Market Order a Stop Order is generated if and only if the quantity in Market Order + position quantity</span>
+<span class="sd">        for this contract != 0. This means that StopOrders are not generated if the MarketOrder should completely close</span>
+<span class="sd">        the position for the contract.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_duplicates</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signals_register</span><span class="o">.</span><span class="n">save_signals</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Position Sizer - Removing redundant signals&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remove_redundant_signals</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+
+        <span class="n">market_orders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_market_orders</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+        <span class="n">market_orders</span> <span class="o">=</span> <span class="p">[</span><span class="n">order</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">market_orders</span> <span class="k">if</span> <span class="n">order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="n">orders</span> <span class="o">=</span> <span class="n">market_orders</span>
+
+        <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">market_orders</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Market Order for </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="p">,</span> <span class="n">order</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">use_stop_losses</span><span class="p">:</span>
+            <span class="c1"># As the market orders are not sorted according to signals, create a dictionary mapping</span>
+            <span class="c1"># contracts to market orders (orders contain now only these market orders which are not None)</span>
+            <span class="n">contract_to_market_order</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="p">:</span> <span class="n">order</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">market_orders</span>
+            <span class="p">}</span>
+
+            <span class="n">stop_orders</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generate_stop_order</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">contract_to_market_order</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span> <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">!=</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">OUT</span>
+            <span class="p">]</span>
+
+            <span class="n">stop_orders</span> <span class="o">=</span> <span class="p">[</span><span class="n">order</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">stop_orders</span> <span class="k">if</span> <span class="n">order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">orders</span> <span class="o">=</span> <span class="n">market_orders</span> <span class="o">+</span> <span class="n">stop_orders</span>
+
+            <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">stop_orders</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Stop Order for </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="p">,</span> <span class="n">order</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">orders</span></div>
+
+    <span class="k">def</span> <span class="nf">_remove_redundant_signals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all these signals, which do not need to be passed into order factory as they obviously do not change the</span>
+<span class="sd">        state of the portfolio (current exposure equals Exposure.OUT and suggested exposure is also Exposure.OUT).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">specific_tickers_with_open_position</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">contract</span><span class="p">())</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broker</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">position_for_ticker_exists_in_portfolio</span><span class="p">(</span><span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+                <span class="c1"># Check if any of specific tickers with open positions in portfolio belongs to tickers family</span>
+                <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">ticker</span><span class="o">.</span><span class="n">belongs_to_family</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">specific_tickers_with_open_position</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">specific_tickers_with_open_position</span>
+
+        <span class="n">redundant_signals</span> <span class="o">=</span> <span class="p">[</span><span class="n">signal</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span>
+                             <span class="k">if</span> <span class="n">signal</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">==</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">OUT</span> <span class="ow">and</span>
+                             <span class="ow">not</span> <span class="n">position_for_ticker_exists_in_portfolio</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">redundant_signals</span><span class="p">:</span>
+            <span class="n">signals</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_generate_market_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Order</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Should implement _generate_market_orders()&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_stop_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">contract_to_market_order</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="n">Order</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        As each of the stop orders relies on the precomputed stop_price, which considers a.o. last available price of</span>
+<span class="sd">        the security, orders are being created separately for each of the signals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">ticker_to_contract</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+        <span class="c1"># stop_quantity = existing position size + recent market orders quantity</span>
+        <span class="n">stop_quantity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_existing_position_quantity</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">market_order</span> <span class="o">=</span> <span class="n">contract_to_market_order</span><span class="p">[</span><span class="n">contract</span><span class="p">]</span>
+            <span class="n">stop_quantity</span> <span class="o">+=</span> <span class="n">market_order</span><span class="o">.</span><span class="n">quantity</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c1"># Generated Market Order was equal to None</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">stop_quantity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">stop_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_stop_price</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">stop_price</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Stop price should be a finite number&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="n">stop_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cap_stop_price</span><span class="p">(</span><span class="n">stop_price</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+
+            <span class="c1"># put minus before the quantity as stop order has to go in the opposite direction</span>
+            <span class="n">stop_orders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_factory</span><span class="o">.</span><span class="n">orders</span><span class="p">({</span><span class="n">contract</span><span class="p">:</span> <span class="o">-</span><span class="n">stop_quantity</span><span class="p">},</span> <span class="n">StopOrder</span><span class="p">(</span><span class="n">stop_price</span><span class="p">),</span> <span class="n">TimeInForce</span><span class="o">.</span><span class="n">GTC</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">stop_orders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Only one order should be generated&quot;</span>
+            <span class="k">return</span> <span class="n">stop_orders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># quantity is 0 - no need to place a stop order</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_cap_stop_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">Signal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prevent the stop price from moving down in case of a long position or up in case of a short position.</span>
+
+<span class="sd">        Adjust the stop price only in case if there is an existing open position for specifically this contract. E.g.</span>
+<span class="sd">        in case if there exists an open position for the December Cotton future contract, which expired today, if</span>
+<span class="sd">        we are creating an order for the January Cotton contract we should not adjust the StopOrders stop price.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If there exist an open position for the contract - check the previous Stop Order</span>
+        <span class="n">specific_ticker</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">get_current_specific_ticker</span><span class="p">()</span> \
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="n">signal</span><span class="o">.</span><span class="n">ticker</span>
+
+        <span class="n">contract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">ticker_to_contract</span><span class="p">(</span><span class="n">specific_ticker</span><span class="p">)</span>
+        <span class="n">position_quantity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_existing_position_quantity</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">position_quantity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Get the last signal that was generated for the contract</span>
+            <span class="n">signals_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signals_register</span><span class="o">.</span><span class="n">get_signals_for_ticker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="n">specific_ticker</span><span class="p">,</span>
+                                                                           <span class="n">alpha_model</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">alpha_model</span><span class="p">)</span>
+            <span class="n">signals_series</span> <span class="o">=</span> <span class="n">signals_series</span><span class="p">[</span><span class="n">signals_series</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">()]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">signals_series</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="c1"># Get the last signal, which was generated for the same exposure as the current exposure</span>
+                <span class="n">exposure_series</span> <span class="o">=</span> <span class="n">signals_series</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="p">)</span>
+                <span class="n">current_exposure</span> <span class="o">=</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">LONG</span> <span class="k">if</span> <span class="n">position_quantity</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">SHORT</span>
+                <span class="n">last_date_with_current_exposure</span> <span class="o">=</span> <span class="n">exposure_series</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">exposure_series</span> <span class="o">==</span> <span class="n">current_exposure</span><span class="p">)</span>\
+                    <span class="o">.</span><span class="n">last_valid_index</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">last_date_with_current_exposure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There is an open position for the contract </span><span class="si">{}</span><span class="s2"> but no signal was found&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">stop_price</span>
+
+                <span class="n">last_signal_for_the_contract</span> <span class="o">=</span> <span class="n">signals_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">last_date_with_current_exposure</span><span class="p">]</span>  <span class="c1"># type: Signal</span>
+                <span class="n">previous_stop_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_stop_price</span><span class="p">(</span><span class="n">last_signal_for_the_contract</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">last_signal_for_the_contract</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">==</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">OUT</span> <span class="ow">or</span> \
+                        <span class="ow">not</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">previous_stop_price</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">stop_price</span>
+
+                <span class="k">if</span> <span class="n">last_signal_for_the_contract</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">==</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">LONG</span><span class="p">:</span>
+                    <span class="n">stop_price</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">stop_price</span><span class="p">,</span> <span class="n">previous_stop_price</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">last_signal_for_the_contract</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">==</span> <span class="n">Exposure</span><span class="o">.</span><span class="n">SHORT</span><span class="p">:</span>
+                    <span class="n">stop_price</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">stop_price</span><span class="p">,</span> <span class="n">previous_stop_price</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">stop_price</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_stop_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">Signal</span><span class="p">):</span>
+        <span class="n">current_price</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">last_available_price</span>
+
+        <span class="k">if</span> <span class="n">current_price</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">current_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+        <span class="n">price_multiplier</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">signal</span><span class="o">.</span><span class="n">fraction_at_risk</span> <span class="o">*</span> <span class="n">signal</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">stop_price</span> <span class="o">=</span> <span class="n">price_multiplier</span> <span class="o">*</span> <span class="n">current_price</span>
+        <span class="n">stop_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_round_stop_price</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stop_price</span>
+
+    <span class="k">def</span> <span class="nf">_get_existing_position_quantity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contract</span><span class="p">):</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broker</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+        <span class="n">quantity</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span> <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">positions</span> <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">contract</span><span class="p">()</span> <span class="o">==</span> <span class="n">contract</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quantity</span>
+
+    <span class="k">def</span> <span class="nf">_check_for_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">]):</span>
+        <span class="n">sorted_signals</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">signal</span><span class="p">:</span> <span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">signal_group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">sorted_signals</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">signal</span><span class="p">:</span> <span class="n">signal</span><span class="o">.</span><span class="n">ticker</span><span class="p">):</span>
+            <span class="n">signal_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">signal_group</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;More than one signal for ticker </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_round_stop_price</span><span class="p">(</span><span class="n">stop_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The stop price has to be expressed in the format that matches the minimum price variation of a contract.</span>
+<span class="sd">        For example 10.123 is not a valid stop price for a contract with minimum price variation of 0.01</span>
+<span class="sd">        It is assumed that contracts have minimum price variation of 0.01 and the stop price is rounded to 2 decimals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">stop_price</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

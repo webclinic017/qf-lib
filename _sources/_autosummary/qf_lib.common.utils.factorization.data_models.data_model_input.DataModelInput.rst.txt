@@ -1,0 +1,9 @@
+DataModelInput
+=============================================================================
+
+.. currentmodule:: qf_lib.common.utils.factorization.data_models.data_model_input
+
+.. autoclass:: DataModelInput
+	:show-inheritance:
+	:autosummary:
+	:members:

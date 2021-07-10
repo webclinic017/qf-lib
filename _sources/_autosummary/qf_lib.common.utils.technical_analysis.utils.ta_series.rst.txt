@@ -1,0 +1,6 @@
+ta_series
+======================================================
+
+.. currentmodule:: qf_lib.common.utils.technical_analysis.utils
+
+.. autofunction:: ta_series

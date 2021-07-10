@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EmailPublisher &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="plotting" href="../plotting.html" />
+    <link rel="prev" title="ExcelImporter" href="qf_lib.documents_utils.excel.excel_importer.ExcelImporter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../document_utils.html">document_utils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.documents_utils.document_exporting.document_exporter.DocumentExporter.html">DocumentExporter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter.html">PDFExporter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.documents_utils.document_exporting.html_exporter.HTMLExporter.html">HTMLExporter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.documents_utils.excel.excel_importer.ExcelImporter.html">ExcelImporter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">EmailPublisher</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../document_utils.html">document_utils</a> &raquo;</li>
+        
+      <li>EmailPublisher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="emailpublisher">
+<h1>EmailPublisher<a class="headerlink" href="#emailpublisher" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.documents_utils.email_publishing.email_publisher.</code><code class="sig-name descname">EmailPublisher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">settings</span><span class="p">:</span> <span class="n">qf_lib.settings.Settings</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/documents_utils/email_publishing/email_publisher.html#EmailPublisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Used to create and send an e-mail from given templates.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.publish" title="qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.publish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">publish</span></code></a>(mail_to, List[str]], subject, …)</p></td>
+<td><p>Creates and sends an e-mail from given templates.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mail_to</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">subject</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">template_path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">cc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bcc</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">attachments</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">()</span></em>, <em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">templates_encoding</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'utf8'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/documents_utils/email_publishing/email_publisher.html#EmailPublisher.publish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and sends an e-mail from given templates. It’s possible to add some attachments to the message.
+Subject, e-mail addresses (to, cc, bcc) and message template may contain so called “placeholders” like
+{{ username }} (they need to be placed in the double curly brackets). Later it’s necessary to pass the context
+parameter from which data will be taken to substitute placeholders</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mail_to</strong> – single e-mail address or the list/tuple of them. It denotes the primary recipients of an e-mail</p></li>
+<li><p><strong>subject</strong> – subject of the message</p></li>
+<li><p><strong>template_path</strong> – path (relative to the email_templates_directory set in the settings file) to the template from which
+e-mail should be created</p></li>
+<li><p><strong>cc</strong> – the e-mail address (or list of them) of all the CC recipients</p></li>
+<li><p><strong>bcc</strong> – the e-mail address (or list of them) of all the CC recipients</p></li>
+<li><p><strong>attachments</strong> – a list of paths to the files which should be attached to an e-mail</p></li>
+<li><p><strong>context</strong> – dictionary with keys of type string. Keys’ names should correspond to the names of placeholders
+in the template</p></li>
+<li><p><strong>templates_encoding</strong> – the encoding of the template. The default one is UTF-8</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../plotting.html" class="btn btn-neutral float-right" title="plotting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.documents_utils.excel.excel_importer.ExcelImporter.html" class="btn btn-neutral float-left" title="ExcelImporter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

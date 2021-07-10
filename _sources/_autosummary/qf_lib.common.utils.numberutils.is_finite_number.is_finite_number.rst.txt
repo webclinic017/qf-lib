@@ -1,0 +1,6 @@
+is_finite_number
+=================================================================
+
+.. currentmodule:: qf_lib.common.utils.numberutils.is_finite_number
+
+.. autofunction:: is_finite_number

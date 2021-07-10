@@ -1,0 +1,6 @@
+get_grouping_for_frequency
+=====================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.index_grouping
+
+.. autofunction:: get_grouping_for_frequency

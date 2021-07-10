@@ -1,0 +1,9 @@
+RegularTimeEvent
+===========================================================================================
+
+.. currentmodule:: qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event
+
+.. autoclass:: RegularTimeEvent
+	:show-inheritance:
+	:autosummary:
+	:members:

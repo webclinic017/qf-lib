@@ -1,0 +1,9 @@
+SignalsRegister
+===========================================================
+
+.. currentmodule:: qf_lib.backtesting.signals.signals_register
+
+.. autoclass:: SignalsRegister
+	:show-inheritance:
+	:autosummary:
+	:members:

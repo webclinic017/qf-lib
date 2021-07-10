@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>TextDecorator &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TitleDecorator" href="qf_lib.plotting.decorators.title_decorator.TitleDecorator.html" />
+    <link rel="prev" title="StemDecorator" href="qf_lib.plotting.decorators.stem_decorator.StemDecorator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plotting.html">plotting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#charts">charts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plotting.html#decorators">decorators</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html">ChartDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator.html">AxesFormatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator.html">AxesLabelDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator.html">AxesLocatorDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator.html">AxesPositionDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator.html">AxisTickLabelsDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator.html">BarValuesDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.cone_decorator.ConeDecorator.html">ConeDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator.html">ConeProcessDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html">Coordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.DataCoordinate.html">DataCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.AxesCoordinate.html">AxesCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.FigureCoordinate.html">FigureCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.DisplayCoordinate.html">DisplayCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator.html">DataElementDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html">LegendDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html">HorizontalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html">VerticalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html">DiagonalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator.html">PointEmphasisDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator.html">ScatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator.html">SeriesLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem.html">SimpleLegendItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.span_decorator.SpanDecorator.html">SpanDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.stem_decorator.StemDecorator.html">StemDecorator</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">TextDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.title_decorator.TitleDecorator.html">TitleDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator.html">TopDrawdownDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator.html">VerticalSpanDecorator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#helpers">helpers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../plotting.html">plotting</a> &raquo;</li>
+        
+      <li>TextDecorator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="textdecorator">
+<h1>TextDecorator<a class="headerlink" href="#textdecorator" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.plotting.decorators.text_decorator.TextDecorator">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.plotting.decorators.text_decorator.</code><code class="sig-name descname">TextDecorator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html#qf_lib.plotting.decorators.coordinate.Coordinate" title="qf_lib.plotting.decorators.coordinate.Coordinate">qf_lib.plotting.decorators.coordinate.Coordinate</a></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html#qf_lib.plotting.decorators.coordinate.Coordinate" title="qf_lib.plotting.decorators.coordinate.Coordinate">qf_lib.plotting.decorators.coordinate.Coordinate</a></span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">plot_settings</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/plotting/decorators/text_decorator.html#TextDecorator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.decorators.text_decorator.TextDecorator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html#qf_lib.plotting.decorators.chart_decorator.ChartDecorator" title="qf_lib.plotting.decorators.chart_decorator.ChartDecorator"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.plotting.decorators.chart_decorator.ChartDecorator</span></code></a></p>
+<p>Adds text to the Chart at given coordinates (e.g. the label for data point).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – Text which should be added to the chart</p></li>
+<li><p><strong>x</strong> (<a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html#qf_lib.plotting.decorators.coordinate.Coordinate" title="qf_lib.plotting.decorators.coordinate.Coordinate"><em>Coordinate</em></a>) – x coordinate for the text</p></li>
+<li><p><strong>y</strong> (<a class="reference internal" href="qf_lib.plotting.decorators.coordinate.Coordinate.html#qf_lib.plotting.decorators.coordinate.Coordinate" title="qf_lib.plotting.decorators.coordinate.Coordinate"><em>Coordinate</em></a>) – y coordinate for the text</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – see: ChartDecorator.__init__#key</p></li>
+<li><p><strong>plot_settings</strong> – additional arguments which will be passed to the matplotlib plotting function
+(see: <a class="reference external" href="http://matplotlib.org/api/text_api.html#matplotlib.text.Text">http://matplotlib.org/api/text_api.html#matplotlib.text.Text</a>)</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.plotting.decorators.text_decorator.TextDecorator.decorate" title="qf_lib.plotting.decorators.text_decorator.TextDecorator.decorate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decorate</span></code></a>(chart)</p></td>
+<td><p>Modifies the axes object taken from the chart (e.g.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.plotting.decorators.text_decorator.TextDecorator.decorate">
+<code class="sig-name descname">decorate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chart</span><span class="p">:</span> <span class="n">Chart</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/qf_lib/plotting/decorators/text_decorator.html#TextDecorator.decorate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.decorators.text_decorator.TextDecorator.decorate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifies the axes object taken from the chart (e.g. adds legend, draws cone, etc.).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.plotting.decorators.title_decorator.TitleDecorator.html" class="btn btn-neutral float-right" title="TitleDecorator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.plotting.decorators.stem_decorator.StemDecorator.html" class="btn btn-neutral float-left" title="StemDecorator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

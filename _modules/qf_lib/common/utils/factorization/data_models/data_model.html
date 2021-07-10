@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.utils.factorization.data_models.data_model &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../_static/underscore.js"></script>
+        <script src="../../../../../../_static/doctools.js"></script>
+        <script src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.utils.factorization.data_models.data_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.utils.factorization.data_models.data_model</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">floor</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">cond</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.diagnostic</span> <span class="kn">import</span> <span class="n">het_breuschpagan</span><span class="p">,</span> <span class="n">acorr_ljungbox</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.outliers_influence</span> <span class="kn">import</span> <span class="n">OLSInfluence</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.stattools</span> <span class="kn">import</span> <span class="n">durbin_watson</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.timeseries_analysis.timeseries_analysis</span> <span class="kn">import</span> <span class="n">TimeseriesAnalysis</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.timeseries_analysis.return_attribution_analysis</span> <span class="kn">import</span> <span class="n">ReturnAttributionAnalysis</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.timeseries_analysis.risk_contribution_analysis</span> <span class="kn">import</span> <span class="n">RiskContributionAnalysis</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.factorization.data_models.data_model_input</span> <span class="kn">import</span> <span class="n">DataModelInput</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.cast_dataframe</span> <span class="kn">import</span> <span class="n">cast_dataframe</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.cast_series</span> <span class="kn">import</span> <span class="n">cast_series</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="DataModel"><a class="viewcode-back" href="../../../../../../_autosummary/qf_lib.common.utils.factorization.data_models.data_model.DataModel.html#qf_lib.common.utils.factorization.data_models.data_model.DataModel">[docs]</a><span class="k">class</span> <span class="nc">DataModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class grouping the results of factorization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_model_input</span>
+<span class="sd">        data from which the model is built</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTOCORR_MAX_LAG</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    int</span>
+<span class="sd">    maximal lag used during testing for autocorrelation of the fit; lags used for testing will be values</span>
+<span class="sd">    1, ..., autocorr_max_lag</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTOCORR_SIGNIFICANCE_LEVEL</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    float</span>
+<span class="sd">    significance level for the autocorrelation of the fit test</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_model_input</span><span class="p">:</span> <span class="n">DataModelInput</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span> <span class="o">=</span> <span class="n">data_model_input</span>
+
+        <span class="c1">########################################################</span>
+        <span class="c1"># OUTPUT VARIABLES                                     #</span>
+        <span class="c1">########################################################</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Structure with a result of multilinear regression (based on all data points and using OLS to calculate</span>
+<span class="sd">        coefficients).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted_tms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Fitted (predicted) response values based on input data. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="sd">&quot;&quot;&quot; Constant alpha (y = beta * x + constant). &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Vector of coefficients [beta1, beta2, ...]. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_tms_analysis</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; TimeseriesAnalysis class based on returns of the fit. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fund_tms_analysis</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; TimeseriesAnalysis class based on returns of the analysed fund. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">risk_contribution</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Vector containing normalised risk contribution of each factor. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors_performance_attribution_ret</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Vector containing annualised performance attribution of each factor. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unexplained_performance_attribution_ret</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Scalar with annualised return unexplained by factors. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">durbin_watson_test</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to test if linear regression residuals are uncorrelated. Small p-values indicate correlation among</span>
+<span class="sd">        residuals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autocorrelation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Extension of Durbin-Watson test to add many lags (1-5).  0 - not autocorrelated, 1 - autocorrelated. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">heteroskedasticity</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Probability of a hypothesis that the error variance doesn&#39;t depend on input data (regressors). &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">correlation_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">condition_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Condition number of a matrix measures the sensitivity of the solution of a system of linear equations</span>
+<span class="sd">        to errors in the data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_squared_of_each_predictor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Concerns about collinearity can be ignored if rSquare is higher than rSquare of each predictor. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_sample_and_out_sample_returns</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns of a fit based on in-sample coefficients. Vector with in-sample and out-of-sample simple returns.</span>
+<span class="sd">        Its length is equal to length of fitted returns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">oos_start_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Date on which the Out-Of-Sample period started (In-Sample vs Out-Of-Sample test). &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cooks_distance_tms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Cooks distance. Used for checking the influence of outliers for the model. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ols_influence</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Class for calculating outliers and influence measures for OLS result. &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calc_coefficients</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_return_analysis_of_fund_and_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitted_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_out_of_sample_fit</span><span class="p">()</span>
+
+        <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">resid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">durbin_watson_test</span> <span class="o">=</span> <span class="n">durbin_watson</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+
+        <span class="n">regressors_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span>
+        <span class="n">analysed_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">analysed_tms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">risk_contribution</span> <span class="o">=</span> <span class="n">RiskContributionAnalysis</span><span class="o">.</span><span class="n">get_risk_contribution</span><span class="p">(</span>
+            <span class="n">regressors_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">analysed_tms</span><span class="p">)</span>
+
+        <span class="n">factors_perf_attrib</span><span class="p">,</span> <span class="n">unexplained_perf_attrib</span> <span class="o">=</span> <span class="n">ReturnAttributionAnalysis</span><span class="o">.</span><span class="n">get_factor_return_attribution</span><span class="p">(</span>
+            <span class="n">analysed_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_tms</span><span class="p">,</span> <span class="n">regressors_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intercept</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factors_performance_attribution_ret</span> <span class="o">=</span> <span class="n">factors_perf_attrib</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unexplained_performance_attribution_ret</span> <span class="o">=</span> <span class="n">unexplained_perf_attrib</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_correlations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitted_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">condition_number</span> <span class="o">=</span> <span class="n">cond</span><span class="p">(</span><span class="n">regressors_df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_r_square_of_each_predictor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_autocorrelation</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">heteroskedasticity</span> <span class="o">=</span> <span class="n">het_breuschpagan</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_cooks_distance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">r_squared</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">rsquared_adj</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">t_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">tvalues</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">p_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">pvalues</span>
+
+    <span class="k">def</span> <span class="nf">_calc_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">regressors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">is_fit_intercept</span><span class="p">:</span>
+            <span class="n">regressors</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">regressors</span><span class="p">,</span> <span class="n">prepend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">analysed_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">analysed_tms</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">analysed_tms</span><span class="p">,</span> <span class="n">regressors</span><span class="p">)</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Fitted model for given regressors and fund returns time series:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+        <span class="n">coefficients_</span><span class="p">,</span> <span class="n">intercept_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_params</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intercept</span> <span class="o">=</span> <span class="n">intercept_</span>
+        <span class="n">series_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">analysed_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted_tms</span> <span class="o">=</span> <span class="n">series_type</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fit</span><span class="o">.</span><span class="n">fittedvalues</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">analysed_tms</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                      <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fitted returns&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span> <span class="o">=</span> <span class="n">fit</span>
+
+    <span class="k">def</span> <span class="nf">_get_model_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">is_fit_intercept</span><span class="p">:</span>
+            <span class="n">coefficients_</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># last value is a constant parameter</span>
+            <span class="n">intercept_</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># it needs to be extracted into intercept_ attribute</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coefficients_</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span>
+            <span class="n">intercept_</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="n">coefficients_</span><span class="p">,</span> <span class="n">intercept_</span>
+
+    <span class="k">def</span> <span class="nf">_setup_return_analysis_of_fund_and_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fitted_tms</span><span class="p">):</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">frequency</span>
+        <span class="n">analysed_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">analysed_tms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_tms_analysis</span> <span class="o">=</span> <span class="n">TimeseriesAnalysis</span><span class="p">(</span><span class="n">fitted_tms</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fund_tms_analysis</span> <span class="o">=</span> <span class="n">TimeseriesAnalysis</span><span class="p">(</span><span class="n">analysed_tms</span><span class="p">,</span> <span class="n">freq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_out_of_sample_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a fit base just on 2/3 of returns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">analysed_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">analysed_tms</span>
+        <span class="n">regressors_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span>
+        <span class="n">number_of_data_in_sample</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">analysed_tms</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">oos_start_date</span> <span class="o">=</span> <span class="n">analysed_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">number_of_data_in_sample</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">regressors_in_sample_df</span> <span class="o">=</span> <span class="n">regressors_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">number_of_data_in_sample</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">fund_returns_in_sample_tms</span> <span class="o">=</span> <span class="n">analysed_tms</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">number_of_data_in_sample</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">regressors_in_sample_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Fitting in sample using </span><span class="si">{:d}</span><span class="s2"> data points&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_data_in_sample</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">is_fit_intercept</span><span class="p">:</span>
+            <span class="n">regressors_in_sample_df</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">regressors_in_sample_df</span><span class="p">,</span> <span class="n">prepend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">fund_returns_in_sample_tms</span><span class="p">,</span> <span class="n">regressors_in_sample_df</span><span class="p">)</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+        <span class="n">coeffs_in_sample</span><span class="p">,</span> <span class="n">intercept_in_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_params</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+        <span class="n">portfolio_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_weighted_portfolio_rets</span><span class="p">(</span>
+            <span class="n">returns</span><span class="o">=</span><span class="n">regressors_df</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">coeffs_in_sample</span><span class="p">,</span> <span class="n">intercept</span><span class="o">=</span><span class="n">intercept_in_sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_sample_and_out_sample_returns</span> <span class="o">=</span> <span class="n">portfolio_returns</span>
+
+    <span class="k">def</span> <span class="nf">_get_weighted_portfolio_rets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="c1"># normalize weights, so that they contain intercept factor in the end and that they all sum up to 1</span>
+        <span class="n">norm_weights</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">intercept</span><span class="p">]</span>
+        <span class="n">norm_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">norm_weights</span><span class="p">)</span>
+        <span class="n">norm_weights</span> <span class="o">=</span> <span class="n">norm_weights</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">norm_weights</span><span class="p">)</span>
+
+        <span class="n">norm_returns</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">prepend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">portfolio_returns</span> <span class="o">=</span> <span class="n">norm_returns</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">norm_weights</span><span class="p">)</span>
+        <span class="n">portfolio_returns</span> <span class="o">=</span> <span class="n">cast_series</span><span class="p">(</span><span class="n">portfolio_returns</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">returns</span><span class="p">))</span>
+        <span class="n">portfolio_returns</span><span class="o">.</span><span class="n">__finalize__</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">portfolio_returns</span>
+
+    <span class="k">def</span> <span class="nf">_setup_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fitted_tms</span><span class="p">):</span>
+        <span class="n">analysed_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">analysed_tms</span>
+        <span class="n">regressors_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span>
+        <span class="n">data_for_correlation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">fitted_tms</span><span class="p">,</span> <span class="n">regressors_df</span><span class="p">,</span> <span class="n">analysed_tms</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correlation_matrix</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span><span class="n">data_for_correlation</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">output_type</span><span class="o">=</span><span class="n">QFDataFrame</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_r_square_of_each_predictor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">regressors_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span>
+        <span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">regressors_df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+        <span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="n">QFDataFrame</span><span class="p">)</span>
+        <span class="n">vif</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">))</span>
+        <span class="n">r_squared_values</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">vif</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_squared_of_each_predictor</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">r_squared_values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">regressors_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_setup_autocorrelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residuals</span><span class="p">):</span>
+        <span class="n">lags</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTOCORR_MAX_LAG</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># p_value is a probability of no autocorrelation present (separate value for each lag)</span>
+        <span class="n">return_df</span> <span class="o">=</span> <span class="n">acorr_ljungbox</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: pd.DataFrame</span>
+        <span class="n">p_value</span> <span class="o">=</span> <span class="n">return_df</span><span class="p">[</span><span class="s2">&quot;lb_pvalue&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autocorrelation</span> <span class="o">=</span> <span class="n">p_value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTOCORR_SIGNIFICANCE_LEVEL</span>
+
+    <span class="k">def</span> <span class="nf">_setup_cooks_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ols_results</span><span class="p">):</span>
+        <span class="n">ols_influence</span> <span class="o">=</span> <span class="n">OLSInfluence</span><span class="p">(</span><span class="n">ols_results</span><span class="p">)</span>
+        <span class="n">cooks_distance</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ols_influence</span><span class="o">.</span><span class="n">cooks_distance</span>
+        <span class="n">dates_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">regressors_df</span><span class="o">.</span><span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cooks_distance_tms</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cooks_distance</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">dates_index</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ols_influence</span> <span class="o">=</span> <span class="n">ols_influence</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

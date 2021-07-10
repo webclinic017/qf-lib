@@ -1,0 +1,9 @@
+ConeChart
+===========================================
+
+.. currentmodule:: qf_lib.plotting.charts.cone_chart
+
+.. autoclass:: ConeChart
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+EmailPublisher
+======================================================================
+
+.. currentmodule:: qf_lib.documents_utils.email_publishing.email_publisher
+
+.. autoclass:: EmailPublisher
+	:show-inheritance:
+	:autosummary:
+	:members:

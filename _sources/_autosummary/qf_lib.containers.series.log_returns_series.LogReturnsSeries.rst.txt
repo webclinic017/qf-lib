@@ -1,0 +1,9 @@
+LogReturnsSeries
+============================================================
+
+.. currentmodule:: qf_lib.containers.series.log_returns_series
+
+.. autoclass:: LogReturnsSeries
+	:show-inheritance:
+	:autosummary:
+	:members:

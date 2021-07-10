@@ -1,0 +1,9 @@
+SimpleReturnsSeries
+==================================================================
+
+.. currentmodule:: qf_lib.containers.series.simple_returns_series
+
+.. autoclass:: SimpleReturnsSeries
+	:show-inheritance:
+	:autosummary:
+	:members:

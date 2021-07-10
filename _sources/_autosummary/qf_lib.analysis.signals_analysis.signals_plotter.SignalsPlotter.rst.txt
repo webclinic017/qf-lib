@@ -1,0 +1,9 @@
+SignalsPlotter
+===============================================================
+
+.. currentmodule:: qf_lib.analysis.signals_analysis.signals_plotter
+
+.. autoclass:: SignalsPlotter
+	:show-inheritance:
+	:autosummary:
+	:members:

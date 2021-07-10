@@ -1,0 +1,6 @@
+get_function_name
+=================================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.function_name
+
+.. autofunction:: get_function_name

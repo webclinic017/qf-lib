@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">linregress</span>
+<span class="kn">from</span> <span class="nn">statsmodels.distributions</span> <span class="kn">import</span> <span class="n">ECDF</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.common.abstract_document</span> <span class="kn">import</span> <span class="n">AbstractDocument</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.error_handling</span> <span class="kn">import</span> <span class="n">ErrorHandling</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.constants</span> <span class="kn">import</span> <span class="n">DAYS_PER_YEAR_AVG</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.omega_ratio</span> <span class="kn">import</span> <span class="n">omega_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.sharpe_ratio</span> <span class="kn">import</span> <span class="n">sharpe_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.sorino_ratio</span> <span class="kn">import</span> <span class="n">sorino_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.chart</span> <span class="kn">import</span> <span class="n">ChartElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.df_table</span> <span class="kn">import</span> <span class="n">DFTable</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.heading</span> <span class="kn">import</span> <span class="n">HeadingElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.new_page</span> <span class="kn">import</span> <span class="n">NewPageElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.paragraph</span> <span class="kn">import</span> <span class="n">ParagraphElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.chart</span> <span class="kn">import</span> <span class="n">Chart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.histogram_chart</span> <span class="kn">import</span> <span class="n">HistogramChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_label_decorator</span> <span class="kn">import</span> <span class="n">AxesLabelDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.coordinate</span> <span class="kn">import</span> <span class="n">DataCoordinate</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.fill_between_decorator</span> <span class="kn">import</span> <span class="n">FillBetweenDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.scatter_decorator</span> <span class="kn">import</span> <span class="n">ScatterDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.text_decorator</span> <span class="kn">import</span> <span class="n">TextDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.backtests_overfitting.minimum_backtest_length</span> <span class="kn">import</span> <span class="n">minBTL</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.backtests_overfitting.overfitting_analysis</span> <span class="kn">import</span> <span class="n">OverfittingAnalysis</span>
+
+
+<div class="viewcode-block" id="BacktestOverfittingSheet"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html#qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet">[docs]</a><span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">class_error_logging</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">BacktestOverfittingSheet</span><span class="p">(</span><span class="n">AbstractDocument</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a document summarising all the statistics related to the probability of backtest overfitting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        necessary settings</span>
+<span class="sd">    pdf_exporter: PDFExporter</span>
+<span class="sd">        used to export the document to PDF</span>
+<span class="sd">    title: str</span>
+<span class="sd">        title of the document</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Backtest overfitting&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranking_functions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Sharpe Ratio&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">series</span><span class="p">:</span> <span class="n">sharpe_ratio</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">),</span>
+            <span class="s2">&quot;Sortino Ratio&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">series</span><span class="p">:</span> <span class="n">sorino_ratio</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">),</span>
+            <span class="s2">&quot;Omega Ratio&quot;</span><span class="p">:</span> <span class="n">omega_ratio</span><span class="p">,</span>
+            <span class="s2">&quot;Total return&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">series</span><span class="p">:</span> <span class="n">series</span><span class="o">.</span><span class="n">to_prices</span><span class="p">()</span><span class="o">.</span><span class="n">total_cumulative_return</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># type: Dict[str, OverfittingAnalysis]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># type: int</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># type: float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># type: int</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup_overfitting_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_dir_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">strategies_returns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SimpleReturnsDataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">num_of_slices</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs the overfitting analysis given either the path to the top directory, which contains the Timeseries</span>
+<span class="sd">        excel files (in its subdirectories) generated by the backtest monitor, or the data frame containing the</span>
+<span class="sd">        strategies returns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        top_dir_path: Optional[str]</span>
+<span class="sd">            path to the top directory, which contains all the subdirectories with backtests results</span>
+<span class="sd">        strategies_returns: Optional[SimpleReturnsDataFrame]</span>
+<span class="sd">            dataframe containing simple returns of all strategies. The data frame index should contain the timestamps</span>
+<span class="sd">            of the strategy returns in order to be able to compute all necessary ratios. Each column of the data frame</span>
+<span class="sd">            should contain the simple returns of each of variants of the strategy / each of strategies.</span>
+<span class="sd">        num_of_slices: int</span>
+<span class="sd">            number of slices used in the overfitting analysis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">top_dir_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">strategies_returns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;In order to complete the analysis you need to either provide the path to the top &quot;</span>
+                             <span class="s2">&quot;directory with Timeseries files or the data frame of returns. Please provide exactly &quot;</span>
+                             <span class="s2">&quot;one of these parameters.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strategies_returns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strategies_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_timeseries_returns</span><span class="p">(</span><span class="n">top_dir</span><span class="o">=</span><span class="n">top_dir_path</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">ranking_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span><span class="p">[</span><span class="n">function_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">OverfittingAnalysis</span><span class="p">(</span><span class="n">strategies_returns</span><span class="p">,</span>
+                                                                           <span class="n">ranking_function</span><span class="o">=</span><span class="n">ranking_function</span><span class="p">,</span>
+                                                                           <span class="n">num_of_slices</span><span class="o">=</span><span class="n">num_of_slices</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span> <span class="o">=</span> <span class="n">strategies_returns</span><span class="o">.</span><span class="n">num_of_columns</span>
+        <span class="n">backtest_start_date</span> <span class="o">=</span> <span class="n">strategies_returns</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">backtest_end_date</span> <span class="o">=</span> <span class="n">strategies_returns</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">backtest_end_date</span> <span class="o">-</span> <span class="n">backtest_start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="n">DAYS_PER_YEAR_AVG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span> <span class="o">=</span> <span class="n">num_of_slices</span>
+
+    <span class="k">def</span> <span class="nf">build_document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_header</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_minimum_backtest_length_plot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_probability_of_backtest_overiftting_analysis</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_best_is_and_oos_qualities</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_logits_distribution_chart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_stochastic_dominance_chart</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_timeseries_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the path to a directory it searches for all Timeseries excel files, which are related to various</span>
+<span class="sd">        strategies. Each standard Timeseries file contains an index in the first column and timeseries of the portfolio</span>
+<span class="sd">        in the second column. The first row contains header (&quot;Index&quot; for the first column and the backtest name for the</span>
+<span class="sd">        second column).</span>
+
+<span class="sd">        After all timeseries&#39; are found, they are merged into one dataframe, indexed by dates, where each column</span>
+<span class="sd">        represents simple returns of a strategy (column names contain the backtest names).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        top_dir: str</span>
+<span class="sd">            path to the top directory</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleReturnsDataFrame</span>
+<span class="sd">            dataframe containing simple returns of all strategies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">top_dir</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">excel_tms</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;**/*Timeseries.xlsx&quot;</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">PricesDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">excel_tms</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">data_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data_frames</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_add_minimum_backtest_length_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimated_maximum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Minimum Backtest Length</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The Minimum Backtest Length (MinBTL) denotes the minimum &quot;</span>
+                                                   <span class="s2">&quot;length of the backtests in years, needed to avoid selecting a &quot;</span>
+                                                   <span class="s2">&quot;strategy with an In-Sample Sharpe ratio of </span><span class="si">{}</span><span class="s2"> among N independent&quot;</span>
+                                                   <span class="s2">&quot;strategies with an expected Out-Of-Sample Sharpe ratio of zero.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                                   <span class="s2">&quot;MinBTL should be considered a necessary, non-sufficient condition &quot;</span>
+                                                   <span class="s2">&quot;to avoid overfitting.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">estimated_maximum</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The concept of the Minimum Backtest Length is presented by Bailey, &quot;</span>
+                                                   <span class="s2">&quot;Borwein, Prado and Zhu in  the &#39;PseudoMathematics and Financial &quot;</span>
+                                                   <span class="s2">&quot;Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample &quot;</span>
+                                                   <span class="s2">&quot;Performance&#39;. The paper contains the exact way of computing the&quot;</span>
+                                                   <span class="s2">&quot;MinBTL and the upper bound estimate of that measure (both measures &quot;</span>
+                                                   <span class="s2">&quot;are showed on the plot).&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">start_x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;legend_decorator&quot;</span><span class="p">)</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Minimum Backtest Length&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+        <span class="n">axes_decorator</span> <span class="o">=</span> <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">x_label</span><span class="o">=</span><span class="s1">&#39;number of trials&#39;</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;number of years&#39;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">axes_decorator</span><span class="p">)</span>
+
+        <span class="n">max_number_of_backtests</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">number_of_trials</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_number_of_backtests</span><span class="p">))</span>
+
+        <span class="c1"># Color scheme used for the chart</span>
+        <span class="n">red_color</span> <span class="o">=</span> <span class="s2">&quot;#A40000&quot;</span>
+        <span class="n">green_color</span> <span class="o">=</span> <span class="s2">&quot;#00a452&quot;</span>
+
+        <span class="c1"># Compute both data series that need to be plotted</span>
+        <span class="k">def</span> <span class="nf">upper_bound_minBTL</span><span class="p">(</span><span class="n">samples_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">samples_number</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">estimated_maximum</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">upper_bound_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">upper_bound_minBTL</span><span class="p">(</span><span class="n">no</span><span class="p">)</span> <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="n">number_of_trials</span><span class="p">],</span>
+                                      <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_number_of_backtests</span><span class="p">))</span>
+        <span class="n">minimum_backtest_length_series</span> <span class="o">=</span> <span class="n">minBTL</span><span class="p">(</span><span class="n">number_of_trials</span><span class="p">,</span> <span class="n">estimated_maximum</span><span class="p">)</span>
+
+        <span class="c1"># Add both data series to the plot</span>
+        <span class="n">minimum_backtest_length</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">minimum_backtest_length_series</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">red_color</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">minimum_backtest_length</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">minimum_backtest_length</span><span class="p">,</span> <span class="s2">&quot;MinBTL&quot;</span><span class="p">)</span>
+
+        <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">upper_bound_series</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">green_color</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="s2">&quot;Upper bound for MinBTL&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check if in our case the condition is satisfied</span>
+        <span class="n">condition_satisfied</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span> <span class="o">&gt;</span> <span class="n">minBTL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span><span class="p">)</span>
+
+        <span class="c1"># Add the point with current values, emphasize it with appropriate colour</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="n">dot_color</span> <span class="o">=</span> <span class="n">green_color</span> <span class="k">if</span> <span class="n">condition_satisfied</span> <span class="k">else</span> <span class="n">red_color</span>
+        <span class="n">actual_values</span> <span class="o">=</span> <span class="n">ScatterDecorator</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span><span class="p">],</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span><span class="p">)],</span> <span class="n">color</span><span class="o">=</span><span class="n">dot_color</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">actual_values</span><span class="p">)</span>
+
+        <span class="n">text_decorator</span> <span class="o">=</span> <span class="n">TextDecorator</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">{:.0f}</span><span class="s2">, </span><span class="si">{:.2f}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span><span class="p">),</span>
+                                       <span class="n">y</span><span class="o">=</span><span class="n">DataCoordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">),</span>
+                                       <span class="n">x</span><span class="o">=</span><span class="n">DataCoordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span> <span class="o">+</span> <span class="n">max_number_of_backtests</span> <span class="o">/</span> <span class="mi">50</span><span class="p">))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">text_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Fill area below blue line in red with semitransparent red color</span>
+        <span class="n">red_fill</span> <span class="o">=</span> <span class="n">FillBetweenDecorator</span><span class="p">(</span><span class="n">upper_bound</span><span class="o">=</span><span class="n">minimum_backtest_length_series</span><span class="p">,</span> <span class="n">colors_alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">red_color</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">red_fill</span><span class="p">)</span>
+
+        <span class="c1"># Fill the area above dotted (or blue ?) line with semitransparent green color</span>
+        <span class="n">y_upper_bound</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">upper_bound_series</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">green_fill</span> <span class="o">=</span> <span class="n">FillBetweenDecorator</span><span class="p">(</span><span class="n">lower_bound</span><span class="o">=</span><span class="n">minimum_backtest_length_series</span><span class="p">,</span>
+                                          <span class="n">colors_alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">green_color</span><span class="p">,</span>
+                                          <span class="n">upper_bound</span><span class="o">=</span><span class="n">QFSeries</span><span class="p">(</span>
+                                              <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">y_upper_bound</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_number_of_backtests</span><span class="p">)],</span>
+                                              <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_number_of_backtests</span><span class="p">)))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">green_fill</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+        <span class="c1"># Add final conclusions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;As it can be seen from the plot, the Minimum Backtest Length &quot;</span>
+                                                   <span class="s2">&quot;condition in the case of our backtests is </span><span class="si">{}</span><span class="s2">.&quot;</span>
+                                                   <span class="s2">&quot;The MinBTL for </span><span class="si">{}</span><span class="s2"> backtests equals </span><span class="si">{:.2f}</span><span class="s2"> years and the number of &quot;</span>
+                                                   <span class="s2">&quot;years we used for the backtests was equal to </span><span class="si">{:.2f}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                                        <span class="s2">&quot;satisfied&quot;</span> <span class="k">if</span> <span class="n">condition_satisfied</span> <span class="k">else</span> <span class="s2">&quot;not satisfied&quot;</span><span class="p">,</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span><span class="p">,</span> <span class="n">minBTL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_strategies</span><span class="p">),</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">backtests_length</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_probability_of_backtest_overiftting_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the PBO and other necessary measures to asses the probability of the backtests overfitting. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Probability of Backtest Overfitting (</span><span class="si">{}</span><span class="s2"> slices)&quot;</span>
+                                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The concept of the Probability of Backtest Overfitting is &quot;</span>
+                                                   <span class="s2">&quot;presented by Bailey, Borwein, Prado and Zhu in the &quot;</span>
+                                                   <span class="s2">&quot;&#39;The Probability of Backtest Overfitting&#39;. The paper contains the &quot;</span>
+                                                   <span class="s2">&quot;exact way of computing all the below described measures.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Probability of Backtest Overfitting (PBO)&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The probability that the model configuration selected as optimal &quot;</span>
+                                                   <span class="s2">&quot;In-Sample will underperform the median of the N model &quot;</span>
+                                                   <span class="s2">&quot;configurations Out-Of-Sample.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Probability of loss&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The probability that the model selected as optimal IS will deliver &quot;</span>
+                                                   <span class="s2">&quot;a loss OOS. Even if PBO is close to 0 the probability of loss &quot;</span>
+                                                   <span class="s2">&quot;could be high, in which case the strategy’s performance OOS is &quot;</span>
+                                                   <span class="s2">&quot;probably poor for reasons other than overfitting.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Expected return&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;For each combination of the IS-OOS sets, the best IS strategy is &quot;</span>
+                                                   <span class="s2">&quot;chosen (based on the chosen Measure, e.g. sharpe ratio) and its &quot;</span>
+                                                   <span class="s2">&quot;OOS annualised return is computed. Expected return &quot;</span>
+                                                   <span class="s2">&quot;equals to the mean value of all OOS annualised returns of best &quot;</span>
+                                                   <span class="s2">&quot;strategies.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Results&quot;</span><span class="p">))</span>
+        <span class="n">pbo_values</span> <span class="o">=</span> <span class="p">[(</span><span class="n">fun_name</span><span class="p">,</span>
+                       <span class="s2">&quot;</span><span class="si">{:.2%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oa</span><span class="o">.</span><span class="n">calculate_overfitting_probability</span><span class="p">()),</span>
+                       <span class="s2">&quot;</span><span class="si">{:.2%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oa</span><span class="o">.</span><span class="n">calculate_probability_of_loss</span><span class="p">()),</span>
+                       <span class="s2">&quot;</span><span class="si">{:.2%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oa</span><span class="o">.</span><span class="n">calculate_expected_return</span><span class="p">()))</span>
+                      <span class="k">for</span> <span class="n">fun_name</span><span class="p">,</span> <span class="n">oa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">DFTable</span><span class="p">(</span><span class="n">QFDataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">pbo_values</span><span class="p">,</span>
+                                                 <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Measure name*&quot;</span><span class="p">,</span>
+                                                          <span class="s2">&quot;Probability of Backtest Overfitting&quot;</span><span class="p">,</span>
+                                                          <span class="s2">&quot;Probability of loss&quot;</span><span class="p">,</span>
+                                                          <span class="s2">&quot;Expected return&quot;</span><span class="p">]),</span>
+                        <span class="n">css_classes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="s1">&#39;left-align&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;(*) Measure defines a method used to select the optimal strategy &quot;</span>
+                                                   <span class="s2">&quot;In-Sample.&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_best_is_and_oos_qualities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Performance degradation&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The plots show the pairs of (In-Sample performance, Out-Of-Sample &quot;</span>
+                                                   <span class="s2">&quot;performance) for the optimal model configurations selected for &quot;</span>
+                                                   <span class="s2">&quot;each subset, which corresponds to the performance degradation &quot;</span>
+                                                   <span class="s2">&quot;associated with the backtest of the investment strategy.&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">oa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_new_grid</span><span class="p">()</span>
+
+            <span class="n">df</span> <span class="o">=</span> <span class="n">oa</span><span class="o">.</span><span class="n">get_best_strategies_is_oos_qualities</span><span class="p">()</span>
+
+            <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">ScatterDecorator</span><span class="p">(</span><span class="n">x_data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;IS&quot;</span><span class="p">],</span> <span class="n">y_data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OOS&quot;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;IS vs OOS comparison - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function_name</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">))</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span>
+                <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;In-Sample performance&quot;</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Out-Of-Sample performance&quot;</span><span class="p">))</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+
+            <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">linregress</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;IS&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;OOS&quot;</span><span class="p">])</span>
+            <span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;IS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;IS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">num</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+            <span class="n">y_range</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">x_range</span> <span class="o">+</span> <span class="n">intercept</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">y_range</span><span class="p">),</span>
+                                                     <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">text_position_shift</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;OOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="mi">20</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TextDecorator</span><span class="p">(</span><span class="s2">&quot;y = </span><span class="si">{:.2f}</span><span class="s2">x + </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span>
+                                              <span class="n">x</span><span class="o">=</span><span class="n">DataCoordinate</span><span class="p">(</span><span class="n">x_range</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x_range</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]),</span>
+                                              <span class="n">y</span><span class="o">=</span><span class="n">DataCoordinate</span><span class="p">(</span><span class="n">y_range</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x_range</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">text_position_shift</span><span class="p">),</span>
+                                              <span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_is_oos_fit_chart</span><span class="p">(</span><span class="n">oa</span><span class="p">,</span> <span class="n">top_strategies_to_plot</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+            <span class="n">is_hist</span> <span class="o">=</span> <span class="n">HistogramChart</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;IS&quot;</span><span class="p">],</span> <span class="n">best_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="n">is_hist</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;In-Sample </span><span class="si">{}</span><span class="s2"> histogram&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function_name</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">))</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">is_hist</span><span class="p">)</span>
+
+            <span class="n">oos_hist</span> <span class="o">=</span> <span class="n">HistogramChart</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OOS&quot;</span><span class="p">],</span> <span class="n">best_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="n">oos_hist</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span>
+                <span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Out-Of-Sample </span><span class="si">{}</span><span class="s2"> histogram&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function_name</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">))</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">oos_hist</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_logits_distribution_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Logits&#39; distribution&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;The charts below display the distribution of logits, which allows &quot;</span>
+                                                   <span class="s2">&quot;us to compute the probability of backtest overfitting (PBO). This &quot;</span>
+                                                   <span class="s2">&quot;represents the rate at which optimal In-Sample strategies &quot;</span>
+                                                   <span class="s2">&quot;underperform the median of the OOS trials.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;Logit is a value calculated for each combination, i.e. each &quot;</span>
+                                                   <span class="s2">&quot;In-Sample and Out-Of-Sample pair. In order to calculate single &quot;</span>
+                                                   <span class="s2">&quot;logit the best IS strategy is picked and then it is ranked OOS. &quot;</span>
+                                                   <span class="s2">&quot;Single logit corresponds to the performance ranking of the &quot;</span>
+                                                   <span class="s2">&quot;selected strategy OOS. The lower the logit is, the worse the &quot;</span>
+                                                   <span class="s2">&quot;strategy OOS performance was in comparison to other strategies. &quot;</span>
+                                                   <span class="s2">&quot;The higher the value of the logit, the better it performed OOS in &quot;</span>
+                                                   <span class="s2">&quot;comparison to other strategies. If the value of the logit is equal &quot;</span>
+                                                   <span class="s2">&quot;to 0, it means that the selected strategy was the median of all &quot;</span>
+                                                   <span class="s2">&quot;strategies sorted by their OOS performance. The more negative &quot;</span>
+                                                   <span class="s2">&quot;logits there are, the higher Probability of Backtest Overfitting. &quot;</span>
+                                                   <span class="s2">&quot;The PBO is defined as a ratio of the number of the negative logits &quot;</span>
+                                                   <span class="s2">&quot;to total number of logits).&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_new_grid</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">oa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">logits</span> <span class="o">=</span> <span class="n">oa</span><span class="o">.</span><span class="n">calculate_relative_rank_logits</span><span class="p">(</span><span class="n">oa</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">)</span>
+            <span class="n">logits_histogram</span> <span class="o">=</span> <span class="n">HistogramChart</span><span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">best_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">logits_histogram</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Logits distribution - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function_name</span><span class="p">),</span>
+                                                          <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">))</span>
+            <span class="n">logits_histogram</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;Logit value&quot;</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">))</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">logits_histogram</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_stochastic_dominance_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Stochastic dominance&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;This analysis determines whether the procedure used to select a &quot;</span>
+                                                   <span class="s2">&quot;strategy In-Sample is preferable to randomly choosing one model &quot;</span>
+                                                   <span class="s2">&quot;configuration among the N alternatives.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;Stochastic dominance shows the advantage or disadvantage of using &quot;</span>
+                                                   <span class="s2">&quot;particular algorithm selection methodology. Each line on the chart &quot;</span>
+                                                   <span class="s2">&quot;is a Cumulative-Density-Function (CDF) of the performance measure. &quot;</span>
+                                                   <span class="s2">&quot;CDF function tell the probability that performance will take a &quot;</span>
+                                                   <span class="s2">&quot;value less than or equal to x.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Optimised case&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;For each IS-OOS combination the best IS strategy is picked. Then &quot;</span>
+                                                   <span class="s2">&quot;the OOS performance of this strategy is evaluated. Optimised line &quot;</span>
+                                                   <span class="s2">&quot;corresponds to the CDF of OOS performances across all combinations.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Non-optimised case&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;For each IS-OOS combination median value of the OOS is calculated &quot;</span>
+                                                   <span class="s2">&quot;across all tested strategies. Non-optimised line corresponds to &quot;</span>
+                                                   <span class="s2">&quot;the CDF function of these median values across all combinations.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;First-order stochastic dominance occurs if CDF of OOS performance &quot;</span>
+                                                   <span class="s2">&quot;measures for the best IS strategy (optimized line) is below the &quot;</span>
+                                                   <span class="s2">&quot;CDF of the median OOS performance (Non-optimised). In other words, &quot;</span>
+                                                   <span class="s2">&quot;the distribution of the OOS performance measures is shifted &quot;</span>
+                                                   <span class="s2">&quot;towards positive values when we use the best IS strategy.&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_new_grid</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">oa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">overfitting_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">oos_qualities</span> <span class="o">=</span> <span class="n">oa</span><span class="o">.</span><span class="n">get_best_strategies_is_oos_qualities</span><span class="p">()[</span><span class="s2">&quot;OOS&quot;</span><span class="p">]</span>
+            <span class="n">ecdf</span> <span class="o">=</span> <span class="n">ECDF</span><span class="p">(</span><span class="n">oos_qualities</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">best_qualities</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ecdf</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ecdf</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="n">all_oos_qualities</span> <span class="o">=</span> <span class="p">[</span><span class="n">oos_ranking</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span> <span class="k">for</span> <span class="n">oos_ranking</span> <span class="ow">in</span> <span class="n">oa</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">]</span>
+            <span class="n">ecdf</span> <span class="o">=</span> <span class="n">ECDF</span><span class="p">(</span><span class="n">all_oos_qualities</span><span class="p">)</span>
+            <span class="n">qualities</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ecdf</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ecdf</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="c1"># Adjust the end of the lines</span>
+            <span class="k">if</span> <span class="n">best_qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">max</span><span class="p">(</span><span class="n">best_qualities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">best_qualities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">elif</span> <span class="n">best_qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">max</span><span class="p">(</span><span class="n">qualities</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">qualities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_qualities</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+            <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">best_qualities</span><span class="p">)</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;Optimised&quot;</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">qualities</span><span class="p">)</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;Non-optimised&quot;</span><span class="p">)</span>
+
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Stochastic dominance - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function_name</span><span class="p">)))</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_is_oos_fit_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oa</span><span class="p">:</span> <span class="n">OverfittingAnalysis</span><span class="p">,</span> <span class="n">top_strategies_to_plot</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Chart</span><span class="p">:</span>
+        <span class="c1"># Find top best OOS / IS performing strategies</span>
+        <span class="n">mean_quality_for_each_strategy_in_oos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">oos_qualities</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">oos_qualities</span> <span class="ow">in</span> <span class="n">oa</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">top_strategies_names</span> <span class="o">=</span> <span class="n">mean_quality_for_each_strategy_in_oos</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">top_strategies_to_plot</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span>
+
+        <span class="n">min_is_performance</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">oa</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">])</span>
+        <span class="n">max_is_performance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">oa</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">])</span>
+        <span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">min_is_performance</span><span class="p">,</span> <span class="n">max_is_performance</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">top_strategies_names</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">is_vs_oos</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="n">is_qualities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">],</span> <span class="n">oos_qualities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">])</span>
+                                    <span class="k">for</span> <span class="n">is_qualities</span><span class="p">,</span> <span class="n">oos_qualities</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">oa</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">,</span> <span class="n">oa</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">)],</span>
+                                   <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">popt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">is_vs_oos</span><span class="p">],</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">is_vs_oos</span><span class="p">],</span> <span class="n">maxfev</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+                <span class="n">data_points</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">popt</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_range</span><span class="p">])</span>
+                <span class="n">data_element</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">data_points</span><span class="p">)</span>
+                <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data_element</span><span class="p">)</span>
+                <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data_element</span><span class="p">,</span> <span class="s2">&quot;TOP </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;IS vs OOS fitted line - TOP </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">top_strategies_to_plot</span><span class="p">)))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span>
+            <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;In-Sample performance&quot;</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Out-Of-Sample performance&quot;</span><span class="p">))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chart</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="c1"># Set the style for the report</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;tearsheet&#39;</span><span class="p">])</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M </span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="p">],</span> <span class="n">report_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

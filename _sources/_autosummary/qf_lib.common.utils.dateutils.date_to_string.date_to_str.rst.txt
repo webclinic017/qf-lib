@@ -1,0 +1,6 @@
+date_to_str
+========================================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.date_to_string
+
+.. autofunction:: date_to_str

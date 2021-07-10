@@ -1,0 +1,9 @@
+ExposureSettings
+====================================================================
+
+.. currentmodule:: qf_lib.analysis.exposure_analysis.exposure_settings
+
+.. autoclass:: ExposureSettings
+	:show-inheritance:
+	:autosummary:
+	:members:

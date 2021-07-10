@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>create_returns_bar_chart &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="create_returns_distribution" href="qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution.html" />
+    <link rel="prev" title="create_return_quantiles" href="qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plotting.html">plotting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#charts">charts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting.html#decorators">decorators</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plotting.html#helpers">helpers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_bar_chart.create_bar_chart.html">create_bar_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_dd_probability_chart.create_dd_probability_chart.html">create_dd_probability_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_dd_probability_chart_3d.create_dd_probability_chart_3d.html">create_dd_probability_chart_3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_dot_plot.create_dot_plot.html">create_dot_plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart.html">create_event_comparison_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_gross_leverage_chart.create_gross_leverage_chart.html">create_gross_leverage_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_holdings_chart.create_holdings_chart.html">create_holdings_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_line_chart.create_line_chart.html">create_line_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_qq_chart.create_qq_chart.html">create_qq_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles.html">create_return_quantiles</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">create_returns_bar_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution.html">create_returns_distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_returns_similarity.create_returns_similarity.html">create_returns_similarity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_rolling_chart.create_rolling_chart.html">create_rolling_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark.html">create_rolling_chart_using_benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.create_skewness_chart.create_skewness_chart.html">create_skewness_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.plotting.helpers.index_translator.IndexTranslator.html">IndexTranslator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../plotting.html">plotting</a> &raquo;</li>
+        
+      <li>create_returns_bar_chart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="create-returns-bar-chart">
+<h1>create_returns_bar_chart<a class="headerlink" href="#create-returns-bar-chart" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart">
+<code class="sig-prename descclassname">qf_lib.plotting.helpers.create_returns_bar_chart.</code><code class="sig-name descname">create_returns_bar_chart</code><span class="sig-paren">(</span><em class="sig-param">returns: qf_lib.containers.series.qf_series.QFSeries</em>, <em class="sig-param">frequency: qf_lib.common.enums.frequency.Frequency = &lt;Frequency.YEARLY: 1&gt;</em>, <em class="sig-param">title: str = None</em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.plotting.charts.bar_chart.BarChart.html#qf_lib.plotting.charts.bar_chart.BarChart" title="qf_lib.plotting.charts.bar_chart.BarChart">qf_lib.plotting.charts.bar_chart.BarChart</a><a class="reference internal" href="../_modules/qf_lib/plotting/helpers/create_returns_bar_chart.html#create_returns_bar_chart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a new returns bar chart based on the returns specified. By default a new annual returns bar chart will
+be created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>returns</strong> (<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><em>QFSeries</em></a>) – The returns series to use in the chart.</p></li>
+<li><p><strong>frequency</strong> (<a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><em>Frequency</em></a>) – frequency of the returns after aggregation</p></li>
+<li><p><strong>title</strong> – optional title for the chart</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.plotting.charts.bar_chart.BarChart.html#qf_lib.plotting.charts.bar_chart.BarChart" title="qf_lib.plotting.charts.bar_chart.BarChart">BarChart</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution.html" class="btn btn-neutral float-right" title="create_returns_distribution" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles.html" class="btn btn-neutral float-left" title="create_return_quantiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

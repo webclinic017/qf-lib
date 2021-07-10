@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.order.order_factory &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.order.order_factory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.order.order_factory</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.broker.broker</span> <span class="kn">import</span> <span class="n">Broker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract</span> <span class="kn">import</span> <span class="n">Contract</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.execution_style</span> <span class="kn">import</span> <span class="n">ExecutionStyle</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.time_in_force</span> <span class="kn">import</span> <span class="n">TimeInForce</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.function_name</span> <span class="kn">import</span> <span class="n">get_function_name</span>
+
+
+<div class="viewcode-block" id="OrderFactory"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory">[docs]</a><span class="k">class</span> <span class="nc">OrderFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Creates Orders.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    broker: Broker</span>
+<span class="sd">        broker used to access the portfolio</span>
+<span class="sd">    data_handler: DataHandler</span>
+<span class="sd">        data handler used to download prices</span>
+<span class="sd">    contract_to_ticker_mapper: ContractTickerMapper</span>
+<span class="sd">        object mapping contracts to tickers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker</span><span class="p">:</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">,</span> <span class="n">contract_to_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broker</span> <span class="o">=</span> <span class="n">broker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span> <span class="o">=</span> <span class="n">data_handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contract_to_ticker_mapper</span> <span class="o">=</span> <span class="n">contract_to_ticker_mapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OrderFactory.orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.orders">[docs]</a>    <span class="k">def</span> <span class="nf">orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantities</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+               <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of Orders for given numbers of shares for each given asset.</span>
+
+<span class="sd">        Orders requiring 0 shares will be removed from resulting order list</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        quantities: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to an amount of shares which should be bought/sold.</span>
+<span class="sd">            If number is positive then asset will be bought. Otherwise it will be sold.</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+
+        <span class="n">order_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">quantities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">quantity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">order_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Order</span><span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">order_list</span></div>
+
+<div class="viewcode-block" id="OrderFactory.target_orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.target_orders">[docs]</a>    <span class="k">def</span> <span class="nf">target_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_quantities</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+                      <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">tolerance_quantities</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of Orders from a dictionary of desired target number of shares (number of shares which should be</span>
+<span class="sd">        present in the portfolio after executing the Order).</span>
+
+<span class="sd">        If the position doesn&#39;t already exist, the new Order is placed for the :target_quantity of shares.</span>
+<span class="sd">        If the position does exist the Order for the difference between the target number of shares</span>
+<span class="sd">        and the current number of shares is placed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_quantities: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to a target number of shares which should be present in the portfolio after the Order</span>
+<span class="sd">            is executed. After comparing with tolerance the math.floor of the quantity will be taken.</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+<span class="sd">        tolerance_quantities: None, Mapping[Contract, int]</span>
+<span class="sd">            tells what is a tolerance for the target_quantities (in both directions) for each Contract.</span>
+<span class="sd">            The tolerance is expressed in shares.</span>
+<span class="sd">            For example: assume that currently the portfolio contains 100 shares of asset A.</span>
+<span class="sd">            then calling target_orders({A: 101}, ..., tolerance_quantities={A: 2}) will not generate any trades as</span>
+<span class="sd">            the tolerance of 2 allows the allocation to be 100. while target value is 101.</span>
+<span class="sd">            Another example:</span>
+<span class="sd">            assume that currently the portfolio contains 100 shares of asset A.</span>
+<span class="sd">            then calling target_value_order({A: 103}, ..., tolerance_quantities={A: 2}) will generate a BUY order</span>
+<span class="sd">            for 3 shares</span>
+<span class="sd">            if abs(target - actual) &gt; tolerance buy or sell assets to match the target</span>
+<span class="sd">            If tolerance for a specific contract is not provided it is assumed to be 0</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+
+        <span class="c1"># Dict of Contract -&gt; Quantities of shares to buy/sell</span>
+        <span class="n">quantities</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">tolerance_quantities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tolerance_quantities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">contract_to_positions</span> <span class="o">=</span> <span class="p">{</span><span class="n">position</span><span class="o">.</span><span class="n">contract</span><span class="p">():</span> <span class="n">position</span> <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">broker</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()}</span>
+
+        <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">target_quantity</span> <span class="ow">in</span> <span class="n">target_quantities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">contract_to_positions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">tolerance_quantity</span> <span class="o">=</span> <span class="n">tolerance_quantities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">current_quantity</span> <span class="o">=</span> <span class="n">position</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_quantity</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">quantity</span> <span class="o">=</span> <span class="n">target_quantity</span> <span class="o">-</span> <span class="n">current_quantity</span>
+
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance_quantity</span> <span class="ow">and</span> <span class="n">quantity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># tolerance_quantity can be 0</span>
+                <span class="n">quantities</span><span class="p">[</span><span class="n">contract</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>  <span class="c1"># type: int</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OrderFactory.value_orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.value_orders">[docs]</a>    <span class="k">def</span> <span class="nf">value_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+                     <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of Orders by specifying the amount of money which should be spent on each asset rather</span>
+<span class="sd">        than the number of shares to buy/sell.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        values: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to the amount of money which should be spent on the asset (expressed in the currency</span>
+<span class="sd">            in which the asset is traded)</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency for the last available price sampling</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+
+        <span class="n">quantities</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_target_shares_and_tolerances</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="n">int_quantities</span> <span class="o">=</span> <span class="p">{</span><span class="n">contract</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">quantities</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orders</span><span class="p">(</span><span class="n">int_quantities</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OrderFactory.percent_orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.percent_orders">[docs]</a>    <span class="k">def</span> <span class="nf">percent_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percentages</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+                       <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of Orders by specifying the percentage of the current portfolio value which should be spent</span>
+<span class="sd">        on each asset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        percentages: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to a percentage value of the current portfolio which should be allocated in the asset.</span>
+<span class="sd">            This is specified as a decimal value (e.g. 0.5 means 50%)</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency for the last available price sampling (daily or minutely)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+
+        <span class="n">portfolio_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">broker</span><span class="o">.</span><span class="n">get_portfolio_value</span><span class="p">()</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">contract</span><span class="p">:</span> <span class="n">portfolio_value</span> <span class="o">*</span> <span class="n">fraction</span> <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">fraction</span> <span class="ow">in</span> <span class="n">percentages</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_orders</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OrderFactory.target_value_orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.target_value_orders">[docs]</a>    <span class="k">def</span> <span class="nf">target_value_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+                            <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>\
+            <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of Orders by specifying how much should be allocated in each asset after the Orders</span>
+<span class="sd">        have been executed.</span>
+
+<span class="sd">        For example if we&#39;ve already have 10M invested in &#39;SPY US Equity&#39; and you call this method with target value of 11M</span>
+<span class="sd">        then only 1M will be spent on this asset</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_values: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to a value which should be allocated in the asset after the Order has been executed</span>
+<span class="sd">            (expressed in the currency in which the asset is traded)</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+<span class="sd">        tolerance_percentage: float</span>
+<span class="sd">            tells the us what is a tolerance to the target_values (in both directions).</span>
+<span class="sd">            The tolerance is expressed as percentage of target_values.</span>
+<span class="sd">            For example: assume that currently the portfolio contains asset A with allocation 10 000$.</span>
+<span class="sd">            then calling target_value_order({A: 10 500}, ..., tolerance_percentage=0.05) will not generate any trades as</span>
+<span class="sd">            the tolerance of 0.05 allows the allocation to be 10 000$, while target value is 10 500$ (tolerance value</span>
+<span class="sd">            would be equal to 0.05 * 10 500 = 525 and the difference between current and target value would be &lt; 525$).</span>
+<span class="sd">            Another example:</span>
+<span class="sd">            For example: assume that currently the portfolio contains asset A with allocation 10 000$.</span>
+<span class="sd">            then calling target_value_order({A: 13 000}, ..., tolerance_percentage=0.1) will generate a BUY order</span>
+<span class="sd">            corresponding to 3000$ of shares. The tolerance of 0.1 does not allow a difference of 3000$</span>
+<span class="sd">            if abs(target - actual) &gt; tolerance_percentage *  target value</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency for the last available price sampling (daily or minutely)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">tolerance_percentage</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;The tolerance_percentage should belong to [0, 1) interval&quot;</span>
+
+        <span class="n">target_quantities</span><span class="p">,</span> <span class="n">tolerance_quantities</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_target_shares_and_tolerances</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_orders</span><span class="p">(</span><span class="n">target_quantities</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">,</span> <span class="n">tolerance_quantities</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OrderFactory.target_percent_orders"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.order.order_factory.OrderFactory.html#qf_lib.backtesting.order.order_factory.OrderFactory.target_percent_orders">[docs]</a>    <span class="k">def</span> <span class="nf">target_percent_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_percentages</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">execution_style</span><span class="p">:</span> <span class="n">ExecutionStyle</span><span class="p">,</span>
+                              <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates an Order adjusting a position to a value equal to the given percentage of the portfolio.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_percentages: Mapping[Contract, int]</span>
+<span class="sd">            mapping of a Contract to a percentage of a current portfolio value which should be allocated in each asset</span>
+<span class="sd">            after the Order has been carried out</span>
+<span class="sd">        execution_style: ExecutionStyle</span>
+<span class="sd">            execution style of an order (e.g. MarketOrder, StopOrder, etc.)</span>
+<span class="sd">        time_in_force: TimeInForce</span>
+<span class="sd">            e.g. &#39;DAY&#39; (Order valid for one trading session), &#39;GTC&#39; (good till cancelled)</span>
+<span class="sd">        tolerance_percentage: float</span>
+<span class="sd">            tells the us what is a tolerance to the target_percentages (in both directions). The tolerance is expressed</span>
+<span class="sd">            in percentage points (0.02 corresponds to 2pp of the target_value). For more details look at the description</span>
+<span class="sd">            of target_value_orders.</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency for the last available price sampling (daily or minutely)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        List[Order]</span>
+<span class="sd">            list of generated orders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_function_call</span><span class="p">(</span><span class="nb">vars</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">tolerance_percentage</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;The tolerance_percentage should belong to [0, 1) interval&quot;</span>
+
+        <span class="n">portfolio_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">broker</span><span class="o">.</span><span class="n">get_portfolio_value</span><span class="p">()</span>
+        <span class="n">target_values</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">contract</span><span class="p">:</span> <span class="n">portfolio_value</span> <span class="o">*</span> <span class="n">target_percent</span> <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">target_percent</span> <span class="ow">in</span> <span class="n">target_percentages</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_value_orders</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="n">execution_style</span><span class="p">,</span> <span class="n">time_in_force</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_calculate_target_shares_and_tolerances</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">contract_to_amount_of_money</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">tolerance_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Contract</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Tuple(Mapping[Contract, float], Mapping[Contract, float])</span>
+<span class="sd">            Tells how many shares of each asset we should have in order to match the target and what is the tolerance</span>
+<span class="sd">            (in number of shares) for each asset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tickers_to_contract_and_amount_of_money</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_tickers_to_contract_and_amount_of_money</span><span class="p">(</span>
+            <span class="n">contract_to_amount_of_money</span><span class="p">)</span>
+
+        <span class="n">tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tickers_to_contract_and_amount_of_money</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">current_prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># Contract -&gt; target number of shares</span>
+        <span class="n">target_quantities</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># type: Dict[Contract, float]</span>
+
+        <span class="c1"># Contract -&gt; tolerance expressed as number of shares</span>
+        <span class="n">tolerance_quantities</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># type: Dict[Contract, float]</span>
+
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="n">amount_of_money</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tickers_to_contract_and_amount_of_money</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">current_price</span> <span class="o">=</span> <span class="n">current_prices</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span>
+
+            <span class="n">divisor</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_price</span> <span class="o">*</span> <span class="n">contract</span><span class="o">.</span><span class="n">contract_size</span><span class="p">)</span>
+            <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">amount_of_money</span> <span class="o">/</span> <span class="n">divisor</span>   <span class="c1"># type: float</span>
+            <span class="n">target_quantities</span><span class="p">[</span><span class="n">contract</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_quantity</span>
+
+            <span class="n">tolerance_quantity</span> <span class="o">=</span> <span class="n">target_quantity</span> <span class="o">*</span> <span class="n">tolerance_percentage</span>
+            <span class="n">tolerance_quantities</span><span class="p">[</span><span class="n">contract</span><span class="p">]</span> <span class="o">=</span> <span class="n">tolerance_quantity</span>
+
+        <span class="k">return</span> <span class="n">target_quantities</span><span class="p">,</span> <span class="n">tolerance_quantities</span>
+
+    <span class="k">def</span> <span class="nf">_make_tickers_to_contract_and_amount_of_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contract_to_amount_of_money</span><span class="p">):</span>
+        <span class="n">tickers_to_contract_and_amount_of_money</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">amount_of_money</span> <span class="ow">in</span> <span class="n">contract_to_amount_of_money</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contract_to_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span>
+            <span class="n">tickers_to_contract_and_amount_of_money</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">contract</span><span class="p">,</span> <span class="n">amount_of_money</span>
+
+        <span class="k">return</span> <span class="n">tickers_to_contract_and_amount_of_money</span>
+
+    <span class="k">def</span> <span class="nf">_log_function_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params_dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;self&#39;</span> <span class="ow">in</span> <span class="n">params_dict</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">params_dict</span><span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">]</span>
+
+        <span class="n">fn_name_level_above</span> <span class="o">=</span> <span class="n">get_function_name</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">log_message</span> <span class="o">=</span> <span class="s2">&quot;Function call: &#39;</span><span class="si">{}</span><span class="s2">&#39; with parameters:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fn_name_level_above</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">value_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">for</span> <span class="n">inner_k</span><span class="p">,</span> <span class="n">inner_v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">value_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inner_k</span><span class="p">,</span> <span class="n">inner_v</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="n">log_message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value_str</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_message</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

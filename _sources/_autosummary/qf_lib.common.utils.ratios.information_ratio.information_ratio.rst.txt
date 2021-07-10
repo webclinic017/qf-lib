@@ -1,0 +1,6 @@
+information_ratio
+==============================================================
+
+.. currentmodule:: qf_lib.common.utils.ratios.information_ratio
+
+.. autofunction:: information_ratio

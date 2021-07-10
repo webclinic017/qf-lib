@@ -1,0 +1,6 @@
+create_gross_leverage_chart
+===============================================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_gross_leverage_chart
+
+.. autofunction:: create_gross_leverage_chart

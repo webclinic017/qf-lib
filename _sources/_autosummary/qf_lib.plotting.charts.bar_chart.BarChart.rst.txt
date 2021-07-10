@@ -1,0 +1,9 @@
+BarChart
+=========================================
+
+.. currentmodule:: qf_lib.plotting.charts.bar_chart
+
+.. autoclass:: BarChart
+	:show-inheritance:
+	:autosummary:
+	:members:

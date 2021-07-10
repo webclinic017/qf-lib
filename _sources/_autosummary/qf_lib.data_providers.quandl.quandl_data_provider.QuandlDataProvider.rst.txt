@@ -1,0 +1,9 @@
+QuandlDataProvider
+====================================================================
+
+.. currentmodule:: qf_lib.data_providers.quandl.quandl_data_provider
+
+.. autoclass:: QuandlDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

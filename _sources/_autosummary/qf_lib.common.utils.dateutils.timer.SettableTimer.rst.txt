@@ -1,0 +1,9 @@
+SettableTimer
+=================================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.timer
+
+.. autoclass:: SettableTimer
+	:show-inheritance:
+	:autosummary:
+	:members:

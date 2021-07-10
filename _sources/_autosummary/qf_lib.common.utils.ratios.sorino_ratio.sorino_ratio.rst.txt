@@ -1,0 +1,6 @@
+sorino_ratio
+====================================================
+
+.. currentmodule:: qf_lib.common.utils.ratios.sorino_ratio
+
+.. autofunction:: sorino_ratio

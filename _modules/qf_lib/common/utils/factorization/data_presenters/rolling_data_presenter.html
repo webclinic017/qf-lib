@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../_static/underscore.js"></script>
+        <script src="../../../../../../_static/doctools.js"></script>
+        <script src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib.dates</span> <span class="kn">import</span> <span class="n">DateFormatter</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_format</span> <span class="kn">import</span> <span class="n">DateFormat</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.factorization.data_models.rolling_data_model</span> <span class="kn">import</span> <span class="n">RollingDataModel</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_formatter_decorator</span> <span class="kn">import</span> <span class="n">AxesFormatterDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+
+
+<div class="viewcode-block" id="RollingDataPresenter"><a class="viewcode-back" href="../../../../../../_autosummary/qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html#qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter">[docs]</a><span class="k">class</span> <span class="nc">RollingDataPresenter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class used for presenting the data stored in the RollingFactorizationDataModel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rolling_model</span><span class="p">:</span> <span class="n">RollingDataModel</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span> <span class="o">=</span> <span class="n">rolling_model</span>
+
+    <span class="k">def</span> <span class="nf">general_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Values are calculated based on </span><span class="si">{window_size:d}</span><span class="s1"> data samples rolling </span><span class="se">\n</span><span class="s1">&#39;</span> \
+               <span class="s1">&#39;with </span><span class="si">{num_of_samples:d}</span><span class="s1"> sample(s) shift. </span><span class="se">\n</span><span class="s1">&#39;</span> \
+               <span class="s1">&#39;Frequency of the data points is </span><span class="si">{frequency:s}</span><span class="s1">. </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="n">window_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">window_size_</span><span class="p">,</span>
+                   <span class="n">num_of_samples</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">step_</span><span class="p">,</span>
+                   <span class="n">frequency</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">input_data</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+               <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">regression_coefficients_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">coefficients_df</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_coeffs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rolling regression coefficients&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">t_statistics_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_t_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">t_stats_df</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_t_stats</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rolling t-statistics&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">p_values_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_p_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">p_values_df</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_p_values</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Rolling p-Value&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">r_squared_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_r_squared</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">r_squared_tms</span>
+        <span class="n">rolling_r_squared</span> <span class="o">=</span> <span class="n">rolling_r_squared</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;R Squared Adjusted&#39;</span><span class="p">)</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_r_squared</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;R Squared&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">correlations_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="c1"># select correlations of different series with analysed timeseries</span>
+        <span class="n">rolling_correlations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">correlations_df</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_correlations</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Correlation&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">risk_contribution_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_risk_contribs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">risk_contribs_df</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_risk_contribs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Risk Contribution&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">performance_attribution_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+        <span class="n">rolling_factors_performance_attributions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">factors_performance_attributions_df</span>
+        <span class="n">rolling_unexplained_perf_attribs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">unexplained_performance_attributions_tms</span>
+        <span class="n">rolling_unexplained_perf_attribs</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Unexplained/Alpha&#39;</span>
+        <span class="n">rolling_perf_attribs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">rolling_factors_performance_attributions</span><span class="p">,</span> <span class="n">rolling_unexplained_perf_attribs</span><span class="p">],</span>
+                                         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_line_chart</span><span class="p">(</span><span class="n">rolling_values</span><span class="o">=</span><span class="n">rolling_perf_attribs</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Performance Attribution&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line_chart</span>
+
+    <span class="k">def</span> <span class="nf">_create_line_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rolling_values</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">line_chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">values_tms</span> <span class="ow">in</span> <span class="n">rolling_values</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">coeff_tms_data_elem</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">values_tms</span><span class="p">)</span>
+            <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">coeff_tms_data_elem</span><span class="p">)</span>
+            <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">coeff_tms_data_elem</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span>
+
+        <span class="n">full_title_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1"> samples rolling&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rolling_model</span><span class="o">.</span><span class="n">window_size_</span><span class="p">)])</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="n">full_title_str</span><span class="p">))</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">AxesFormatterDecorator</span><span class="p">(</span><span class="n">x_major</span><span class="o">=</span><span class="n">DateFormatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">DateFormat</span><span class="o">.</span><span class="n">YEAR_DOT_MONTH</span><span class="p">))))</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">line_chart</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

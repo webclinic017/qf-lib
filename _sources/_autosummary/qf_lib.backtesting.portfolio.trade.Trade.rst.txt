@@ -1,0 +1,9 @@
+Trade
+========================================
+
+.. currentmodule:: qf_lib.backtesting.portfolio.trade
+
+.. autoclass:: Trade
+	:show-inheritance:
+	:autosummary:
+	:members:

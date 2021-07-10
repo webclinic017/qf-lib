@@ -1,0 +1,9 @@
+TradesGenerator
+===============================================================
+
+.. currentmodule:: qf_lib.analysis.trade_analysis.trades_generator
+
+.. autoclass:: TradesGenerator
+	:show-inheritance:
+	:autosummary:
+	:members:

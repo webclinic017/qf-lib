@@ -1,0 +1,525 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>plotting &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HeatMapChart" href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart.html" />
+    <link rel="prev" title="EmailPublisher" href="_autosummary/qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">plotting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#charts">charts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart.html">HeatMapChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.values_annotations.ValuesAnnotations.html">ValuesAnnotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart_decorator.HeatMapChartDecorator.html">HeatMapChartDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.annual_returns_bar_chart.AnnualReturnsBarChart.html">AnnualReturnsBarChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.bar_chart.BarChart.html">BarChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.boxplot_chart.BoxplotChart.html">BoxplotChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.chart.Chart.html">Chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.cone_chart.ConeChart.html">ConeChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.cone_chart_oos.ConeChartOOS.html">ConeChartOOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.dist_chart.DistChart.html">DistChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.histogram_chart.HistogramChart.html">HistogramChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.kde_chart.KDEChart.html">KDEChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.line_chart.LineChart.html">LineChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.regression_chart.RegressionChart.html">RegressionChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.returns_heatmap_chart.ReturnsHeatmapChart.html">ReturnsHeatmapChart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.surface_chart_3d.SurfaceChart3D.html">SurfaceChart3D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#decorators">decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html">ChartDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator.html">AxesFormatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator.html">AxesLabelDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator.html">AxesLocatorDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator.html">AxesPositionDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator.html">AxisTickLabelsDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator.html">BarValuesDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.cone_decorator.ConeDecorator.html">ConeDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator.html">ConeProcessDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.Coordinate.html">Coordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.DataCoordinate.html">DataCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.AxesCoordinate.html">AxesCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.FigureCoordinate.html">FigureCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.DisplayCoordinate.html">DisplayCoordinate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator.html">DataElementDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html">LegendDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html">HorizontalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html">VerticalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html">DiagonalLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator.html">PointEmphasisDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator.html">ScatterDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator.html">SeriesLineDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem.html">SimpleLegendItem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.span_decorator.SpanDecorator.html">SpanDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.stem_decorator.StemDecorator.html">StemDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.text_decorator.TextDecorator.html">TextDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.title_decorator.TitleDecorator.html">TitleDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator.html">TopDrawdownDecorator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator.html">VerticalSpanDecorator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#helpers">helpers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_bar_chart.create_bar_chart.html">create_bar_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dd_probability_chart.create_dd_probability_chart.html">create_dd_probability_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dd_probability_chart_3d.create_dd_probability_chart_3d.html">create_dd_probability_chart_3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dot_plot.create_dot_plot.html">create_dot_plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart.html">create_event_comparison_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_gross_leverage_chart.create_gross_leverage_chart.html">create_gross_leverage_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_holdings_chart.create_holdings_chart.html">create_holdings_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_line_chart.create_line_chart.html">create_line_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_qq_chart.create_qq_chart.html">create_qq_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles.html">create_return_quantiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart.html">create_returns_bar_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution.html">create_returns_distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_similarity.create_returns_similarity.html">create_returns_similarity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_rolling_chart.create_rolling_chart.html">create_rolling_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark.html">create_rolling_chart_using_benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_skewness_chart.create_skewness_chart.html">create_skewness_chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.index_translator.IndexTranslator.html">IndexTranslator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>plotting</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="plotting">
+<h1>plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h1>
+<section id="charts">
+<h2>charts<a class="headerlink" href="#charts" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart.html#qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart" title="qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heatmap.heatmap_chart.HeatMapChart</span></code></a></p></td>
+<td><p>Creates a Heatmap chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.values_annotations.ValuesAnnotations.html#qf_lib.plotting.charts.heatmap.values_annotations.ValuesAnnotations" title="qf_lib.plotting.charts.heatmap.values_annotations.ValuesAnnotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heatmap.values_annotations.ValuesAnnotations</span></code></a></p></td>
+<td><p>Adds annotations containing values for each square presented on the heat map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart_decorator.HeatMapChartDecorator.html#qf_lib.plotting.charts.heatmap.heatmap_chart_decorator.HeatMapChartDecorator" title="qf_lib.plotting.charts.heatmap.heatmap_chart_decorator.HeatMapChartDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heatmap.heatmap_chart_decorator.HeatMapChartDecorator</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.annual_returns_bar_chart.AnnualReturnsBarChart.html#qf_lib.plotting.charts.annual_returns_bar_chart.AnnualReturnsBarChart" title="qf_lib.plotting.charts.annual_returns_bar_chart.AnnualReturnsBarChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">annual_returns_bar_chart.AnnualReturnsBarChart</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.bar_chart.BarChart.html#qf_lib.plotting.charts.bar_chart.BarChart" title="qf_lib.plotting.charts.bar_chart.BarChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bar_chart.BarChart</span></code></a></p></td>
+<td><p>Creates a new bar chart with the specified <code class="docutils literal notranslate"><span class="pre">orientation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.boxplot_chart.BoxplotChart.html#qf_lib.plotting.charts.boxplot_chart.BoxplotChart" title="qf_lib.plotting.charts.boxplot_chart.BoxplotChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boxplot_chart.BoxplotChart</span></code></a></p></td>
+<td><p>Creates a box plot consisting of the list of <code class="docutils literal notranslate"><span class="pre">QFSeries</span></code> specified in <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart" title="qf_lib.plotting.charts.chart.Chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chart.Chart</span></code></a></p></td>
+<td><p>Abstract class for all the charts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.cone_chart.ConeChart.html#qf_lib.plotting.charts.cone_chart.ConeChart" title="qf_lib.plotting.charts.cone_chart.ConeChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cone_chart.ConeChart</span></code></a></p></td>
+<td><p>Plots a cone chart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.cone_chart_oos.ConeChartOOS.html#qf_lib.plotting.charts.cone_chart_oos.ConeChartOOS" title="qf_lib.plotting.charts.cone_chart_oos.ConeChartOOS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cone_chart_oos.ConeChartOOS</span></code></a></p></td>
+<td><p>While using a simple cone (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.dist_chart.DistChart.html#qf_lib.plotting.charts.dist_chart.DistChart" title="qf_lib.plotting.charts.dist_chart.DistChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_chart.DistChart</span></code></a></p></td>
+<td><p>Flexibly plot a univariate distribution of observations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.histogram_chart.HistogramChart.html#qf_lib.plotting.charts.histogram_chart.HistogramChart" title="qf_lib.plotting.charts.histogram_chart.HistogramChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram_chart.HistogramChart</span></code></a></p></td>
+<td><p>Constructs a new histogram based on the <code class="docutils literal notranslate"><span class="pre">series</span></code> specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.kde_chart.KDEChart.html#qf_lib.plotting.charts.kde_chart.KDEChart" title="qf_lib.plotting.charts.kde_chart.KDEChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kde_chart.KDEChart</span></code></a></p></td>
+<td><p>Fits and plots a univariate (bivariate to be implemented) kernel density estimate using Seaborn’s kdeplot function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.line_chart.LineChart.html#qf_lib.plotting.charts.line_chart.LineChart" title="qf_lib.plotting.charts.line_chart.LineChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_chart.LineChart</span></code></a></p></td>
+<td><p>Simple line chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.regression_chart.RegressionChart.html#qf_lib.plotting.charts.regression_chart.RegressionChart" title="qf_lib.plotting.charts.regression_chart.RegressionChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regression_chart.RegressionChart</span></code></a></p></td>
+<td><p>Creates a regression chart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.returns_heatmap_chart.ReturnsHeatmapChart.html#qf_lib.plotting.charts.returns_heatmap_chart.ReturnsHeatmapChart" title="qf_lib.plotting.charts.returns_heatmap_chart.ReturnsHeatmapChart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns_heatmap_chart.ReturnsHeatmapChart</span></code></a></p></td>
+<td><p>Constructs a new monthly returns heatmap chart based on the specified returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.charts.surface_chart_3d.SurfaceChart3D.html#qf_lib.plotting.charts.surface_chart_3d.SurfaceChart3D" title="qf_lib.plotting.charts.surface_chart_3d.SurfaceChart3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surface_chart_3d.SurfaceChart3D</span></code></a></p></td>
+<td><p>Creates a 3D surface chart</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="decorators">
+<h2>decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.chart_decorator.ChartDecorator.html#qf_lib.plotting.decorators.chart_decorator.ChartDecorator" title="qf_lib.plotting.decorators.chart_decorator.ChartDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chart_decorator.ChartDecorator</span></code></a></p></td>
+<td><p>Abstract class for Chart decorators.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator.html#qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator" title="qf_lib.plotting.decorators.axes_formatter_decorator.AxesFormatterDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axes_formatter_decorator.AxesFormatterDecorator</span></code></a></p></td>
+<td><p>Creates a new Axes Formatter decorator that changes the way tickers in the x/y-axis are displayed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator.html#qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator" title="qf_lib.plotting.decorators.axes_label_decorator.AxesLabelDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axes_label_decorator.AxesLabelDecorator</span></code></a></p></td>
+<td><p>Creates a new axes label decorator that shows the specified <code class="docutils literal notranslate"><span class="pre">x_label</span></code> and <code class="docutils literal notranslate"><span class="pre">y_label</span></code> on the chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator.html#qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator" title="qf_lib.plotting.decorators.axes_locator_decorator.AxesLocatorDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axes_locator_decorator.AxesLocatorDecorator</span></code></a></p></td>
+<td><p>Creates a new axes locator decorator that changes how often the tickers in the x and y-axis are displayed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator.html#qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator" title="qf_lib.plotting.decorators.axes_position_decorator.AxesPositionDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axes_position_decorator.AxesPositionDecorator</span></code></a></p></td>
+<td><p>Sets the position of the axes (the area of the chart) on the figure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator.html#qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator" title="qf_lib.plotting.decorators.axis_tick_labels_decorator.AxisTickLabelsDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">axis_tick_labels_decorator.AxisTickLabelsDecorator</span></code></a></p></td>
+<td><p>Customizes tick labels for a given axis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator.html#qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator" title="qf_lib.plotting.decorators.bar_values_decorator.BarValuesDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bar_values_decorator.BarValuesDecorator</span></code></a></p></td>
+<td><p>Adds values next to each bar on the bar chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.cone_decorator.ConeDecorator.html#qf_lib.plotting.decorators.cone_decorator.ConeDecorator" title="qf_lib.plotting.decorators.cone_decorator.ConeDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cone_decorator.ConeDecorator</span></code></a></p></td>
+<td><p>Puts cone on top of the timeseries starting from given date.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator.html#qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator" title="qf_lib.plotting.decorators.cone_process_decorator.ConeProcessDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cone_process_decorator.ConeProcessDecorator</span></code></a></p></td>
+<td><p>Puts cone on top of the timeseries starting from given date.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.Coordinate.html#qf_lib.plotting.decorators.coordinate.Coordinate" title="qf_lib.plotting.decorators.coordinate.Coordinate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinate.Coordinate</span></code></a></p></td>
+<td><p>Base class for coordinates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.DataCoordinate.html#qf_lib.plotting.decorators.coordinate.DataCoordinate" title="qf_lib.plotting.decorators.coordinate.DataCoordinate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinate.DataCoordinate</span></code></a></p></td>
+<td><p>Coordinate which is bound to data (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.AxesCoordinate.html#qf_lib.plotting.decorators.coordinate.AxesCoordinate" title="qf_lib.plotting.decorators.coordinate.AxesCoordinate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinate.AxesCoordinate</span></code></a></p></td>
+<td><p>Coordinate which is bound to Axes object (e.g.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.FigureCoordinate.html#qf_lib.plotting.decorators.coordinate.FigureCoordinate" title="qf_lib.plotting.decorators.coordinate.FigureCoordinate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinate.FigureCoordinate</span></code></a></p></td>
+<td><p>Coordinate which is bound to Figure object (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.coordinate.DisplayCoordinate.html#qf_lib.plotting.decorators.coordinate.DisplayCoordinate" title="qf_lib.plotting.decorators.coordinate.DisplayCoordinate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinate.DisplayCoordinate</span></code></a></p></td>
+<td><p>Coordinate which is bound to Display (absolute values).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator.html#qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator" title="qf_lib.plotting.decorators.data_element_decorator.DataElementDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_element_decorator.DataElementDecorator</span></code></a></p></td>
+<td><p>Wrapper for main data element used by a certain type of Chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.legend_decorator.LegendDecorator.html#qf_lib.plotting.decorators.legend_decorator.LegendDecorator" title="qf_lib.plotting.decorators.legend_decorator.LegendDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">legend_decorator.LegendDecorator</span></code></a></p></td>
+<td><p>A decorator which draws a legend on the graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator" title="qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_decorators.HorizontalLineDecorator</span></code></a></p></td>
+<td><p>A simple decorator that displays a horizontal line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator" title="qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_decorators.VerticalLineDecorator</span></code></a></p></td>
+<td><p>A simple decorator that displays a vertical line.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator" title="qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_decorators.DiagonalLineDecorator</span></code></a></p></td>
+<td><p>A simple decorator that displays a diagonal line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator.html#qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator" title="qf_lib.plotting.decorators.point_emphasis_decorator.PointEmphasisDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_emphasis_decorator.PointEmphasisDecorator</span></code></a></p></td>
+<td><p>Creates a new marker for <cite>series_data_element</cite> for <cite>x=series_index</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator.html#qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator" title="qf_lib.plotting.decorators.scatter_decorator.ScatterDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scatter_decorator.ScatterDecorator</span></code></a></p></td>
+<td><p>Creates a scatter plot based on the data specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator.html#qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator" title="qf_lib.plotting.decorators.series_line_decorator.SeriesLineDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series_line_decorator.SeriesLineDecorator</span></code></a></p></td>
+<td><p>A simple decorator that displays a single series, useful for charts that want a line overlay for example bar chart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem.html#qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem" title="qf_lib.plotting.decorators.simple_legend_item.SimpleLegendItem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_legend_item.SimpleLegendItem</span></code></a></p></td>
+<td><p>An item which can be added to a Legend in a simple way: by using its handle property.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.span_decorator.SpanDecorator.html#qf_lib.plotting.decorators.span_decorator.SpanDecorator" title="qf_lib.plotting.decorators.span_decorator.SpanDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">span_decorator.SpanDecorator</span></code></a></p></td>
+<td><p>Uses a series of periods (tuples containing start date and end date of each period) to draw vertical spans (rectangles).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.stem_decorator.StemDecorator.html#qf_lib.plotting.decorators.stem_decorator.StemDecorator" title="qf_lib.plotting.decorators.stem_decorator.StemDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stem_decorator.StemDecorator</span></code></a></p></td>
+<td><p>A simple decorator that displays a single series in a form of stems.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.text_decorator.TextDecorator.html#qf_lib.plotting.decorators.text_decorator.TextDecorator" title="qf_lib.plotting.decorators.text_decorator.TextDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text_decorator.TextDecorator</span></code></a></p></td>
+<td><p>Adds text to the Chart at given coordinates (e.g.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.title_decorator.TitleDecorator.html#qf_lib.plotting.decorators.title_decorator.TitleDecorator" title="qf_lib.plotting.decorators.title_decorator.TitleDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">title_decorator.TitleDecorator</span></code></a></p></td>
+<td><p>Adds title to the chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator.html#qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator" title="qf_lib.plotting.decorators.top_drawdown_decorator.TopDrawdownDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">top_drawdown_decorator.TopDrawdownDecorator</span></code></a></p></td>
+<td><p>Highlights the top drawdowns in a specified series.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator.html#qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator" title="qf_lib.plotting.decorators.vertical_span_decorator.VerticalSpanDecorator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vertical_span_decorator.VerticalSpanDecorator</span></code></a></p></td>
+<td><p>Draws a vertical span (rectangle) from x_min to x_max.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="helpers">
+<h2>helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_bar_chart.create_bar_chart.html#qf_lib.plotting.helpers.create_bar_chart.create_bar_chart" title="qf_lib.plotting.helpers.create_bar_chart.create_bar_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_bar_chart.create_bar_chart</span></code></a></p></td>
+<td><p>Creates a new bar chart based on the settings specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dd_probability_chart.create_dd_probability_chart.html#qf_lib.plotting.helpers.create_dd_probability_chart.create_dd_probability_chart" title="qf_lib.plotting.helpers.create_dd_probability_chart.create_dd_probability_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_dd_probability_chart.create_dd_probability_chart</span></code></a></p></td>
+<td><p>Creates drawdowns probability chart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dd_probability_chart_3d.create_dd_probability_chart_3d.html#qf_lib.plotting.helpers.create_dd_probability_chart_3d.create_dd_probability_chart_3d" title="qf_lib.plotting.helpers.create_dd_probability_chart_3d.create_dd_probability_chart_3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_dd_probability_chart_3d.create_dd_probability_chart_3d</span></code></a></p></td>
+<td><p>Create a 3d drawdowns probability chart</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_dot_plot.create_dot_plot.html#qf_lib.plotting.helpers.create_dot_plot.create_dot_plot" title="qf_lib.plotting.helpers.create_dot_plot.create_dot_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_dot_plot.create_dot_plot</span></code></a></p></td>
+<td><p>Create a dot linechart.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart.html#qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart" title="qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_event_comparison_chart.create_event_comparison_chart</span></code></a></p></td>
+<td><p>Creates a new chart based on a line chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_gross_leverage_chart.create_gross_leverage_chart.html#qf_lib.plotting.helpers.create_gross_leverage_chart.create_gross_leverage_chart" title="qf_lib.plotting.helpers.create_gross_leverage_chart.create_gross_leverage_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_gross_leverage_chart.create_gross_leverage_chart</span></code></a></p></td>
+<td><p>Creates a line chart showing gross leverage based on the specified gross leverage values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_holdings_chart.create_holdings_chart.html#qf_lib.plotting.helpers.create_holdings_chart.create_holdings_chart" title="qf_lib.plotting.helpers.create_holdings_chart.create_holdings_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_holdings_chart.create_holdings_chart</span></code></a></p></td>
+<td><p>Creates a line chart showing holdings per day based on the specified positions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_line_chart.create_line_chart.html#qf_lib.plotting.helpers.create_line_chart.create_line_chart" title="qf_lib.plotting.helpers.create_line_chart.create_line_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_line_chart.create_line_chart</span></code></a></p></td>
+<td><p>Creates a new line chart based on the settings specified.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_qq_chart.create_qq_chart.html#qf_lib.plotting.helpers.create_qq_chart.create_qq_chart" title="qf_lib.plotting.helpers.create_qq_chart.create_qq_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_qq_chart.create_qq_chart</span></code></a></p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param strategy</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles.html#qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles" title="qf_lib.plotting.helpers.create_return_quantiles.create_return_quantiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_return_quantiles.create_return_quantiles</span></code></a></p></td>
+<td><p>Creates a new return quantiles boxplot chart based on the returns specified.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart.html#qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart" title="qf_lib.plotting.helpers.create_returns_bar_chart.create_returns_bar_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_returns_bar_chart.create_returns_bar_chart</span></code></a></p></td>
+<td><p>Constructs a new returns bar chart based on the returns specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution.html#qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution" title="qf_lib.plotting.helpers.create_returns_distribution.create_returns_distribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_returns_distribution.create_returns_distribution</span></code></a></p></td>
+<td><p>Creates a new returns distribution histogram with the specified frequency.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_returns_similarity.create_returns_similarity.html#qf_lib.plotting.helpers.create_returns_similarity.create_returns_similarity" title="qf_lib.plotting.helpers.create_returns_similarity.create_returns_similarity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_returns_similarity.create_returns_similarity</span></code></a></p></td>
+<td><p>Creates a new returns similarity chart.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_rolling_chart.create_rolling_chart.html#qf_lib.plotting.helpers.create_rolling_chart.create_rolling_chart" title="qf_lib.plotting.helpers.create_rolling_chart.create_rolling_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_rolling_chart.create_rolling_chart</span></code></a></p></td>
+<td><p>Creates a new line chart and adds the rolling window for each of the specified series to it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark.html#qf_lib.plotting.helpers.create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark" title="qf_lib.plotting.helpers.create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_rolling_chart_using_benchmark.create_rolling_chart_using_benchmark</span></code></a></p></td>
+<td><p>Creates a new line chart and adds the rolling window for each of the specified series to it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.create_skewness_chart.create_skewness_chart.html#qf_lib.plotting.helpers.create_skewness_chart.create_skewness_chart" title="qf_lib.plotting.helpers.create_skewness_chart.create_skewness_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_skewness_chart.create_skewness_chart</span></code></a></p></td>
+<td><p>Creates a new line chart showing the skewness of the distribution.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.plotting.helpers.index_translator.IndexTranslator.html#qf_lib.plotting.helpers.index_translator.IndexTranslator" title="qf_lib.plotting.helpers.index_translator.IndexTranslator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_translator.IndexTranslator</span></code></a></p></td>
+<td><p>Object which automatically translates label-indexed data into number-indexed data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.plotting.charts.heatmap.heatmap_chart.HeatMapChart.html" class="btn btn-neutral float-right" title="HeatMapChart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="_autosummary/qf_lib.documents_utils.email_publishing.email_publisher.EmailPublisher.html" class="btn btn-neutral float-left" title="EmailPublisher" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

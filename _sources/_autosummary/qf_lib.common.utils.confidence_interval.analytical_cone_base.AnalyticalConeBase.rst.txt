@@ -1,0 +1,9 @@
+AnalyticalConeBase
+===============================================================================
+
+.. currentmodule:: qf_lib.common.utils.confidence_interval.analytical_cone_base
+
+.. autoclass:: AnalyticalConeBase
+	:show-inheritance:
+	:autosummary:
+	:members:

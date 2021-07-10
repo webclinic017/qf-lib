@@ -1,0 +1,9 @@
+AbstractPriceDataProvider
+============================================================================
+
+.. currentmodule:: qf_lib.data_providers.abstract_price_data_provider
+
+.. autoclass:: AbstractPriceDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

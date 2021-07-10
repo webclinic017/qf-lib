@@ -1,0 +1,9 @@
+StemDecorator
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.stem_decorator
+
+.. autoclass:: StemDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

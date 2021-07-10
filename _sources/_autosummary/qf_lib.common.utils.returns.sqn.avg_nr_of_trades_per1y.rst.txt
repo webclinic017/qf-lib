@@ -1,0 +1,6 @@
+avg_nr_of_trades_per1y
+======================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.sqn
+
+.. autofunction:: avg_nr_of_trades_per1y

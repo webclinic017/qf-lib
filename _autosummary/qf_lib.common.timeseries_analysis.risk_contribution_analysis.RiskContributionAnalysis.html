@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RiskContributionAnalysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AnalyticalConeBase" href="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html" />
+    <link rel="prev" title="ReturnAttributionAnalysis" href="qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../common.html">common</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../common.html#enums">enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#exceptions">exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#risk-parity-boxes">risk_parity_boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#tickers">tickers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../common.html#timeseries-analysis">timeseries_analysis</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis.html">ReturnAttributionAnalysis</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">RiskContributionAnalysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#utils">utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../common.html">common</a> &raquo;</li>
+        
+      <li>RiskContributionAnalysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="riskcontributionanalysis">
+<h1>RiskContributionAnalysis<a class="headerlink" href="#riskcontributionanalysis" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.common.timeseries_analysis.risk_contribution_analysis.</code><code class="sig-name descname">RiskContributionAnalysis</code><a class="reference internal" href="../_modules/qf_lib/common/timeseries_analysis/risk_contribution_analysis.html#RiskContributionAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Calculates risk contribution metrics.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_distance_to_equal_risk_contrib" title="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_distance_to_equal_risk_contrib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_to_equal_risk_contrib</span></code></a>(…)</p></td>
+<td><p>By minimising this function it is possible to calculate Equal Risk Contribution Portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution" title="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_risk_contribution</span></code></a>(factors_rets, …)</p></td>
+<td><p>Calculates risk contribution of different factors to the portfolio.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution_optimised" title="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution_optimised"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_risk_contribution_optimised</span></code></a>(assets_rets, …)</p></td>
+<td><p>Calculates risk contribution of each asset of the portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.is_equal_risk_contribution" title="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.is_equal_risk_contribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_equal_risk_contribution</span></code></a>(…)</p></td>
+<td><p>Tells whether each asset has an equal risk contribution to the portfolio.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_distance_to_equal_risk_contrib">
+<em class="property">classmethod </em><code class="sig-name descname">get_distance_to_equal_risk_contrib</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assets_returns_covariance</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights_of_assets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/qf_lib/common/timeseries_analysis/risk_contribution_analysis.html#RiskContributionAnalysis.get_distance_to_equal_risk_contrib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_distance_to_equal_risk_contrib" title="Permalink to this definition">¶</a></dt>
+<dd><p>By minimising this function it is possible to calculate Equal Risk Contribution Portfolio. It has better
+numerical properties than simple approach  ( riskContribution - mean(riskContribution) )
+Details: <a class="reference external" href="http://www.thierry-roncalli.com/download/erc-slides.pdf">http://www.thierry-roncalli.com/download/erc-slides.pdf</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assets_returns_covariance</strong> – covariance matrix for assets returns data frame</p></li>
+<li><p><strong>weights_of_assets</strong> – weight of each asset in the portfolio. It’s indexed with names of assets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>L2 (euclidean) distance from equal risk distribution</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution">
+<em class="property">classmethod </em><code class="sig-name descname">get_risk_contribution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">factors_rets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">weigths_of_assets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em>, <em class="sig-param"><span class="n">portfolio_rets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><a class="reference internal" href="../_modules/qf_lib/common/timeseries_analysis/risk_contribution_analysis.html#RiskContributionAnalysis.get_risk_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates risk contribution of different factors to the portfolio. Risk is defined as volatility.
+Uses x-sigma-rho formula (MSCI Bara paper).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factors_rets</strong> – dataframe consisted of returns for different assets</p></li>
+<li><p><strong>weigths_of_assets</strong> – series of weights of each asset. It’s indexed with names of assets.</p></li>
+<li><p><strong>portfolio_rets</strong> – return of the whole portfolio</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Series of risk contributions (one for each asset) to the portfolio. It’s indexed with names of assets.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution_optimised">
+<em class="property">classmethod </em><code class="sig-name descname">get_risk_contribution_optimised</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assets_rets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights_of_assets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><a class="reference internal" href="../_modules/qf_lib/common/timeseries_analysis/risk_contribution_analysis.html#RiskContributionAnalysis.get_risk_contribution_optimised"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution_optimised" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates risk contribution of each asset of the portfolio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assets_rets</strong> – returns of assets building the portfolio (each assets in a separate column)</p></li>
+<li><p><strong>weights_of_assets</strong> – Series of weights (one for each asset).  It’s indexed with names of assets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Series of risk contributions (one for each asset) It’s indexed with names of assets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.is_equal_risk_contribution">
+<em class="property">classmethod </em><code class="sig-name descname">is_equal_risk_contribution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">returns_covariance</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights_of_assets</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/qf_lib/common/timeseries_analysis/risk_contribution_analysis.html#RiskContributionAnalysis.is_equal_risk_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.is_equal_risk_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells whether each asset has an equal risk contribution to the portfolio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>returns_covariance</strong> – DataFrame which is a covariance matrix. Columns and rows are both indexed with names of assets.</p></li>
+<li><p><strong>weights_of_assets</strong> – Series of weights (one weight for each asset). It’s indexed with names of assets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>True if each asset has and equal risk contribution. False – otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html" class="btn btn-neutral float-right" title="AnalyticalConeBase" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis.html" class="btn btn-neutral float-left" title="ReturnAttributionAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

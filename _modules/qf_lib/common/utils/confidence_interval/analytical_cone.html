@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.utils.confidence_interval.analytical_cone &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.utils.confidence_interval.analytical_cone</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.utils.confidence_interval.analytical_cone</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">Int64Index</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.confidence_interval.analytical_cone_base</span> <span class="kn">import</span> <span class="n">AnalyticalConeBase</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.log_returns_series</span> <span class="kn">import</span> <span class="n">LogReturnsSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="AnalyticalCone"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html#qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone">[docs]</a><span class="k">class</span> <span class="nc">AnalyticalCone</span><span class="p">(</span><span class="n">AnalyticalConeBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">:</span> <span class="n">QFSeries</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">series</span> <span class="o">=</span> <span class="n">series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">to_log_returns</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AnalyticalCone.calculate_simple_cone"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html#qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.calculate_simple_cone">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_simple_cone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">live_start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PricesSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a simple cone starting from a given date using the solution to the stochastic equation:</span>
+<span class="sd">        S(t) = S(0)*exp( (mu-0.5*sigma^2)*t + sigma*N(0,1)*sqrt(t) )</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        live_start_date: datetime</span>
+<span class="sd">            datetime or string with date, corresponds to the cone start date</span>
+<span class="sd">        number_of_std: float</span>
+<span class="sd">            corresponds to the randomness of the stochastic process. reflects number of standard deviations</span>
+<span class="sd">            to get expected values for. For example 1.0 means 1 standard deviation above the expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PriceSeries</span>
+<span class="sd">            expected values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">is_log_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">live_start_date</span><span class="p">]</span>
+        <span class="n">oos_log_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">live_start_date</span><span class="p">]</span>
+
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">is_log_tms</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">is_log_tms</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+        <span class="n">days_oos</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">oos_log_tms</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># a list [0, 1, 2, ... N]</span>
+        <span class="n">initial_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">is_log_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># price at last in-sample date</span>
+
+        <span class="c1"># for each day OOS calculate the expected value at different point in time using the _get_expected_value()</span>
+        <span class="c1"># function that gives expectation in single point in time.</span>
+        <span class="n">expected_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">nr_of_days</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_expected_value</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">initial_price</span><span class="p">,</span> <span class="n">nr_of_days</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">),</span> <span class="n">days_oos</span><span class="p">))</span>
+
+        <span class="c1"># We need to add last IS index value to connect the cone to the line. It will correspond to 0 days cone</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">oos_log_tms</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">is_log_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">PricesSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">expected_values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AnalyticalCone.calculate_aggregated_cone"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html#qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.calculate_aggregated_cone">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_aggregated_cone</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">nr_of_days_to_evaluate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluates many simple cones and saves the end values of every individual simple cone.</span>
+<span class="sd">        While using a simple cone (e.g. LineChart with Cone decorator) the results of the evaluation may be very</span>
+<span class="sd">        different depending on the starting point. To be immune to this, calculate_aggregated_cone plots</span>
+<span class="sd">        only the ends of simple cones which start  at 1 period, 2 periods, ..., n periods before the end of the series.</span>
+<span class="sd">        The period length depends  on the frequency of the data provided for the chart. If it has daily frequency,</span>
+<span class="sd">        then the length of one period will be 1 day.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nr_of_days_to_evaluate</span>
+<span class="sd">            max number of days in the past, from when all the cones are evaluated</span>
+<span class="sd">        is_end_date</span>
+<span class="sd">            the end od in-sample date. Makes sure that in-sample doesn&#39;t move with the cone.</span>
+<span class="sd">        number_of_std</span>
+<span class="sd">            corresponds to the randomness of the stochastic process. reflects number of standard deviations</span>
+<span class="sd">            to get expected values for. For example 1.0 means 1 standard deviation above the expected value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame</span>
+<span class="sd">            contains values corresponding to Strategy, Mean and Std. Values are indexed by number of days</span>
+<span class="sd">            from which given cone was evaluated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nr_of_data_points</span> <span class="o">=</span> <span class="n">nr_of_days_to_evaluate</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># there is a point for 0 days at the beginning of the cone</span>
+
+        <span class="c1"># if nr_of_days_to_evaluate is too large and goes into In-Sample, we need to reduce the value</span>
+        <span class="n">is_end_date_int_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">is_end_date</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
+        <span class="n">first_cone_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="p">)</span> <span class="o">-</span> <span class="n">nr_of_data_points</span>
+        <span class="k">if</span> <span class="n">first_cone_index</span> <span class="o">&lt;</span> <span class="n">is_end_date_int_index</span><span class="p">:</span>
+            <span class="n">first_cone_index</span> <span class="o">=</span> <span class="n">is_end_date_int_index</span>
+            <span class="n">nr_of_data_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="p">)</span> <span class="o">-</span> <span class="n">first_cone_index</span>
+
+        <span class="n">strategy_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nr_of_data_points</span><span class="p">)</span>
+        <span class="n">expected_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nr_of_data_points</span><span class="p">)</span>
+
+        <span class="n">mean_return</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_is_statistics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="p">,</span> <span class="n">is_end_date</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_of_data_points</span><span class="p">):</span>
+            <span class="n">cone_start_idx</span> <span class="o">=</span> <span class="n">first_cone_index</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># calculate total return of the strategy</span>
+            <span class="n">oos_log_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_returns_tms</span><span class="p">[</span><span class="n">cone_start_idx</span><span class="p">:]</span>
+            <span class="n">total_strategy_return</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">oos_log_returns</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>  <span class="c1"># 1 + percentage return</span>
+
+            <span class="c1"># calculate expectation</span>
+            <span class="n">number_of_steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oos_log_returns</span><span class="p">)</span>
+            <span class="n">starting_price</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># we take 1 as a base value</span>
+            <span class="n">total_expected_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_expected_value</span><span class="p">(</span>
+                <span class="n">mean_return</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">starting_price</span><span class="p">,</span> <span class="n">number_of_steps</span><span class="p">,</span> <span class="n">number_of_std</span><span class="p">)</span>
+
+            <span class="c1"># writing to the array starting from the last array element and then moving towards the first one</span>
+            <span class="n">strategy_values</span><span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_strategy_return</span>
+            <span class="n">expected_values</span><span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_expected_return</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">Int64Index</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nr_of_data_points</span><span class="p">))</span>
+
+        <span class="n">strategy_values_tms</span> <span class="o">=</span> <span class="n">PricesSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">strategy_values</span><span class="p">)</span>
+        <span class="n">expected_tms</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">expected_values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">QFDataFrame</span><span class="p">({</span>
+            <span class="s1">&#39;Strategy&#39;</span><span class="p">:</span> <span class="n">strategy_values_tms</span><span class="p">,</span>
+            <span class="s1">&#39;Expectation&#39;</span><span class="p">:</span> <span class="n">expected_tms</span><span class="p">,</span>
+        <span class="p">})</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_is_statistics</span><span class="p">(</span><span class="n">log_returns_tms</span><span class="p">:</span> <span class="n">LogReturnsSeries</span><span class="p">,</span> <span class="n">is_end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the mean return and standard deviation of return In-Sample</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">in_sample_log_returns</span> <span class="o">=</span> <span class="n">log_returns_tms</span><span class="p">[</span><span class="n">log_returns_tms</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">is_end_date</span><span class="p">]</span>
+        <span class="n">mean_return</span> <span class="o">=</span> <span class="n">in_sample_log_returns</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">in_sample_log_returns</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">mean_return</span><span class="p">,</span> <span class="n">sigma</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

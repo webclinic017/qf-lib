@@ -1,0 +1,9 @@
+BloombergFutureTicker
+======================================================================================
+
+.. currentmodule:: qf_lib.containers.futures.future_tickers.bloomberg_future_ticker
+
+.. autoclass:: BloombergFutureTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

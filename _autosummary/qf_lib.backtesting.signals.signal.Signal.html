@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Signal &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SignalsRegister" href="qf_lib.backtesting.signals.signals_register.SignalsRegister.html" />
+    <link rel="prev" title="FixedPortfolioPercentagePositionSizer" href="qf_lib.backtesting.position_sizer.fixed_portfolio_percentage_position_sizer.FixedPortfolioPercentagePositionSizer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../backtesting.html">backtesting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#data-handler">data_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#events">events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#execution-handler">execution_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#signals">signals</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.signals.signals_register.SignalsRegister.html">SignalsRegister</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.html">BacktestSignalsRegister</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../backtesting.html">backtesting</a> &raquo;</li>
+        
+      <li>Signal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="signal">
+<h1>Signal<a class="headerlink" href="#signal" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.backtesting.signals.signal.Signal">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.signals.signal.</code><code class="sig-name descname">Signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a></span></em>, <em class="sig-param"><span class="n">suggested_exposure</span><span class="p">:</span> <span class="n">qf_lib.backtesting.alpha_model.exposure_enum.Exposure</span></em>, <em class="sig-param"><span class="n">fraction_at_risk</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">last_available_price</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confidence</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">expected_move</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">symbol</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha_model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/signals/signal.html#Signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.signals.signal.Signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Objects of this class are used in the portfolio construction process. They are returned by AlphaModels to
+determine the suggested trend direction as well as its strength</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a>) – Ticker for which the signal was generated</p></li>
+<li><p><strong>suggested_exposure</strong> (<em>Exposure</em>) – A value of type Exposure which describes the move suggested by a specific AlphaModel - SHORT, LONG or OUT</p></li>
+<li><p><strong>fraction_at_risk</strong> (<em>float</em>) – A percentage value which determines the risk factor for an AlphaModel and a specified Ticker, may be used
+to calculate the position size.
+For example: Value of 0.02 means that we should place a Stop Loss 2% below the latest available
+price of the instrument. This value should always be positive</p></li>
+<li><p><strong>last_available_price</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The last price that was available at the time of generating the signal</p></li>
+<li><p><strong>confidence</strong> (<em>float</em>) – A float value in range [0;1] which describes the trust level for the AlphaModel in a current situation.
+By default set to 1.0 (maximum)</p></li>
+<li><p><strong>expected_move</strong> (<em>float</em>) – A percentage value which determines an expected price change for the upcoming period, may by positive
+(uptrend) or negative (downtrend) and the range is unlimited</p></li>
+<li><p><strong>symbol</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Symbol of the ticker (if None, the default value would be computed as the property ticker of the ticker).
+E.g. for BloombergTicker(“Example Equity”) the symbol should be simply equal to “Example Equity” (so there
+is no need to provide it). However, in case of e.g. BloombergFutureTicker(“Example”, “Example{} Equity”, 1, 1)
+the symbol should point to the specific ticker that was used to generate the signal, e.g. “ExampleZ9 Equity”.
+With ticker + symbol fields we are always able to track the exact ticker and contract that were used to generate
+a signal.</p></li>
+<li><p><strong>alpha_model</strong> – reference to the alpha model that generated the signal</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.backtesting.signals.signals_register.SignalsRegister.html" class="btn btn-neutral float-right" title="SignalsRegister" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.backtesting.position_sizer.fixed_portfolio_percentage_position_sizer.FixedPortfolioPercentagePositionSizer.html" class="btn btn-neutral float-left" title="FixedPortfolioPercentagePositionSizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

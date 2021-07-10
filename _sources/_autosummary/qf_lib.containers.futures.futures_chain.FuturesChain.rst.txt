@@ -1,0 +1,9 @@
+FuturesChain
+====================================================
+
+.. currentmodule:: qf_lib.containers.futures.futures_chain
+
+.. autoclass:: FuturesChain
+	:show-inheritance:
+	:autosummary:
+	:members:

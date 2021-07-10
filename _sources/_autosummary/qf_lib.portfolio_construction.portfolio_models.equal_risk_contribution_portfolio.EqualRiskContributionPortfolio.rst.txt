@@ -1,0 +1,9 @@
+EqualRiskContributionPortfolio
+===============================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio
+
+.. autoclass:: EqualRiskContributionPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

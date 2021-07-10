@@ -1,0 +1,6 @@
+create_line_chart
+===========================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_line_chart
+
+.. autofunction:: create_line_chart

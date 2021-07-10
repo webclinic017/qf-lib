@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.tearsheets.abstract_tearsheet &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.tearsheets.abstract_tearsheet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.tearsheets.abstract_tearsheet</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.common.abstract_document</span> <span class="kn">import</span> <span class="n">AbstractDocument</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.timeseries_analysis.timeseries_analysis</span> <span class="kn">import</span> <span class="n">TimeseriesAnalysis</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.plotting_mode</span> <span class="kn">import</span> <span class="n">PlottingMode</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.volatility.get_volatility</span> <span class="kn">import</span> <span class="n">get_volatility</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.chart</span> <span class="kn">import</span> <span class="n">ChartElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.grid</span> <span class="kn">import</span> <span class="n">GridElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.cone_chart</span> <span class="kn">import</span> <span class="n">ConeChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.helpers.create_return_quantiles</span> <span class="kn">import</span> <span class="n">create_return_quantiles</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.helpers.create_skewness_chart</span> <span class="kn">import</span> <span class="n">create_skewness_chart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+
+<div class="viewcode-block" id="AbstractTearsheet"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet.html#qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet">[docs]</a><span class="k">class</span> <span class="nc">AbstractTearsheet</span><span class="p">(</span><span class="n">AbstractDocument</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a PDF &#39;one-pager&#39; as often found in institutional strategy performance reports.</span>
+<span class="sd">    Includes an equity curve, drawdown curve, monthly returns, heatmap, yearly returns summary and other statistics</span>
+
+<span class="sd">    Can be used with or without the benchmark</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        settings of the project</span>
+<span class="sd">    pdf_exporter: PDFExporter</span>
+<span class="sd">        tool that creates the pdf with the result</span>
+<span class="sd">    strategy_series: QFSeries</span>
+<span class="sd">        timeseries of the trading of the strategy</span>
+<span class="sd">    live_date: datetime</span>
+<span class="sd">        if set it is used to generate the cone chart</span>
+<span class="sd">    title: str</span>
+<span class="sd">        title of the document</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span> <span class="n">strategy_series</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span>
+                 <span class="n">live_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Strategy Analysis&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span> <span class="o">=</span> <span class="n">strategy_series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">live_date</span> <span class="o">=</span> <span class="n">live_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="n">strategy_series</span><span class="o">.</span><span class="n">get_frequency</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_add_perf_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        series_list</span>
+<span class="sd">            List of compared series. The strategy should always be the first element in the list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_large_perf_chart</span><span class="p">(</span><span class="n">series_list</span><span class="p">),</span>
+                                               <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_cone_and_quantiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_new_grid</span><span class="p">()</span>
+        <span class="c1"># Cone chart</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># use live_date to generate the cone chart (show only the OOS part in the cone)</span>
+            <span class="n">is_end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_date</span>
+            <span class="n">nr_of_data_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">live_date</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># use the 1Y of data or half of the series depending of what is shorter</span>
+            <span class="n">nr_of_data_points</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
+            <span class="n">is_end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="n">nr_of_data_points</span><span class="p">]</span>
+
+        <span class="n">cone_chart</span> <span class="o">=</span> <span class="n">ConeChart</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="p">,</span> <span class="n">nr_of_data_points</span><span class="o">=</span><span class="n">nr_of_data_points</span><span class="p">,</span> <span class="n">is_end_date</span><span class="o">=</span><span class="n">is_end_date</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">cone_chart</span><span class="p">)</span>
+
+        <span class="c1"># Returns quantiles</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">create_return_quantiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_date</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_underwater_and_skewness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">GridElement</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PlottingMode</span><span class="o">.</span><span class="n">PDF</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">half_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">)</span>
+
+        <span class="c1"># Underwater plot</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_underwater_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="p">))</span>
+
+        <span class="c1"># Skewness chart</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">create_skewness_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_series</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Skewness&quot;</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">add_chart</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_rolling_ret_and_vol_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeseries</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rolling_ret_and_vol_chart</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_rolling_vol_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeseries_list</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">volatility</span><span class="p">(</span><span class="n">window</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">get_volatility</span><span class="p">(</span><span class="n">PricesSeries</span><span class="p">(</span><span class="n">window</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">annualise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rolling_chart</span><span class="p">(</span><span class="n">timeseries_list</span><span class="p">,</span> <span class="n">volatility</span><span class="p">,</span> <span class="s2">&quot;Volatility&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_rolling_return_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeseries_list</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">tot_return</span><span class="p">(</span><span class="n">window</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">PricesSeries</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">total_cumulative_return</span><span class="p">()</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rolling_chart</span><span class="p">(</span><span class="n">timeseries_list</span><span class="p">,</span> <span class="n">tot_return</span><span class="p">,</span> <span class="s2">&quot;Return&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_statistics_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">]):</span>
+        <span class="n">ta_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">TimeseriesAnalysis</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span> <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="n">series_list</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_add_statistics_table</span><span class="p">(</span><span class="n">ta_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Set the style for the report</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;tearsheet&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Tearsheet.pdf&quot;</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">):</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="p">],</span> <span class="n">report_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

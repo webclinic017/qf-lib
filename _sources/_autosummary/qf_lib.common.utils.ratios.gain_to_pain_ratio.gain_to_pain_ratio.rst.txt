@@ -1,0 +1,6 @@
+gain_to_pain_ratio
+================================================================
+
+.. currentmodule:: qf_lib.common.utils.ratios.gain_to_pain_ratio
+
+.. autofunction:: gain_to_pain_ratio

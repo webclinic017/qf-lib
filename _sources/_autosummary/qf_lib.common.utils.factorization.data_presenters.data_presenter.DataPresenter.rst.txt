@@ -1,0 +1,9 @@
+DataPresenter
+==============================================================================
+
+.. currentmodule:: qf_lib.common.utils.factorization.data_presenters.data_presenter
+
+.. autoclass:: DataPresenter
+	:show-inheritance:
+	:autosummary:
+	:members:

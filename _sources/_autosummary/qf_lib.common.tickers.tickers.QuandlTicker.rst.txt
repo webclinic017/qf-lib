@@ -1,0 +1,9 @@
+QuandlTicker
+==========================================
+
+.. currentmodule:: qf_lib.common.tickers.tickers
+
+.. autoclass:: QuandlTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

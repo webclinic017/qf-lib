@@ -1,0 +1,9 @@
+KDEChart
+=========================================
+
+.. currentmodule:: qf_lib.plotting.charts.kde_chart
+
+.. autoclass:: KDEChart
+	:show-inheritance:
+	:autosummary:
+	:members:

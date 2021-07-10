@@ -1,0 +1,9 @@
+DailyDataHandler
+===================================================================
+
+.. currentmodule:: qf_lib.backtesting.data_handler.daily_data_handler
+
+.. autoclass:: DailyDataHandler
+	:show-inheritance:
+	:autosummary:
+	:members:

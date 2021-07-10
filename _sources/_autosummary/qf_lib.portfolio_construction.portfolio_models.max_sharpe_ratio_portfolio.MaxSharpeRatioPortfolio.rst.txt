@@ -1,0 +1,9 @@
+MaxSharpeRatioPortfolio
+=================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio
+
+.. autoclass:: MaxSharpeRatioPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+DataHandler
+========================================================
+
+.. currentmodule:: qf_lib.backtesting.data_handler.data_handler
+
+.. autoclass:: DataHandler
+	:show-inheritance:
+	:autosummary:
+	:members:

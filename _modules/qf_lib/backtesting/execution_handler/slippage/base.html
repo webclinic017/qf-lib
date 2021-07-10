@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.execution_handler.slippage.base &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.execution_handler.slippage.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.execution_handler.slippage.base</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+
+
+<div class="viewcode-block" id="Slippage"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.backtesting.execution_handler.slippage.base.Slippage.html#qf_lib.backtesting.execution_handler.slippage.base.Slippage">[docs]</a><span class="k">class</span> <span class="nc">Slippage</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for slippage models.</span>
+<span class="sd">    It can limit the Order&#39;s volume. This model needs to know the daily volume of the traded asset, thus it uses the</span>
+<span class="sd">    data provider in order to be able to access the volume value for the day.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_provider: DataProvider</span>
+<span class="sd">        DataProvider component</span>
+<span class="sd">    contract_ticker_mapper: ContractTickerMapper</span>
+<span class="sd">        ContractTickerMapper component</span>
+<span class="sd">    max_volume_share_limit: float, None</span>
+<span class="sd">        number from range [0,1] which denotes how big (volume-wise) the Order can be i.e. if it&#39;s 0.5 and a daily</span>
+<span class="sd">        volume for a given asset is 1,000,000 USD, then max volume of the Order can be 500,000 USD. If not provided, no</span>
+<span class="sd">        volume checks are performed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">,</span> <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">,</span>
+                 <span class="n">max_volume_share_limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_volume_share_limit</span> <span class="o">=</span> <span class="n">max_volume_share_limit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span> <span class="o">=</span> <span class="n">contract_ticker_mapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_provider</span> <span class="o">=</span> <span class="n">data_provider</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Slippage.process_orders"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.backtesting.execution_handler.slippage.base.Slippage.html#qf_lib.backtesting.execution_handler.slippage.base.Slippage.process_orders">[docs]</a>    <span class="k">def</span> <span class="nf">process_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">orders</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Order</span><span class="p">],</span> <span class="n">no_slippage_fill_prices</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> \
+            <span class="n">Tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates fill prices and quantities for Orders. For Orders that can&#39;t be executed (missing security price,</span>
+<span class="sd">        etc.) float(&quot;nan&quot;) will be returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        date: datetime</span>
+<span class="sd">            time when the slippage is applied</span>
+<span class="sd">        orders: Sequence[Order]</span>
+<span class="sd">            sequence of Orders for which the fill price should be calculated</span>
+<span class="sd">        no_slippage_fill_prices: Sequence[float]</span>
+<span class="sd">            fill prices without a slippage applied. Each fill price corresponds to the Order from `orders` list</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[Sequence[float], Sequence[int]]</span>
+<span class="sd">            sequence of fill prices (order corresponds to the order of orders provided as an argument of the method),</span>
+<span class="sd">            sequence of fill order quantities</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_duplicates</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">orders</span><span class="p">)</span>
+        <span class="n">order_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">order</span><span class="o">.</span><span class="n">quantity</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">])</span>
+
+        <span class="c1"># Compute the fill volumes for orders</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_volume_share_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="p">)</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">]</span>
+            <span class="n">market_daily_volumes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_volumes_traded_today</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">tickers</span><span class="p">)</span>
+            <span class="n">fill_volumes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fill_volumes</span><span class="p">(</span><span class="n">order_volumes</span><span class="p">,</span> <span class="n">market_daily_volumes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fill_volumes</span> <span class="o">=</span> <span class="n">order_volumes</span>
+
+        <span class="n">fill_prices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fill_prices</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">orders</span><span class="p">,</span> <span class="n">no_slippage_fill_prices</span><span class="p">,</span> <span class="n">fill_volumes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fill_prices</span><span class="p">,</span> <span class="n">fill_volumes</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_fill_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">orders</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Order</span><span class="p">],</span> <span class="n">no_slippage_fill_prices</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                         <span class="n">fill_volumes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_volumes_traded_today</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each ticker return the volume traded today. In case of lacking volume data - 0 is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">date</span> <span class="o">+</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Look into the future in order to see the total volume traded today</span>
+        <span class="n">volume_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_provider</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+        <span class="n">volume_df</span> <span class="o">=</span> <span class="n">volume_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">volumes</span> <span class="o">=</span> <span class="n">volume_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">,</span> <span class="n">tickers</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">))</span>
+
+        <span class="c1"># Replace negative values with 0</span>
+        <span class="n">volumes</span><span class="p">[</span><span class="n">volumes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">volumes</span>
+
+    <span class="k">def</span> <span class="nf">_get_fill_volumes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_volumes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">market_volumes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the fill volumes, where the fill volume for each asset should fulfill the following:</span>
+<span class="sd">        abs(fill_volume) &lt;= self.max_volume_share_limit * volume_traded_today</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_abs_order_volumes</span> <span class="o">=</span> <span class="p">[</span><span class="n">volume</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_volume_share_limit</span> <span class="k">for</span> <span class="n">volume</span> <span class="ow">in</span> <span class="n">market_volumes</span><span class="p">]</span>
+        <span class="n">abs_order_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">order_volumes</span><span class="p">)</span>
+
+        <span class="n">abs_fill_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">abs_order_volumes</span><span class="p">,</span> <span class="n">max_abs_order_volumes</span><span class="p">)</span>
+        <span class="n">fill_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="n">abs_fill_volumes</span><span class="p">,</span> <span class="n">order_volumes</span><span class="p">)</span>
+
+        <span class="n">real_fill_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">fill_volumes</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">real_fill_volumes</span>
+
+    <span class="k">def</span> <span class="nf">_check_for_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">orders</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Order</span><span class="p">]):</span>
+        <span class="n">sorted_orders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">orders</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">order</span><span class="p">:</span> <span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">contract</span><span class="p">,</span> <span class="n">orders_group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">sorted_orders</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">order</span><span class="p">:</span> <span class="n">order</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">symbol</span><span class="p">):</span>
+            <span class="n">orders_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">orders_group</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">orders_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> More than one order for ticker </span><span class="si">{}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">contract</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">orders_list</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">order</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

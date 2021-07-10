@@ -1,0 +1,6 @@
+kelly
+=============================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.kelly
+
+.. autofunction:: kelly

@@ -1,0 +1,9 @@
+LogReturnsDataFrame
+=====================================================================
+
+.. currentmodule:: qf_lib.containers.dataframe.log_returns_dataframe
+
+.. autoclass:: LogReturnsDataFrame
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+FixedCommissionModel
+==================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.commission_models.fixed_commission_model
+
+.. autoclass:: FixedCommissionModel
+	:show-inheritance:
+	:autosummary:
+	:members:

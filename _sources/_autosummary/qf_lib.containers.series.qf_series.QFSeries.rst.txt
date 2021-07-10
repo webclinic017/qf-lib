@@ -1,0 +1,9 @@
+QFSeries
+===========================================
+
+.. currentmodule:: qf_lib.containers.series.qf_series
+
+.. autoclass:: QFSeries
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,6 @@
+convert_to_list
+====================================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.to_list_conversion
+
+.. autofunction:: convert_to_list

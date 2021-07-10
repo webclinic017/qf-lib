@@ -1,0 +1,9 @@
+RobustCovariance
+======================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.covariance_estimation.robust_covariance
+
+.. autoclass:: RobustCovariance
+	:show-inheritance:
+	:autosummary:
+	:members:

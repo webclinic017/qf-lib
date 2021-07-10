@@ -1,0 +1,9 @@
+Method
+===============================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.consecutive_duplicates
+
+.. autoclass:: Method
+	:show-inheritance:
+	:autosummary:
+	:members:

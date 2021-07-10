@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RobustCovariance &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NonlinearFunctionOptimizer" href="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html" />
+    <link rel="prev" title="BlackLitterman" href="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html">BlackLitterman</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RobustCovariance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html">NonlinearFunctionOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html">QuadraticOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html">Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html">EfficientFrontierPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio.html">EqualRiskContributionPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio.html">KellyPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio.html">MaxDiversificationPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio.html">MaxExcessReturnPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio.html">MaxSharpeRatioPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio.html">MinVariancePortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio.html">MultiFactorPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio.html">RiskParityPortfolio</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../portfolio_construction.html">portfolio_construction</a> &raquo;</li>
+        
+      <li>RobustCovariance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="robustcovariance">
+<h1>RobustCovariance<a class="headerlink" href="#robustcovariance" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.portfolio_construction.covariance_estimation.robust_covariance.</code><code class="sig-name descname">RobustCovariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">simple_returns</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/covariance_estimation/robust_covariance.html#RobustCovariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates a class used for vol forecasting and covariance matrix estimation
+NOTE: this method has a tendency to make decrease the volatility</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simple_returns</strong> (<a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame"><em>QFDataFrame</em></a>) – QFDataFrame of simple returns of the assets</p>
+</dd>
+</dl>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.calculate_covariance" title="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.calculate_covariance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_covariance</span></code></a>(vol_process, horizon, …)</p></td>
+<td><p>Calculates the covariance matrix using foretasted volatility for each asset and rank correlation between the assets.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.calculate_covariance">
+<code class="sig-name descname">calculate_covariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vol_process</span><span class="p">:</span> <span class="n">arch.univariate.volatility.VolatilityProcess</span></em>, <em class="sig-param"><span class="n">horizon</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'analytic'</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/covariance_estimation/robust_covariance.html#RobustCovariance.calculate_covariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.calculate_covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the covariance matrix using foretasted volatility for each asset and
+rank correlation between the assets. Covariance matrix contains NOT annualised values.
+They are expressed in the frequency of the input returns</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vol_process</strong> (<em>VolatilityProcess</em>) – volatility proces used for forecats calculation. For example EGARCH(p=p, o=o, q=q)</p></li>
+<li><p><strong>horizon</strong> (<em>int</em>) – horizon for the volatility forecast. It is expressed in the frequency of the returns provided</p></li>
+<li><p><strong>(</strong><strong>optional</strong><strong>)</strong> (<em>method</em>) – method of the volatility forecast calculation. Possible: ‘analytic’, ‘simulation’ or ‘bootstrap’
+‘analytic’ is the fastest but is not available for EGARCH and possibly some other models.
+For details check arch documentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>cov_matrix of the assets.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html" class="btn btn-neutral float-right" title="NonlinearFunctionOptimizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html" class="btn btn-neutral float-left" title="BlackLitterman" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

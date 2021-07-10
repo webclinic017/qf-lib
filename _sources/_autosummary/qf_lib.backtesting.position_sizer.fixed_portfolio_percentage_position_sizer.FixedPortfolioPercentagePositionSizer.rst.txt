@@ -1,0 +1,9 @@
+FixedPortfolioPercentagePositionSizer
+=================================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.position_sizer.fixed_portfolio_percentage_position_sizer
+
+.. autoclass:: FixedPortfolioPercentagePositionSizer
+	:show-inheritance:
+	:autosummary:
+	:members:

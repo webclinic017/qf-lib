@@ -1,0 +1,9 @@
+AxesCoordinate
+====================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.coordinate
+
+.. autoclass:: AxesCoordinate
+	:show-inheritance:
+	:autosummary:
+	:members:

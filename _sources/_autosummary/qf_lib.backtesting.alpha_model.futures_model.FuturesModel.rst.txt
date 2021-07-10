@@ -1,0 +1,9 @@
+FuturesModel
+=========================================================
+
+.. currentmodule:: qf_lib.backtesting.alpha_model.futures_model
+
+.. autoclass:: FuturesModel
+	:show-inheritance:
+	:autosummary:
+	:members:

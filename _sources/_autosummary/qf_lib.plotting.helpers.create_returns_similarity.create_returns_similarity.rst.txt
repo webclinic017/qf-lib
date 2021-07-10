@@ -1,0 +1,6 @@
+create_returns_similarity
+===========================================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_returns_similarity
+
+.. autofunction:: create_returns_similarity

@@ -1,0 +1,9 @@
+DailyMarketEvent
+===========================================================================================
+
+.. currentmodule:: qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event
+
+.. autoclass:: DailyMarketEvent
+	:show-inheritance:
+	:autosummary:
+	:members:

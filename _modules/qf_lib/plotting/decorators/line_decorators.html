@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.plotting.decorators.line_decorators &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.plotting.decorators.line_decorators</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.plotting.decorators.line_decorators</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ScalarType</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.constants</span> <span class="kn">import</span> <span class="n">HIGHCHART_COLORS</span><span class="p">,</span> <span class="n">HIGHCHART_DASH_STYLES</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.chart_decorator</span> <span class="kn">import</span> <span class="n">ChartDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.simple_legend_item</span> <span class="kn">import</span> <span class="n">SimpleLegendItem</span>
+
+
+<div class="viewcode-block" id="HorizontalLineDecorator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator">[docs]</a><span class="k">class</span> <span class="nc">HorizontalLineDecorator</span><span class="p">(</span><span class="n">ChartDecorator</span><span class="p">,</span> <span class="n">SimpleLegendItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple decorator that displays a horizontal line.</span>
+
+<span class="sd">    Constructs a new horizontal line decorator. The ``plot_settings`` are passed directly to matplotlib&#39;s</span>
+<span class="sd">    ``axhline``. See http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axhline for valid settings.</span>
+
+<span class="sd">    When plotting for the web, the ``plot_settings`` are passed directly to HighChart&#39;s plotLines options.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">ScalarType</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_settings</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="n">ChartDecorator</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">SimpleLegendItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span> <span class="o">=</span> <span class="n">plot_settings</span>
+
+<div class="viewcode-block" id="HorizontalLineDecorator.decorate"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate">[docs]</a>    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="s2">&quot;Chart&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Save the line ID so that the legend can make use of it.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend_artist</span> <span class="o">=</span> <span class="n">chart</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HorizontalLineDecorator.decorate_html"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.HorizontalLineDecorator.decorate_html">[docs]</a>    <span class="k">def</span> <span class="nf">decorate_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="s2">&quot;Chart&quot;</span><span class="p">,</span> <span class="n">chart_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            if (decorator_options.yAxis.plotLines === undefined) {</span>
+<span class="s2">                decorator_options.yAxis.plotLines = [];</span>
+<span class="s2">            }</span>
+
+<span class="s2">            decorator_options.yAxis.plotLines.push({</span>
+<span class="s2">                color: &quot;{{ color }}&quot;,</span>
+<span class="s2">                dashStyle: &quot;{{ dash_style }}&quot;,</span>
+<span class="s2">                value: {{ value }},</span>
+<span class="s2">                width: 2,</span>
+<span class="s2">                {</span><span class="si">% f</span><span class="s2">or key, value in plot_settings.items(): %}</span>
+<span class="s2">                    {</span><span class="si">% i</span><span class="s2">f key in [&quot;label&quot;]: %}</span>
+<span class="s2">                        {{ key }}: {{ value }},</span>
+<span class="s2">                    {</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">                {</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+<span class="s2">            });</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">HIGHCHART_COLORS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">)</span>
+
+        <span class="n">dash_style</span> <span class="o">=</span> <span class="n">HIGHCHART_DASH_STYLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">[</span><span class="s2">&quot;linestyle&quot;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">dash_style</span><span class="o">=</span><span class="n">dash_style</span><span class="p">,</span> <span class="n">decorator_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="VerticalLineDecorator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator">[docs]</a><span class="k">class</span> <span class="nc">VerticalLineDecorator</span><span class="p">(</span><span class="n">ChartDecorator</span><span class="p">,</span> <span class="n">SimpleLegendItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple decorator that displays a vertical line.</span>
+
+<span class="sd">    Constructs a new vertical line decorator. The ``plot_settings`` are passed directly to matplotlib&#39;s ``axvline``.</span>
+<span class="sd">    See http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axvline for valid settings.</span>
+
+<span class="sd">    When plotting for the web, the ``plot_settings`` are passed directly to HighChart&#39;s plotLines options.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ScalarType</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_settings</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="n">ChartDecorator</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">SimpleLegendItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span> <span class="o">=</span> <span class="n">plot_settings</span>
+
+<div class="viewcode-block" id="VerticalLineDecorator.decorate"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.decorate">[docs]</a>    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="s2">&quot;Chart&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Save the line ID so that the legend can make use of it.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend_artist</span> <span class="o">=</span> <span class="n">chart</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VerticalLineDecorator.decorate_html"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.VerticalLineDecorator.decorate_html">[docs]</a>    <span class="k">def</span> <span class="nf">decorate_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="s2">&quot;Chart&quot;</span><span class="p">,</span> <span class="n">chart_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            if (decorator_options.xAxis.plotLines === undefined) {</span>
+<span class="s2">                decorator_options.xAxis.plotLines = [];</span>
+<span class="s2">            }</span>
+
+<span class="s2">            decorator_options.xAxis.plotLines.push({</span>
+<span class="s2">                color: &quot;{{ color }}&quot;,</span>
+<span class="s2">                dashStyle: &quot;{{ dash_style }}&quot;,</span>
+<span class="s2">                value: moment({{ value }} * 1000).toDate(),</span>
+<span class="s2">                width: 2,</span>
+<span class="s2">                {</span><span class="si">% f</span><span class="s2">or key, value in plot_settings.items(): %}</span>
+<span class="s2">                    {</span><span class="si">% i</span><span class="s2">f key in [&quot;label&quot;]: %}</span>
+<span class="s2">                        {{ key }}: {{ value }},</span>
+<span class="s2">                    {</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">                {</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+<span class="s2">            });</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># This assumes that the line chart&#39;s x-axis contains dates.</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">HIGHCHART_COLORS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="p">)</span>
+
+        <span class="n">dash_style</span> <span class="o">=</span> <span class="n">HIGHCHART_DASH_STYLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">[</span><span class="s2">&quot;linestyle&quot;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">dash_style</span><span class="o">=</span><span class="n">dash_style</span><span class="p">,</span>
+                               <span class="n">plot_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DiagonalLineDecorator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator">[docs]</a><span class="k">class</span> <span class="nc">DiagonalLineDecorator</span><span class="p">(</span><span class="n">ChartDecorator</span><span class="p">,</span> <span class="n">SimpleLegendItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple decorator that displays a diagonal line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_settings</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="n">ChartDecorator</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">SimpleLegendItem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span> <span class="o">=</span> <span class="n">plot_settings</span>
+
+<div class="viewcode-block" id="DiagonalLineDecorator.decorate"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.html#qf_lib.plotting.decorators.line_decorators.DiagonalLineDecorator.decorate">[docs]</a>    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="s2">&quot;Chart&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Save the line ID so that the legend can make use of it.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend_artist</span> <span class="o">=</span> <span class="n">chart</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">transform</span><span class="o">=</span><span class="n">chart</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_settings</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

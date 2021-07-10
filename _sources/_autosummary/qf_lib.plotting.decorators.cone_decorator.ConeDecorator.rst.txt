@@ -1,0 +1,9 @@
+ConeDecorator
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.cone_decorator
+
+.. autoclass:: ConeDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

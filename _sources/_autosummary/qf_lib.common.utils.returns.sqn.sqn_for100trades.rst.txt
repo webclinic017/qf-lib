@@ -1,0 +1,6 @@
+sqn_for100trades
+================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.sqn
+
+.. autofunction:: sqn_for100trades

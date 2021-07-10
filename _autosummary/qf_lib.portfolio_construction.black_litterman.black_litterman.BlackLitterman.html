@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BlackLitterman &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RobustCovariance" href="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html" />
+    <link rel="prev" title="portfolio_construction" href="../portfolio_construction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BlackLitterman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html">RobustCovariance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html">NonlinearFunctionOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html">QuadraticOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html">Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html">EfficientFrontierPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio.html">EqualRiskContributionPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio.html">KellyPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio.html">MaxDiversificationPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio.html">MaxExcessReturnPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio.html">MaxSharpeRatioPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio.html">MinVariancePortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio.html">MultiFactorPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio.html">RiskParityPortfolio</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../portfolio_construction.html">portfolio_construction</a> &raquo;</li>
+        
+      <li>BlackLitterman</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="blacklitterman">
+<h1>BlackLitterman<a class="headerlink" href="#blacklitterman" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.portfolio_construction.black_litterman.black_litterman.</code><code class="sig-name descname">BlackLitterman</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hist_cov</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em>, <em class="sig-param"><span class="n">sample_size</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">sharpe</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates an object allowing calculation of the distribution of the returns using Black Litterman model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist_cov</strong> (<a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame"><em>QFDataFrame</em></a>) – covariance matrix of historical excess returns of assets; should be annualized</p></li>
+<li><p><strong>weights</strong> (<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><em>QFSeries</em></a>) – weights of assets in the market cap index</p></li>
+<li><p><strong>sample_size</strong> (<em>int</em>) – number of simple returns used to estimate the historical covariance</p></li>
+<li><p><strong>sharpe</strong> (<em>float</em>) – average sharpe ratio of the market (by default value of 0.5 is used)</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Attributes</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Omega" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Omega"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Omega</span></code></a></p></td>
+<td><p>Matrix of variance of the views Matrix is square and diagonal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.P" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.P"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P</span></code></a></p></td>
+<td><p>Matrix of views P.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Q" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Q"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Q</span></code></a></p></td>
+<td><p>Vector of expected performance Q.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_absolute_view" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_absolute_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_absolute_view</span></code></a>(asset_index, …)</p></td>
+<td><p>Adds a new view that will be taken into account in calculating the posterior</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_relative_view" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_relative_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_relative_view</span></code></a>(outperforming_asset_index, …)</p></td>
+<td><p>Adds a new view that will be taken into account in calculating the posterior</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_lambda" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_lambda"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_lambda</span></code></a>()</p></td>
+<td><p>Calculates lambda corresponding to risk aversion in the formula:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_posterior" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_posterior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_posterior</span></code></a>()</p></td>
+<td><p>Calculate shape of posterior distribution including the views.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_prior" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_prior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_prior</span></code></a>()</p></td>
+<td><p>Function calculates the prior for the BL model:</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Omega">
+<em class="property">property </em><code class="sig-name descname">Omega</code><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix of variance of the views
+Matrix is square and diagonal. Each value Omega[i,i] corresponds to the variance of a specific view
+nr of rows = number of different views
+nr of columns = number of different views
+For example:
+- (0.0001, 0.0000) means we expect volatility of the first view to be sqrt(0.0001) = 0.01 = 1%
+- (0.0000, 0.0025) means we expect volatility of the first view to be sqrt(0.0025) = 0.05 = 5%
+NOTE: self._omega is stored as horizontal vector. Values are copied on diagonal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.P">
+<em class="property">property </em><code class="sig-name descname">P</code><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.P" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix of views P.
+nr of rows = number of different views
+nr of columns = number of assets
+Example for 4 assets and 2 views:</p>
+<ul class="simple">
+<li><p>(0, 1, 0, 0) means go long second asset</p></li>
+<li><p>(0, 1, 0, -1) means go long second asset while shorting first asset</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Q">
+<em class="property">property </em><code class="sig-name descname">Q</code><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of expected performance Q. Also sometimes refered as vector v
+nr of rows = number of different views
+nr of columns = 1
+For example:
+- [0.10]
+- [0.03]
+means that we have two views and we expect to realise 10% above risk free rate on first view and 3% on second</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_absolute_view">
+<code class="sig-name descname">add_absolute_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asset_index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">outperformance</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">view_vol</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman.add_absolute_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_absolute_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new view that will be taken into account in calculating the posterior</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>short_asset_index</strong> (<em>int</em>) – index of the asset that we expect to outperform the market (indexing starts at 0)</p></li>
+<li><p><strong>outperformance</strong> (<em>float</em>) – how much are we expecting one asset to outperform the market</p></li>
+<li><p><strong>view_vol</strong> (<em>float</em>) – volatility of the view.
+This is the measure of a standard deviation of the outperformance value.
+For example: 0.02 means that the real outperformance will be
+provided outperformance +- 2% within one standard deviation confidence interval.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_relative_view">
+<code class="sig-name descname">add_relative_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outperforming_asset_index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">underperforming_asset_index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">outperformance</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">view_vol</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman.add_relative_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.add_relative_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new view that will be taken into account in calculating the posterior
+The investor believs that outperforming_asset will outperform the underperforming_asset by outperformance
+with the volatility of the view of  view_vol</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outperforming_asset_index</strong> (<em>int</em>) – index of the asset that you believe will outperform (indexing starts at 0)</p></li>
+<li><p><strong>underperforming_asset_index</strong> (<em>int</em>) – index of the asset that you believe will underperform (indexing starts at 0)</p></li>
+<li><p><strong>outperformance</strong> (<em>float</em>) – how much are we expecting one asset to outperform the other</p></li>
+<li><p><strong>view_vol</strong> (<em>float</em>) – volatility of the outperformance.
+This is the measure of a standard deviation of the outperformance value.
+For example: 0.02 means that the real outperformance will be
+provided outperformance +- 2% within one standard deviation confidence interval.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_lambda">
+<code class="sig-name descname">calculate_lambda</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman.calculate_lambda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_lambda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates lambda corresponding to risk aversion in the formula:
+max(w):  w’R - lambda/2 * w’ * Cov * w:</p>
+<p>lambda is calculated in the followign way:
+lambda = sharpe_ratio_of_market / vol_of_market.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_posterior">
+<code class="sig-name descname">calculate_posterior</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman.calculate_posterior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_posterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate shape of posterior distribution including the views. It is calculated using a numerically stable formula
+posterior_mean = prior_mean + tau * hist_cov * P’ * ( tau * P * hist_cov * P’ + Omega)^(-1) * (Q - P * prior_mean)
+posterior_cov = (1 + tau) * hist_cov - tau^2 * hist_cov * P’ * (tau * P * hist_cov * P’ + Omega)^(-1) * P * hist_cov</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple[<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">QFSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_prior">
+<code class="sig-name descname">calculate_prior</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/black_litterman/black_litterman.html#BlackLitterman.calculate_prior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.calculate_prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function calculates the prior for the BL model:
+- prior_mean = lambda * hist_cov * market_cap_weights
+- prior_cov = tau * hist_cov</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple(prior_mean, prior_cov)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple[<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">QFSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html" class="btn btn-neutral float-right" title="RobustCovariance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../portfolio_construction.html" class="btn btn-neutral float-left" title="portfolio_construction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

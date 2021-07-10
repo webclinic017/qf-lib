@@ -1,0 +1,6 @@
+avg_drawdown_duration
+=======================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.avg_drawdown_duration
+
+.. autofunction:: avg_drawdown_duration

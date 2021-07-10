@@ -1,0 +1,9 @@
+OrderFactory
+===================================================
+
+.. currentmodule:: qf_lib.backtesting.order.order_factory
+
+.. autoclass:: OrderFactory
+	:show-inheritance:
+	:autosummary:
+	:members:

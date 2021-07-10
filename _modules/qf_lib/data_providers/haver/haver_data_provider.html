@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.haver.haver_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.haver.haver_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.haver.haver_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">PeriodIndex</span><span class="p">,</span> <span class="n">DataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">HaverTicker</span><span class="p">,</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.abstract_price_data_provider</span> <span class="kn">import</span> <span class="n">AbstractPriceDataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">Haver</span>
+    <span class="n">is_haver_installed</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">is_haver_installed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No Haver installed. If you would like to use HaverDataProvider first install the Haver library.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HaverDataProvider"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider">[docs]</a><span class="k">class</span> <span class="nc">HaverDataProvider</span><span class="p">(</span><span class="n">AbstractPriceDataProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constructs a new ``HaverDataProvider`` instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings</span>
+<span class="sd">        Settings object, which should contain path to the directory with the Haver database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">get_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_location</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">haver_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HaverDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">HaverTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">HaverTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Gets historical fields for Haver tickers.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        tickers: HaverTicker, Sequence[HaverTicker]</span>
+<span class="sd">            Haver tickers, for which the prices should be returned</span>
+<span class="sd">        fields</span>
+<span class="sd">            should be equal to None as each ticker corresponds to one timeseries and there is no such thing as a field</span>
+<span class="sd">            in the Haver DB</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            date representing the beginning of historical period from which data should be retrieved</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            date representing the end of historical period from which data should be retrieved;</span>
+<span class="sd">            if no end_date was provided, by default the current date will be used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------------</span>
+<span class="sd">        QFSeries, QFDataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Data field is provided but it will nor be used&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
+        <span class="n">HaverDataProvider</span><span class="o">.</span><span class="n">get_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">HaverTicker</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_single</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">()</span>
+                <span class="c1"># we should go one by one as making single large query will keep just common dates</span>
+                <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">:</span>
+                    <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_single</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">series</span>
+                <span class="k">return</span> <span class="n">result</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">HaverDataProvider</span><span class="o">.</span><span class="n">get_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HaverDataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">HaverTicker</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="HaverDataProvider.price_field_to_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.price_field_to_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">HaverTicker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Haver stores only end of day figures. Use PriceField.Close to obtain them</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>  <span class="c1"># Field representation is none as Field is unused</span>
+        <span class="k">return</span> <span class="n">price_field_dict</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_single</span><span class="p">(</span><span class="n">haver_ticker</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">start_date</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+        <span class="n">ticker_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">haver_ticker</span><span class="o">.</span><span class="n">database_name</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">haver_ticker</span><span class="o">.</span><span class="n">ticker</span><span class="p">]</span>
+        <span class="n">raw_series</span> <span class="o">=</span> <span class="n">Haver</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="n">startdate</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">enddate</span><span class="o">=</span><span class="n">end_date</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_series</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_series</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">PeriodIndex</span><span class="p">):</span>
+                <span class="n">raw_series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">raw_series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">raw_series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">()</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">haver_ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_haver_installed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_location</span><span class="p">):</span>
+                <span class="n">Haver</span><span class="o">.</span><span class="n">path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_location</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t access Haver directory. Probably there is no access to the O: drive.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_connect_if_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calling this function should be the first line in any method accessing the database</span>
+<span class="sd">        It was introduced to make the use of the database lazy and connect only when used requests data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="s2">&quot;No Haver connection.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HaverDataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Downloading Future Chain Tickers in HaverDataProvider is not supported yet&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HaverDataProvider.expiration_date_field_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.expiration_date_field_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">expiration_date_field_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

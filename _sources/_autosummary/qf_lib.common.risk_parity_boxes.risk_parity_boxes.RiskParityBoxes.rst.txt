@@ -1,0 +1,9 @@
+RiskParityBoxes
+=================================================================
+
+.. currentmodule:: qf_lib.common.risk_parity_boxes.risk_parity_boxes
+
+.. autoclass:: RiskParityBoxes
+	:show-inheritance:
+	:autosummary:
+	:members:

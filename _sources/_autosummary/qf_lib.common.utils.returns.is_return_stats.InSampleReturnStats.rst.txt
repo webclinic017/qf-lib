@@ -1,0 +1,9 @@
+InSampleReturnStats
+===============================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.is_return_stats
+
+.. autoclass:: InSampleReturnStats
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FactorizationManager &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Method" href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html" />
+    <link rel="prev" title="StepwiseFactorsIdentifier" href="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../common.html">common</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../common.html#enums">enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#exceptions">exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#risk-parity-boxes">risk_parity_boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#tickers">tickers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#timeseries-analysis">timeseries_analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../common.html#utils">utils</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../common.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html">AnalyticalConeBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html">AnalyticalCone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS.html">AnalyticalConeOOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.date_format.DateFormat.html">DateFormat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.Timer.html">Timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.RealTimer.html">RealTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.SettableTimer.html">SettableTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model.DataModel.html">DataModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput.html">DataModelInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html">RollingWindowsEstimator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter.html">DataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html">RollingDataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html">ElasticNetFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified.html">ElasticNetFactorsIdentifierSimplified</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html">StepwiseFactorsIdentifier</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">FactorizationManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html">Method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats.html">InSampleReturnStats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html">DriftIndependentVolatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.html">VolatilityForecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html">VolatilityManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.data_cleaner.DataCleaner.html">DataCleaner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../common.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../common.html">common</a> &raquo;</li>
+        
+      <li>FactorizationManager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="factorizationmanager">
+<h1>FactorizationManager<a class="headerlink" href="#factorizationmanager" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.common.utils.factorization.manager.FactorizationManager">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.common.utils.factorization.manager.</code><code class="sig-name descname">FactorizationManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysed_tms</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em>, <em class="sig-param"><span class="n">regressors_df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency">qf_lib.common.enums.frequency.Frequency</a></span></em>, <em class="sig-param"><span class="n">factors_identifier</span><span class="p">:</span> <span class="n">qf_lib.common.utils.factorization.factors_identification.factors_identifier.FactorsIdentifier</span></em>, <em class="sig-param"><span class="n">is_fit_intercept</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/common/utils/factorization/manager.html#FactorizationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.factorization.manager.FactorizationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Facade class for factorization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysed_tms</strong> – must have a set name in order to be displayed properly later on</p></li>
+<li><p><strong>regressors_df</strong> – must have a set name for each column in order to be displayed properly later on</p></li>
+<li><p><strong>frequency</strong> – frequency of every series (the same for all)</p></li>
+<li><p><strong>factors_identifier</strong> – class used for identifying significant factors for the model (picks them up from regressors_df)</p></li>
+<li><p><strong>is_fit_intercept</strong> – default True; True if the calculated model should include the intercept coefficient</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.extract_data_for_analysis" title="qf_lib.common.utils.factorization.manager.FactorizationManager.extract_data_for_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_data_for_analysis</span></code></a>()</p></td>
+<td><p>Extracts data which is useful for building the model explaining the fund’s timeseries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.get_factorization_data_model" title="qf_lib.common.utils.factorization.manager.FactorizationManager.get_factorization_data_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_factorization_data_model</span></code></a>()</p></td>
+<td><p>Creates model explaining fund’s timeseries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.get_rolling_factorization_data_model" title="qf_lib.common.utils.factorization.manager.FactorizationManager.get_rolling_factorization_data_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rolling_factorization_data_model</span></code></a>()</p></td>
+<td><p>Creates multiple models explaining fund’s timeseries (one model for each time window).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.common.utils.factorization.manager.FactorizationManager.extract_data_for_analysis">
+<code class="sig-name descname">extract_data_for_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/common/utils/factorization/manager.html#FactorizationManager.extract_data_for_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.extract_data_for_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts data which is useful for building the model explaining the fund’s timeseries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dataframe containing only those regressors which are useful for modeling fund’s timeseries and a Timeseries
+of fund which is preprocessed (cleaned data)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple[<a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>, <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">QFSeries</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.utils.factorization.manager.FactorizationManager.get_factorization_data_model">
+<code class="sig-name descname">get_factorization_data_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model.DataModel.html#qf_lib.common.utils.factorization.data_models.data_model.DataModel" title="qf_lib.common.utils.factorization.data_models.data_model.DataModel">qf_lib.common.utils.factorization.data_models.data_model.DataModel</a><a class="reference internal" href="../_modules/qf_lib/common/utils/factorization/manager.html#FactorizationManager.get_factorization_data_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.get_factorization_data_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates model explaining fund’s timeseries.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.utils.factorization.manager.FactorizationManager.get_rolling_factorization_data_model">
+<code class="sig-name descname">get_rolling_factorization_data_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; qf_lib.common.utils.factorization.data_models.rolling_data_model.RollingDataModel<a class="reference internal" href="../_modules/qf_lib/common/utils/factorization/manager.html#FactorizationManager.get_rolling_factorization_data_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.factorization.manager.FactorizationManager.get_rolling_factorization_data_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates multiple models explaining fund’s timeseries (one model for each time window).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html" class="btn btn-neutral float-right" title="Method" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html" class="btn btn-neutral float-left" title="StepwiseFactorsIdentifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

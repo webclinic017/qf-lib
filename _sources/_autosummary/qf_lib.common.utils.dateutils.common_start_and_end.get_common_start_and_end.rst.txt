@@ -1,0 +1,6 @@
+get_common_start_and_end
+===========================================================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.common_start_and_end
+
+.. autofunction:: get_common_start_and_end

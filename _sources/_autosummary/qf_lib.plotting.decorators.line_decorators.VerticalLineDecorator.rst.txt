@@ -1,0 +1,9 @@
+VerticalLineDecorator
+================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.line_decorators
+
+.. autoclass:: VerticalLineDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

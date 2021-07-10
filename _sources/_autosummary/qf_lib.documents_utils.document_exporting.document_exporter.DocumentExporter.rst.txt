@@ -1,0 +1,9 @@
+DocumentExporter
+============================================================================
+
+.. currentmodule:: qf_lib.documents_utils.document_exporting.document_exporter
+
+.. autoclass:: DocumentExporter
+	:show-inheritance:
+	:autosummary:
+	:members:

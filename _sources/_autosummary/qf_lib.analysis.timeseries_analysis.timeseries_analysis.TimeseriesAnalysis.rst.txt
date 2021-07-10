@@ -1,0 +1,9 @@
+TimeseriesAnalysis
+==========================================================================
+
+.. currentmodule:: qf_lib.analysis.timeseries_analysis.timeseries_analysis
+
+.. autoclass:: TimeseriesAnalysis
+	:show-inheritance:
+	:autosummary:
+	:members:

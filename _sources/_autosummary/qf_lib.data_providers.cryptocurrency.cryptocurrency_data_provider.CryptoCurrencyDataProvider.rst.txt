@@ -1,0 +1,9 @@
+CryptoCurrencyDataProvider
+============================================================================================
+
+.. currentmodule:: qf_lib.data_providers.cryptocurrency.cryptocurrency_data_provider
+
+.. autoclass:: CryptoCurrencyDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

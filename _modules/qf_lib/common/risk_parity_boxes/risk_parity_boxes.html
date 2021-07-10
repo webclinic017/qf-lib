@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.risk_parity_boxes.risk_parity_boxes &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.risk_parity_boxes.risk_parity_boxes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.risk_parity_boxes.risk_parity_boxes</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">BloombergTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.common_start_and_end</span> <span class="kn">import</span> <span class="n">get_common_start_and_end</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.cast_dataframe</span> <span class="kn">import</span> <span class="n">cast_dataframe</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.simple_returns_series</span> <span class="kn">import</span> <span class="n">SimpleReturnsSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.bloomberg_data_provider</span> <span class="kn">import</span> <span class="n">BloombergDataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio</span> <span class="kn">import</span> \
+    <span class="n">EqualRiskContributionPortfolio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.portfolio_construction.portfolio_models.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+
+
+<div class="viewcode-block" id="ChangeDirection"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection">[docs]</a><span class="k">class</span> <span class="nc">ChangeDirection</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">RISING</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;Rising&quot;&quot;&quot;</span>
+    <span class="n">FALLING</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;Failing&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="RiskParityBoxes"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes">[docs]</a><span class="k">class</span> <span class="nc">RiskParityBoxes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boxes_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">ChangeDirection</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">ChangeDirection</span><span class="p">,</span> <span class="n">SimpleReturnsSeries</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_boxes_dict</span> <span class="o">=</span> <span class="n">boxes_dict</span>
+
+    <span class="k">def</span> <span class="nf">get_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">growth</span><span class="p">:</span> <span class="n">ChangeDirection</span><span class="p">,</span> <span class="n">inflation</span><span class="p">:</span> <span class="n">ChangeDirection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleReturnsSeries</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boxes_dict</span><span class="p">[</span><span class="n">growth</span><span class="p">][</span><span class="n">inflation</span><span class="p">]</span>
+
+<div class="viewcode-block" id="RiskParityBoxes.as_list"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.as_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SimpleReturnsSeries</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of series corresponding to risk parity boxes. Order of series:</span>
+<span class="sd">        (growth=RISING, inflation=RISING), (growth=RISING, inflation=FALLING), (growth=FALLING, inflation=RISING),</span>
+<span class="sd">        (growth=FALLING, inflation=FALLING).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">list_of_series</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">growth</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">inflation</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+                <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boxes_dict</span><span class="p">[</span><span class="n">growth</span><span class="p">][</span><span class="n">inflation</span><span class="p">]</span>
+                <span class="n">list_of_series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">list_of_series</span></div>
+
+<div class="viewcode-block" id="RiskParityBoxes.from_list"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.from_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="n">list_of_series</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SimpleReturnsSeries</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RiskParityBoxes&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a RiskParityBoxes instance from a list of series. The order in the list must be the following:</span>
+<span class="sd">        (growth=RISING, inflation=RISING), (growth=RISING, inflation=FALLING), (growth=FALLING, inflation=RISING),</span>
+<span class="sd">        (growth=FALLING, inflation=FALLING).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">series_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">list_of_series</span><span class="p">)</span>
+        <span class="n">growth_to_inflation_to_series</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">growth</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+            <span class="n">inflation_to_series</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">inflation</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+                <span class="n">series</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">series_iter</span><span class="p">)</span>
+                <span class="n">inflation_to_series</span><span class="p">[</span><span class="n">inflation</span><span class="p">]</span> <span class="o">=</span> <span class="n">series</span>
+            <span class="n">growth_to_inflation_to_series</span><span class="p">[</span><span class="n">growth</span><span class="p">]</span> <span class="o">=</span> <span class="n">inflation_to_series</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">next</span><span class="p">(</span><span class="n">series_iter</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Got more series than expected: </span><span class="si">{:d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_of_series</span><span class="p">)))</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># this error was expected</span>
+
+        <span class="k">return</span> <span class="n">RiskParityBoxes</span><span class="p">(</span><span class="n">growth_to_inflation_to_series</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RiskParityBoxesFactory"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory">[docs]</a><span class="k">class</span> <span class="nc">RiskParityBoxesFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes timeseries for risk parity boxes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bbg_data_provider: BloombergDataProvider</span>
+<span class="sd">        reference to bloomberg data provider</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbg_data_provider</span><span class="p">:</span> <span class="n">BloombergDataProvider</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bbg_data_provider</span> <span class="o">=</span> <span class="n">bbg_data_provider</span>
+
+        <span class="c1"># index: growth, columns: inflation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tickers_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_tickers_dict</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_tickers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_all_tickers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tickers_dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RiskParityBoxesFactory.make_parity_boxes"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory.make_parity_boxes">[docs]</a>    <span class="k">def</span> <span class="nf">make_parity_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RiskParityBoxes</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Downloads the needed data and makes parity boxes. Each box is one series of returns (starting at the first</span>
+<span class="sd">        date after start_date and ending at the end_date).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">asset_rets_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_assets_data</span><span class="p">(</span><span class="n">end_date</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># create a dict: growth -&gt; inflation -&gt; None</span>
+        <span class="n">boxes_df</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">growth</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+            <span class="n">inflation_to_rets_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">inflation</span> <span class="ow">in</span> <span class="n">ChangeDirection</span><span class="p">:</span>
+                <span class="n">tickers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tickers_dict</span><span class="p">[</span><span class="n">growth</span><span class="p">][</span><span class="n">inflation</span><span class="p">]</span>
+                <span class="n">asset_rets_for_box_df</span> <span class="o">=</span> <span class="n">asset_rets_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">tickers</span><span class="p">]</span>
+                <span class="n">boxes_rets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_box</span><span class="p">(</span><span class="n">asset_rets_for_box_df</span><span class="p">)</span>
+                <span class="n">inflation_to_rets_dict</span><span class="p">[</span><span class="n">inflation</span><span class="p">]</span> <span class="o">=</span> <span class="n">boxes_rets</span>
+
+            <span class="n">boxes_df</span><span class="p">[</span><span class="n">growth</span><span class="p">]</span> <span class="o">=</span> <span class="n">inflation_to_rets_dict</span>
+
+        <span class="k">return</span> <span class="n">RiskParityBoxes</span><span class="p">(</span><span class="n">boxes_df</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_create_tickers_dict</span><span class="p">():</span>
+        <span class="c1"># growth -&gt; inflatoin -&gt; tickers</span>
+        <span class="n">tickers_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">RISING</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">RISING</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;SPGSCITR Index&quot;</span><span class="p">),</span>  <span class="c1"># Commodities (S&amp;P GSCI Total Return CME)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;MSBIERTR Index&quot;</span><span class="p">),</span>  <span class="c1"># EM Debt (Morningstar Emerging Markets Corporate Bond Index TR)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;XAU Curncy&quot;</span><span class="p">)</span>  <span class="c1"># Gold (XAUUSD Spot Exchange Rate - Price of 1 XAU in USD)</span>
+                <span class="p">],</span>
+                <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">FALLING</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;MXUS Index&quot;</span><span class="p">),</span>  <span class="c1"># Equity USA (MSCI USA)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;LQD US Equity&quot;</span><span class="p">)</span>  <span class="c1"># Credit (ISHARES IBOXX investment grade corporate bond etf)</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">FALLING</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">RISING</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="c1"># ILB (Bloomberg Barclays US Inflation Linked Bonds 1 to 10 Year TR)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;BCIT3T Index&quot;</span><span class="p">),</span>
+                    <span class="c1"># Gold (XAUUSD Spot Exchange Rate - Price of 1 XAU in USD)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;XAU Curncy&quot;</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">ChangeDirection</span><span class="o">.</span><span class="n">FALLING</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;IEF US Equity&quot;</span><span class="p">),</span>  <span class="c1"># Gov bonds (7-10y treasury)</span>
+                    <span class="n">BloombergTicker</span><span class="p">(</span><span class="s2">&quot;XAU Curncy&quot;</span><span class="p">)</span>  <span class="c1"># Gold (XAUUSD Spot Exchange Rate - Price of 1 XAU in USD)</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">tickers_dict</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_all_tickers</span><span class="p">(</span><span class="n">tickers_dict</span><span class="p">):</span>
+        <span class="n">all_tickers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">inflation_to_tickers</span> <span class="ow">in</span> <span class="n">tickers_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">tickers</span> <span class="ow">in</span> <span class="n">inflation_to_tickers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">all_tickers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">all_tickers</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_assets_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">):</span>
+        <span class="c1"># download data</span>
+        <span class="n">asset_prices_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bbg_data_provider</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_tickers</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+        <span class="n">asset_prices_df</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span><span class="n">asset_prices_df</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="n">PricesDataFrame</span><span class="p">)</span>
+
+        <span class="c1"># trim</span>
+        <span class="n">common_start</span><span class="p">,</span> <span class="n">common_end</span> <span class="o">=</span> <span class="n">get_common_start_and_end</span><span class="p">(</span><span class="n">asset_prices_df</span><span class="p">)</span>
+        <span class="n">trimmed_asset_prices_df</span> <span class="o">=</span> <span class="n">asset_prices_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">common_start</span><span class="p">:</span><span class="n">common_end</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># type: PricesDataFrame</span>
+
+        <span class="c1"># remove intermediate NaNs</span>
+        <span class="n">trimmed_asset_prices_df</span> <span class="o">=</span> <span class="n">trimmed_asset_prices_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>  <span class="c1"># forward fill</span>
+
+        <span class="c1"># convert to simple returns</span>
+        <span class="n">assets_rets</span> <span class="o">=</span> <span class="n">trimmed_asset_prices_df</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">assets_rets</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_box</span><span class="p">(</span><span class="n">asset_returns_df</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleReturnsSeries</span><span class="p">:</span>
+        <span class="n">portfolio</span> <span class="o">=</span> <span class="n">EqualRiskContributionPortfolio</span><span class="p">(</span><span class="n">asset_returns_df</span><span class="o">.</span><span class="n">cov</span><span class="p">())</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">portfolio</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+        <span class="n">portfolio_rets</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="o">.</span><span class="n">constant_weights</span><span class="p">(</span><span class="n">asset_returns_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">portfolio_rets</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

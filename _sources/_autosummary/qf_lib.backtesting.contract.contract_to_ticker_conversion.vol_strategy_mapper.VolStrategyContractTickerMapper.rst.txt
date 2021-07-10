@@ -1,0 +1,9 @@
+VolStrategyContractTickerMapper
+=============================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.contract.contract_to_ticker_conversion.vol_strategy_mapper
+
+.. autoclass:: VolStrategyContractTickerMapper
+	:show-inheritance:
+	:autosummary:
+	:members:

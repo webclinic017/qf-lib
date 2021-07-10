@@ -1,0 +1,9 @@
+BloombergTicker
+=============================================
+
+.. currentmodule:: qf_lib.common.tickers.tickers
+
+.. autoclass:: BloombergTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

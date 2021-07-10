@@ -1,0 +1,9 @@
+FutureTicker
+===================================================================
+
+.. currentmodule:: qf_lib.containers.futures.future_tickers.future_ticker
+
+.. autoclass:: FutureTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

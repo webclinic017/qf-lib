@@ -1,0 +1,9 @@
+PositionSizer
+==============================================================
+
+.. currentmodule:: qf_lib.backtesting.position_sizer.position_sizer
+
+.. autoclass:: PositionSizer
+	:show-inheritance:
+	:autosummary:
+	:members:

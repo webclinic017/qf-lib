@@ -1,0 +1,9 @@
+QuadraticOptimizer
+===============================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.optimizers.quadratic_optimizer
+
+.. autoclass:: QuadraticOptimizer
+	:show-inheritance:
+	:autosummary:
+	:members:

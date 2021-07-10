@@ -1,0 +1,9 @@
+SimplePositionSizer
+===========================================================================
+
+.. currentmodule:: qf_lib.backtesting.position_sizer.simple_position_sizer
+
+.. autoclass:: SimplePositionSizer
+	:show-inheritance:
+	:autosummary:
+	:members:

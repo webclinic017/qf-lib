@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.exposure_analysis.exposure_sheet &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.exposure_analysis.exposure_sheet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.exposure_analysis.exposure_sheet</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">get_cmap</span>
+<span class="kn">from</span> <span class="nn">matplotlib.dates</span> <span class="kn">import</span> <span class="n">DateFormatter</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">StrMethodFormatter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.common.abstract_document</span> <span class="kn">import</span> <span class="n">AbstractDocument</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.matplotlib_location</span> <span class="kn">import</span> <span class="n">AxisLocation</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_format</span> <span class="kn">import</span> <span class="n">DateFormat</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.error_handling</span> <span class="kn">import</span> <span class="n">ErrorHandling</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.chart</span> <span class="kn">import</span> <span class="n">ChartElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.paragraph</span> <span class="kn">import</span> <span class="n">ParagraphElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_formatter_decorator</span> <span class="kn">import</span> <span class="n">AxesFormatterDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_position_decorator</span> <span class="kn">import</span> <span class="n">AxesPositionDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator_custom_position</span> <span class="kn">import</span> <span class="n">LegendDecoratorCustomPosition</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<div class="viewcode-block" id="ExposureSheet"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet.html#qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet">[docs]</a><span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">class_error_logging</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ExposureSheet</span><span class="p">(</span><span class="n">AbstractDocument</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an Exposure Sheet in PDF format</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        settings of the project</span>
+<span class="sd">    pdf_exporter: PDFExporter</span>
+<span class="sd">        tool that creates the pdf with the result</span>
+<span class="sd">    title: str</span>
+<span class="sd">        title of the document. Default: Exposure Sheet</span>
+<span class="sd">    axis_position: Tuple[float, float, float, float]</span>
+<span class="sd">        position of the axes (the area of the chart) on the figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Exposure Sheet&quot;</span><span class="p">,</span>
+                 <span class="n">axis_position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.850</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">)):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sector_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis_position</span> <span class="o">=</span> <span class="n">axis_position</span>
+
+    <span class="k">def</span> <span class="nf">build_document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_header</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sector_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sector_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sector_data</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_factor_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor_data</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="c1"># Set the style for the report</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;tearsheet&#39;</span><span class="p">])</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M </span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Exposure Sheet&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="p">],</span> <span class="n">report_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_sector_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector_data</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets coefficients of sector-related regressors</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sector_data: QFDataFrame</span>
+<span class="sd">            QFDataFrame that contains coefficients for sector-related regressors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sector_data</span> <span class="o">=</span> <span class="n">sector_data</span>
+
+    <span class="k">def</span> <span class="nf">set_factor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_data</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets coefficients of factor-related regressors</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        factor_data: QFDataFrame</span>
+<span class="sd">            QFDataFrame that contains coefficients for factor-related regressors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor_data</span> <span class="o">=</span> <span class="n">factor_data</span>
+
+    <span class="k">def</span> <span class="nf">_add_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_chart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span>
+            <span class="n">ChartElement</span><span class="p">(</span>
+                <span class="n">chart</span><span class="o">=</span><span class="n">chart</span><span class="p">,</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span>
+                <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="c1"># Place legend on bottom right corner of plot</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecoratorCustomPosition</span><span class="p">(</span><span class="n">legend_placement</span><span class="o">=</span><span class="n">AxisLocation</span><span class="o">.</span><span class="n">LOWER_LEFT</span><span class="p">)</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;tab10&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+
+        <span class="c1"># iterate columns</span>
+        <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color_index</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">)):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span>
+            <span class="n">data_value_decorator</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">color_index</span><span class="p">))</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data_value_decorator</span><span class="p">)</span>
+            <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data_value_decorator</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span>
+            <span class="n">AxesFormatterDecorator</span><span class="p">(</span>
+                <span class="n">x_major</span><span class="o">=</span><span class="n">DateFormatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">DateFormat</span><span class="o">.</span><span class="n">YEAR_DOT_MONTH</span><span class="p">)),</span>
+                <span class="n">y_major</span><span class="o">=</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{x:.2f}</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_position</span><span class="p">))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chart</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

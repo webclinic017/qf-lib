@@ -1,0 +1,9 @@
+Order
+====================================
+
+.. currentmodule:: qf_lib.backtesting.order.order
+
+.. autoclass:: Order
+	:show-inheritance:
+	:autosummary:
+	:members:

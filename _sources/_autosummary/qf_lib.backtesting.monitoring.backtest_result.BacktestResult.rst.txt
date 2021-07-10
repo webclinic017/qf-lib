@@ -1,0 +1,9 @@
+BacktestResult
+============================================================
+
+.. currentmodule:: qf_lib.backtesting.monitoring.backtest_result
+
+.. autoclass:: BacktestResult
+	:show-inheritance:
+	:autosummary:
+	:members:

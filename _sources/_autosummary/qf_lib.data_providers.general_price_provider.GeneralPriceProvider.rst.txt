@@ -1,0 +1,9 @@
+GeneralPriceProvider
+=================================================================
+
+.. currentmodule:: qf_lib.data_providers.general_price_provider
+
+.. autoclass:: GeneralPriceProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

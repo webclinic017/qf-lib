@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.trade_analysis.trades_generator &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.trade_analysis.trades_generator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.trade_analysis.trades_generator</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract</span> <span class="kn">import</span> <span class="n">Contract</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.backtest_position</span> <span class="kn">import</span> <span class="n">BacktestPosition</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.position_factory</span> <span class="kn">import</span> <span class="n">BacktestPositionFactory</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.trade</span> <span class="kn">import</span> <span class="n">Trade</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.utils</span> <span class="kn">import</span> <span class="n">split_transaction_if_needed</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="TradesGenerator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html#qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator">[docs]</a><span class="k">class</span> <span class="nc">TradesGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class responsible for generating Trade objects from information provided in the form of Transactions or</span>
+<span class="sd">    BacktestPositions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TradesGenerator.create_trades_from_backtest_positions"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html#qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.create_trades_from_backtest_positions">[docs]</a>    <span class="k">def</span> <span class="nf">create_trades_from_backtest_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BacktestPosition</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BacktestPosition</span><span class="p">]],</span>
+                                              <span class="n">portfolio_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Trade</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Trade</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates trades from BacktestPositions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        positions: BacktestPosition, Sequence[BacktestPosition]</span>
+<span class="sd">            Position or positions that will be used to generated the trades</span>
+<span class="sd">        portfolio_values: Optional[QFSeries]</span>
+<span class="sd">            Series containing portfolio values at different point in time. It is optional and if provided, the</span>
+<span class="sd">            percentage pnl value is set in the Trade.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        Trade, Sequence[Trade]</span>
+<span class="sd">            Generated Trade (in case of one BacktestPosition) or a sequence of Trades</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">positions</span><span class="p">,</span> <span class="n">got_single_position</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">BacktestPosition</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">compute_percentage_pnl</span><span class="p">(</span><span class="n">position</span><span class="p">:</span> <span class="n">BacktestPosition</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">portfolio_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">position</span><span class="o">.</span><span class="n">total_pnl</span> <span class="o">/</span> <span class="n">portfolio_values</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">trades</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Trade</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">contract</span><span class="p">(),</span> <span class="n">p</span><span class="o">.</span><span class="n">total_pnl</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">total_commission</span><span class="p">(),</span> <span class="n">p</span><span class="o">.</span><span class="n">direction</span><span class="p">(),</span>
+                  <span class="n">compute_percentage_pnl</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">positions</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">got_single_position</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">trades</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">trades</span></div>
+
+<div class="viewcode-block" id="TradesGenerator.create_trades_from_transactions"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html#qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.create_trades_from_transactions">[docs]</a>    <span class="k">def</span> <span class="nf">create_trades_from_transactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">portfolio_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Trade</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates trades based on a series of Transactions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        transactions: Sequence</span>
+<span class="sd">            Sequence of transactions, which should be parsed</span>
+<span class="sd">        portfolio_values: Optional[QFSeries]</span>
+<span class="sd">            Series containing portfolio values at different point in time. It is optional and if provided, the</span>
+<span class="sd">            percentage pnl value is set in the Trade.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        trades: Sequence[Trade]</span>
+<span class="sd">            List containing trades information, sorted by the time of their creation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">transactions_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span>
+            <span class="p">[(</span><span class="n">t</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">],</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;transaction&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;contract&quot;</span><span class="p">,</span> <span class="s2">&quot;quantity&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Position size after transacting the transaction, where position is identified by &quot;contract&quot; variable</span>
+        <span class="n">transactions_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">transactions_df</span><span class="p">[</span><span class="s2">&quot;position size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;contract&quot;</span><span class="p">)[</span><span class="s2">&quot;quantity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+        <span class="c1"># Assign position start values - a position was opened when the position size was equal to the quantity of</span>
+        <span class="c1"># the transaction (the quantity of the contract in the portfolio before transaction was = 0)</span>
+        <span class="n">new_positions_beginning</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="p">[</span><span class="s2">&quot;position size&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">transactions_df</span><span class="p">[</span><span class="s2">&quot;quantity&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">transactions_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;position start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">transactions_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">new_positions_beginning</span><span class="p">,</span> <span class="s2">&quot;position start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">new_positions_beginning</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">transactions_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;position start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;contract&quot;</span><span class="p">)[</span><span class="s2">&quot;position start&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">tms</span><span class="p">:</span> <span class="n">tms</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">))</span>
+
+        <span class="n">trades_series</span> <span class="o">=</span> <span class="n">transactions_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;position start&quot;</span><span class="p">])[</span><span class="s2">&quot;transaction&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_position</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">portfolio_values</span><span class="p">))</span>
+        <span class="n">trades</span> <span class="o">=</span> <span class="n">trades_series</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">trades</span></div>
+
+    <span class="k">def</span> <span class="nf">_parse_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transactions</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">portfolio_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the given position returns generated trades. Trade is defined as a transaction that goes in the direction of</span>
+<span class="sd">        making your position smaller. For example selling part or entire long position is a trade, buying back part or</span>
+<span class="sd">        entire short position is a trade, buying additional shares of existing long position is NOT a trade.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        transactions: QFSeries</span>
+<span class="sd">            Transactions belonging to one certain position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">transactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_transactions_if_needed</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span>
+
+        <span class="n">contract</span> <span class="o">=</span> <span class="n">transactions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contract</span>  <span class="c1"># type: Contract</span>
+        <span class="n">backtest_positions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">backtest_position</span> <span class="o">=</span> <span class="n">BacktestPositionFactory</span><span class="o">.</span><span class="n">create_position</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+            <span class="n">backtest_position</span><span class="o">.</span><span class="n">transact_transaction</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">backtest_position</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+                <span class="n">backtest_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">backtest_position</span><span class="p">)</span>
+                <span class="n">backtest_position</span> <span class="o">=</span> <span class="n">BacktestPositionFactory</span><span class="o">.</span><span class="n">create_position</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span>
+
+        <span class="n">trades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_trades_from_backtest_positions</span><span class="p">(</span><span class="n">backtest_positions</span><span class="p">,</span> <span class="n">portfolio_values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">trades</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">end_time</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_split_transactions_if_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transactions_series</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split these transactions, which change the direction of the position (e.g. the direction of the position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># before the transaction was -1, after it is 1)</span>
+        <span class="n">split_transactions</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[Transaction]</span>
+
+        <span class="n">total_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">transactions_series</span><span class="p">:</span>
+            <span class="n">split_required</span><span class="p">,</span> <span class="n">closing_transaction</span><span class="p">,</span> <span class="n">remaining_transaction</span> <span class="o">=</span> <span class="n">split_transaction_if_needed</span><span class="p">(</span><span class="n">total_quantity</span><span class="p">,</span>
+                                                                                                     <span class="n">transaction</span><span class="p">)</span>
+            <span class="n">total_quantity</span> <span class="o">+=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">quantity</span>
+
+            <span class="k">if</span> <span class="n">split_required</span><span class="p">:</span>
+                <span class="n">split_transactions</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">closing_transaction</span><span class="p">,</span> <span class="n">remaining_transaction</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">split_transactions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">split_transactions</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

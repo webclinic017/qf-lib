@@ -1,0 +1,9 @@
+IBCommissionModel
+============================================================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.commission_models.ib_commission_model
+
+.. autoclass:: IBCommissionModel
+	:show-inheritance:
+	:autosummary:
+	:members:

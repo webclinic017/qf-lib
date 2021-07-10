@@ -1,0 +1,9 @@
+HorizontalLineDecorator
+==================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.line_decorators
+
+.. autoclass:: HorizontalLineDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

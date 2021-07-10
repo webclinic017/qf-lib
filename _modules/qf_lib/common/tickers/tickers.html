@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.tickers.tickers &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.tickers.tickers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.tickers.tickers</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">total_ordering</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">basename</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.quandl_db_type</span> <span class="kn">import</span> <span class="n">QuandlDBType</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+
+
+<div class="viewcode-block" id="Ticker"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker">[docs]</a><span class="nd">@total_ordering</span>
+<span class="k">class</span> <span class="nc">Ticker</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a security.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------</span>
+<span class="sd">    ticker: str</span>
+<span class="sd">        identifier of the security in a specific database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(&#39;</span><span class="si">{}</span><span class="s2">&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(&#39;</span><span class="si">{}</span><span class="s2">&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Ticker.as_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of a ticker</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a name of the ticker.</span>
+<span class="sd">        The property should be adjusted for different Ticker classes to provide a string representation of a Ticker,</span>
+<span class="sd">        which in some cases could be more understandable than the output of as_string() function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span>
+
+<div class="viewcode-block" id="Ticker.from_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker.from_string">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s1">&#39;Ticker&#39;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s1">&#39;Ticker&#39;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;allows creation of a ticker from a string&quot;&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="ow">is</span> <span class="n">other</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">))</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">ticker</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Cannot compare this object with a Ticker&quot;</span><span class="p">)</span>
+
+        <span class="n">class_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">other_class_name</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">other_class_name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BloombergTicker"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker">[docs]</a><span class="k">class</span> <span class="nc">BloombergTicker</span><span class="p">(</span><span class="n">Ticker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of bloomberg tickers.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BloombergTicker.from_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;BloombergTicker&quot;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s2">&quot;BloombergTicker&quot;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Example: BloombergTicker.from_string(&#39;SPX Index&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">BloombergTicker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">BloombergTicker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">]</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">InternalDBTicker</span><span class="p">(</span><span class="n">Ticker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of tickers inside the database.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    ticker: int, str</span>
+<span class="sd">       string is either timeseriesID or &#39;timeseriesName&#39;</span>
+<span class="sd">       for example 123 or &#39;My Strategy Name&#39;</span>
+<span class="sd">       if ticker is int - it corresponds to the ID of the timeseries in the DB</span>
+<span class="sd">       if ticker is str - it corresponds to the timeseries name</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)),</span> <span class="s2">&quot;Ticker value must be either series name (string) or series id (int)&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;InternalDBTicker&quot;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s2">&quot;InternalDBTicker&quot;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Example: InternalDBTicker.from_string(&#39;#TimeseriesName&#39;)</span>
+<span class="sd">        Example: InternalDBTicker.from_string(&#39;#123&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">to_ticker</span><span class="p">(</span><span class="n">ticker_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">clean_str</span> <span class="o">=</span> <span class="n">ticker_string</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># skip &#39;#&#39;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">integer_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clean_str</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">InternalDBTicker</span><span class="p">(</span><span class="n">integer_value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">InternalDBTicker</span><span class="p">(</span><span class="n">clean_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">to_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">to_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="HaverTicker"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.HaverTicker.html#qf_lib.common.tickers.tickers.HaverTicker">[docs]</a><span class="k">class</span> <span class="nc">HaverTicker</span><span class="p">(</span><span class="n">Ticker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Haver tickers representation. For example E025RE@EUSRVYS -&gt; ticker: E025RE, EUSRVYS: database_name</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    ticker: str</span>
+<span class="sd">        string containing series ID within a specific database</span>
+<span class="sd">    database_name: str</span>
+<span class="sd">        name of the database where the series is located</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_name</span> <span class="o">=</span> <span class="n">database_name</span>
+
+<div class="viewcode-block" id="HaverTicker.as_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.HaverTicker.html#qf_lib.common.tickers.tickers.HaverTicker.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        returns a string that can be used by the official Haver API to get the series</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">+</span> <span class="s1">&#39;@&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_name</span></div>
+
+<div class="viewcode-block" id="HaverTicker.from_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.HaverTicker.html#qf_lib.common.tickers.tickers.HaverTicker.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;HaverTicker&quot;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s2">&quot;HaverTicker&quot;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Example: HaverTicker.from_string(&#39;RECESSQ2@USECON&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">to_ticker</span><span class="p">(</span><span class="n">ticker_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">ticker</span><span class="p">,</span> <span class="n">db_name</span> <span class="o">=</span> <span class="n">ticker_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">HaverTicker</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">db_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">to_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">to_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="QuandlTicker"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.QuandlTicker.html#qf_lib.common.tickers.tickers.QuandlTicker">[docs]</a><span class="k">class</span> <span class="nc">QuandlTicker</span><span class="p">(</span><span class="n">Ticker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of Quandl tickers.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_type</span><span class="p">:</span> <span class="n">QuandlDBType</span> <span class="o">=</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Timeseries</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_name</span> <span class="o">=</span> <span class="n">database_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_type</span> <span class="o">=</span> <span class="n">database_type</span>
+
+<div class="viewcode-block" id="QuandlTicker.as_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.QuandlTicker.html#qf_lib.common.tickers.tickers.QuandlTicker.as_string">[docs]</a>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_type</span> <span class="o">==</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Timeseries</span><span class="p">:</span>
+            <span class="c1"># returns a string that corresponds to the notation used by Quandl Timeseries: db_name/ticker</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_name</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_type</span> <span class="o">==</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Incorrect database type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_type</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">field_to_column_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; - &#39;</span> <span class="o">+</span> <span class="n">field</span>
+
+<div class="viewcode-block" id="QuandlTicker.from_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.QuandlTicker.html#qf_lib.common.tickers.tickers.QuandlTicker.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">db_type</span><span class="p">:</span> <span class="n">QuandlDBType</span> <span class="o">=</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Timeseries</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;QuandlTicker&quot;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s2">&quot;QuandlTicker&quot;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Example: QuandlTicker.from_string(&#39;WIKI/MSFT&#39;)</span>
+<span class="sd">        Note: this method supports only the Timeseries tickers at the moment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">to_ticker</span><span class="p">(</span><span class="n">ticker_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">db_name</span><span class="p">,</span> <span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker_string</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">QuandlTicker</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">db_type</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">to_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">to_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="CcyTicker"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.CcyTicker.html#qf_lib.common.tickers.tickers.CcyTicker">[docs]</a><span class="k">class</span> <span class="nc">CcyTicker</span><span class="p">(</span><span class="n">Ticker</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of Cryptocurrency tickers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    ticker: str</span>
+<span class="sd">        The name of the crypto currency. For example Bitcoin -&gt; ticker: bitcoin</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CcyTicker.from_string"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.tickers.tickers.CcyTicker.html#qf_lib.common.tickers.tickers.CcyTicker.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;CcyTicker&quot;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s2">&quot;CcyTicker&quot;</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Example: CcyTicker.from_string(&#39;Bitcoin&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">to_ticker</span><span class="p">(</span><span class="n">ticker_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">CcyTicker</span><span class="p">(</span><span class="n">ticker_string</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">to_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">to_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">]</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a single ticker or sequence of tickers to strings representations.</span>
+<span class="sd">    if single ticker is passed -&gt; returns a single string</span>
+<span class="sd">    if sequence of tickers is passed -&gt; returns list of strings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tickers</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">str_to_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a single string or sequence of strings to ticker representation.</span>
+
+<span class="sd">    if single ticker is passed -&gt; returns single_ticker or None</span>
+
+<span class="sd">    if sequence of tickers is passed -&gt; returns a tuple</span>
+<span class="sd">        (successfully converted tickers, unsuccessfully converted tickers)</span>
+<span class="sd">        If all tickers were successfully converted the second list should be empty</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">convert_single_ticker</span><span class="p">(</span><span class="n">single_ticker_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">single_ticker_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">InternalDBTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">single_ticker_str</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">single_ticker_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">HaverTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">single_ticker_str</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">single_ticker_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BloombergTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">single_ticker_str</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">single_ticker_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QuandlTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">single_ticker_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">ticker</span> <span class="o">=</span> <span class="n">convert_single_ticker</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ticker</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Value &#39;</span><span class="si">{}</span><span class="s2">&#39; cannot be recognised as a ticker&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ticker</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">successful_tickers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">unsuccessful_tickers</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ticker_str</span><span class="p">:</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">convert_single_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ticker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">successful_tickers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unsuccessful_tickers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unsuccessful_tickers</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">faulty_ticker</span> <span class="ow">in</span> <span class="n">unsuccessful_tickers</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Value &#39;</span><span class="si">{}</span><span class="s2">&#39; cannot be recognised as a ticker&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">faulty_ticker</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">successful_tickers</span><span class="p">,</span> <span class="n">unsuccessful_tickers</span>
+
+
+<span class="k">def</span> <span class="nf">ticker_type_to_class</span><span class="p">(</span><span class="n">ticker_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes name of a specific Ticker class (e.g. &quot;BloombergTicker&quot;) and returns a corresponding Ticker object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;BloombergTicker&#39;</span><span class="p">:</span> <span class="n">BloombergTicker</span><span class="p">,</span>
+        <span class="s1">&#39;InternalDBTicker&#39;</span><span class="p">:</span> <span class="n">InternalDBTicker</span><span class="p">,</span>
+        <span class="s1">&#39;HaverTicker&#39;</span><span class="p">:</span> <span class="n">HaverTicker</span><span class="p">,</span>
+        <span class="s1">&#39;QuandlTicker&#39;</span><span class="p">:</span> <span class="n">QuandlTicker</span><span class="p">,</span>
+        <span class="s1">&#39;CcyTicker&#39;</span><span class="p">:</span> <span class="n">CcyTicker</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">mapping</span><span class="p">[</span><span class="n">ticker_type</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

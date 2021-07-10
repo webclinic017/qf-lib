@@ -1,0 +1,9 @@
+FactorizationManager
+==============================================================
+
+.. currentmodule:: qf_lib.common.utils.factorization.manager
+
+.. autoclass:: FactorizationManager
+	:show-inheritance:
+	:autosummary:
+	:members:

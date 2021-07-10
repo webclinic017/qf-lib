@@ -1,0 +1,6 @@
+simple_to_log_return
+=====================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.simple_to_log_return
+
+.. autofunction:: simple_to_log_return

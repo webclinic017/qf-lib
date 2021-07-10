@@ -1,0 +1,6 @@
+kelly_binary
+====================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.kelly
+
+.. autofunction:: kelly_binary

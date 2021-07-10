@@ -1,0 +1,9 @@
+SpanDecorator
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.span_decorator
+
+.. autoclass:: SpanDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

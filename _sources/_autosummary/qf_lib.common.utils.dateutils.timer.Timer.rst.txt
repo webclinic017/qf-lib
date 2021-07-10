@@ -1,0 +1,9 @@
+Timer
+=========================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.timer
+
+.. autoclass:: Timer
+	:show-inheritance:
+	:autosummary:
+	:members:

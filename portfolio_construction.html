@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>portfolio_construction &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="BlackLitterman" href="_autosummary/qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html" />
+    <link rel="prev" title="MarketStressIndicator" href="_autosummary/qf_lib.indicators.market_stress_indicator_us.MarketStressIndicator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">portfolio_construction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html">BlackLitterman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html">RobustCovariance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html">NonlinearFunctionOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html">QuadraticOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html">Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html">EfficientFrontierPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio.html">EqualRiskContributionPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio.html">KellyPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio.html">MaxDiversificationPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio.html">MaxExcessReturnPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio.html">MaxSharpeRatioPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio.html">MinVariancePortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio.html">MultiFactorPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio.html">RiskParityPortfolio</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>portfolio_construction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="portfolio-construction">
+<h1>portfolio_construction<a class="headerlink" href="#portfolio-construction" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html#qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman" title="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman"><code class="xref py py-obj docutils literal notranslate"><span class="pre">black_litterman.black_litterman.BlackLitterman</span></code></a></p></td>
+<td><p>Creates an object allowing calculation of the distribution of the returns using Black Litterman model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html#qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance" title="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covariance_estimation.robust_covariance.RobustCovariance</span></code></a></p></td>
+<td><p>Creates a class used for vol forecasting and covariance matrix estimation NOTE: this method has a tendency to make decrease the volatility</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html#qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer" title="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer</span></code></a></p></td>
+<td><p>Class used for optimizing nonlinear problems.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html#qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer" title="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimizers.quadratic_optimizer.QuadraticOptimizer</span></code></a></p></td>
+<td><p>Class used for optimizing quadratic problems.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.portfolio.Portfolio</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html#qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio" title="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a portfolio, for which the weight of assets’ mean returns can be adjusted against the weight of the covariance of assets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio.html#qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio" title="qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing an ERC portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio.html#qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio" title="qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.kelly_portfolio.KellyPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a portfolio based on Kelly’s criterion.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio.html#qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio" title="qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a Max Diversification portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio.html#qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio" title="qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a portfolio which is optimized considering its excess return (maximized).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio.html#qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio" title="qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a Max Sharpe Ratio portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio.html#qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio" title="qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.min_variance_portfolio.MinVariancePortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a min-variance portfolio (the one which is optimized considering it variance, which is minimized).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio.html#qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio" title="qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.multifactor_portfolio.MultiFactorPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a portfolio.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio.html#qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio" title="qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">portfolio_models.risk_parity_portfolio.RiskParityPortfolio</span></code></a></p></td>
+<td><p>Class used for constructing a portfolio in which weight of each asset is proportional to the inverse volatility that it has.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html" class="btn btn-neutral float-right" title="BlackLitterman" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="_autosummary/qf_lib.indicators.market_stress_indicator_us.MarketStressIndicator.html" class="btn btn-neutral float-left" title="MarketStressIndicator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

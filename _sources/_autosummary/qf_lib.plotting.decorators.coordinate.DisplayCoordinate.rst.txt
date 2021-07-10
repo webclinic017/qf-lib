@@ -1,0 +1,9 @@
+DisplayCoordinate
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.coordinate
+
+.. autoclass:: DisplayCoordinate
+	:show-inheritance:
+	:autosummary:
+	:members:

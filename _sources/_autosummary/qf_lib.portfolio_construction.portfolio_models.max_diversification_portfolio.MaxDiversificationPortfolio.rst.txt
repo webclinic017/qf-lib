@@ -1,0 +1,9 @@
+MaxDiversificationPortfolio
+========================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio
+
+.. autoclass:: MaxDiversificationPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

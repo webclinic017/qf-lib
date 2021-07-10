@@ -1,0 +1,9 @@
+FuturesAdjustmentMethod
+===========================================================================
+
+.. currentmodule:: qf_lib.containers.futures.futures_adjustment_method
+
+.. autoclass:: FuturesAdjustmentMethod
+	:show-inheritance:
+	:autosummary:
+	:members:

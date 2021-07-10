@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.enums.frequency &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.enums.frequency</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.enums.frequency</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">total_ordering</span>
+<span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">mode</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DatetimeIndex</span><span class="p">,</span> <span class="n">infer_freq</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+
+
+<div class="viewcode-block" id="Frequency"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency">[docs]</a><span class="nd">@total_ordering</span>
+<span class="k">class</span> <span class="nc">Frequency</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Frequency enumeration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MIN_1</span> <span class="o">=</span> <span class="mi">98280</span>
+    <span class="sd">&quot;&quot;&quot;1 minute frequency&quot;&quot;&quot;</span>
+    <span class="n">MIN_5</span> <span class="o">=</span> <span class="mi">1965</span>
+    <span class="sd">&quot;&quot;&quot;5 minutes frequency&quot;&quot;&quot;</span>
+    <span class="n">MIN_10</span> <span class="o">=</span> <span class="mi">9828</span>
+    <span class="sd">&quot;&quot;&quot;10 minutes frequency&quot;&quot;&quot;</span>
+    <span class="n">MIN_15</span> <span class="o">=</span> <span class="mi">6552</span>
+    <span class="sd">&quot;&quot;&quot;15 minutes frequency&quot;&quot;&quot;</span>
+    <span class="n">MIN_30</span> <span class="o">=</span> <span class="mi">3276</span>
+    <span class="sd">&quot;&quot;&quot;30 minutes frequency&quot;&quot;&quot;</span>
+    <span class="n">MIN_60</span> <span class="o">=</span> <span class="mi">1638</span>  <span class="c1"># 1 hour, it is assumed a day has 6.5 trading hours</span>
+    <span class="sd">&quot;&quot;&quot;1 hour frequency&quot;&quot;&quot;</span>
+
+    <span class="n">DAILY</span> <span class="o">=</span> <span class="mi">252</span>
+    <span class="sd">&quot;&quot;&quot;Daily frequency&quot;&quot;&quot;</span>
+    <span class="n">WEEKLY</span> <span class="o">=</span> <span class="mi">52</span>
+    <span class="sd">&quot;&quot;&quot;Weekly frequency&quot;&quot;&quot;</span>
+    <span class="n">MONTHLY</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="sd">&quot;&quot;&quot;Monthly frequency&quot;&quot;&quot;</span>
+    <span class="n">QUARTERLY</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;Quarterly frequency&quot;&quot;&quot;</span>
+    <span class="n">SEMI_ANNUALLY</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;Semi annually frequency&quot;&quot;&quot;</span>
+    <span class="n">YEARLY</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;Yearly frequency&quot;&quot;&quot;</span>
+    <span class="n">IRREGULAR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;Irregular frequency&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">occurrences_in_year</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">occurrences_in_year</span> <span class="o">=</span> <span class="n">occurrences_in_year</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">str_name</span><span class="p">):</span>
+
+        <span class="n">name_to_frequency</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="p">,</span>
+            <span class="s1">&#39;5&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span><span class="p">,</span>
+            <span class="s1">&#39;10&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span><span class="p">,</span>
+            <span class="s1">&#39;15&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span><span class="p">,</span>
+            <span class="s1">&#39;30&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span><span class="p">,</span>
+            <span class="s1">&#39;60&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">,</span>
+            <span class="s1">&#39;daily&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+            <span class="s1">&#39;weekly&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">WEEKLY</span><span class="p">,</span>
+            <span class="s1">&#39;monthly&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">,</span>
+            <span class="s1">&#39;quarterly&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">,</span>
+            <span class="s1">&#39;semi_annually&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">SEMI_ANNUALLY</span><span class="p">,</span>
+            <span class="s1">&#39;yearly&#39;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span><span class="p">,</span>
+            <span class="s2">&quot;irregular&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">IRREGULAR</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">name_to_frequency</span><span class="p">[</span><span class="n">str_name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">nr_of_calendar_days</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">365</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">occurrences_in_year</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Frequency.time_delta"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency.time_delta">[docs]</a>    <span class="k">def</span> <span class="nf">time_delta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDelta</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Maps the enum value into corresponding RelativeDelta.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RelativeDelta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">frequency_to_delta</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">WEEKLY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">SEMI_ANNUALLY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span><span class="p">:</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">frequency_to_delta</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">frequency_to_name</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span><span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span><span class="p">:</span> <span class="s2">&quot;15&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span><span class="p">:</span> <span class="s2">&quot;30&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">:</span> <span class="s2">&quot;60&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span> <span class="s2">&quot;daily&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">WEEKLY</span><span class="p">:</span> <span class="s2">&quot;weekly&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">:</span> <span class="s2">&quot;monthly&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">:</span> <span class="s2">&quot;quarterly&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">SEMI_ANNUALLY</span><span class="p">:</span> <span class="s2">&quot;semi_annually&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span><span class="p">:</span> <span class="s2">&quot;yearly&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">IRREGULAR</span><span class="p">:</span> <span class="s2">&quot;irregular&quot;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">frequency_to_name</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_members</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__members__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pandas_freq</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+        <span class="n">pandas_freq_to_frequency</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="p">,</span>
+            <span class="s2">&quot;5T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span><span class="p">,</span>
+            <span class="s2">&quot;10T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span><span class="p">,</span>
+            <span class="s2">&quot;15T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span><span class="p">,</span>
+            <span class="s2">&quot;30T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span><span class="p">,</span>
+            <span class="s2">&quot;60T&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">,</span>
+            <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">,</span>
+            <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+            <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+            <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">WEEKLY</span><span class="p">,</span>
+            <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">,</span>
+            <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">,</span>
+            <span class="s2">&quot;Q-DEC&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">,</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">:</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">IRREGULAR</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">pandas_freq_to_frequency</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">to_pandas_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">frequency_to_pandas_freq</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span><span class="p">:</span> <span class="s2">&quot;5T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span><span class="p">:</span> <span class="s2">&quot;10T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span><span class="p">:</span> <span class="s2">&quot;15T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span><span class="p">:</span> <span class="s2">&quot;30T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span><span class="p">:</span> <span class="s2">&quot;60T&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">WEEKLY</span><span class="p">:</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span><span class="p">:</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+            <span class="n">Frequency</span><span class="o">.</span><span class="n">IRREGULAR</span><span class="p">:</span> <span class="kc">None</span>
+        <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">frequency_to_pandas_freq</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">T&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_lowest_freq</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">freqs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Frequency&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">freqs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">infer_freq</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">DatetimeIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Frequency&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pandas_freq</span><span class="p">(</span><span class="n">infer_freq</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">IRREGULAR</span><span class="p">:</span>
+            <span class="c1"># Attempt to infer the frequency ourselves.</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">most_popular</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+                <span class="s1">&#39;timedelta64[D]&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">most_popular</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Infer intraday frequency (change to minutes)</span>
+                <span class="n">most_popular</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+                    <span class="s1">&#39;timedelta64[m]&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">most_popular</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span>
+                <span class="k">elif</span> <span class="mi">4</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_5</span>
+                <span class="k">elif</span> <span class="mi">9</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_10</span>
+                <span class="k">elif</span> <span class="mi">14</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">16</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_15</span>
+                <span class="k">elif</span> <span class="mi">29</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">31</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_30</span>
+                <span class="k">elif</span> <span class="mi">50</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">70</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_60</span>
+            <span class="k">elif</span> <span class="n">most_popular</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span>
+            <span class="k">elif</span> <span class="mi">29</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">31</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span>
+            <span class="k">elif</span> <span class="mi">88</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">92</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">QUARTERLY</span>
+            <span class="k">elif</span> <span class="mi">360</span> <span class="o">&lt;=</span> <span class="n">most_popular</span> <span class="o">&lt;=</span> <span class="mi">370</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">YEARLY</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,633 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.plotting.charts.chart &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.plotting.charts.chart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.plotting.charts.chart</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.artist</span> <span class="k">as</span> <span class="nn">artist</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">FixedLocator</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.orientation</span> <span class="kn">import</span> <span class="n">Orientation</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">ChartDecorator</span>
+
+
+<div class="viewcode-block" id="Chart"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart">[docs]</a><span class="k">class</span> <span class="nc">Chart</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract class for all the charts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    start_x: Any</span>
+<span class="sd">       The upper bound of the x-axis.</span>
+<span class="sd">    end_x: Any</span>
+<span class="sd">       The lower bound of the x-axis.</span>
+<span class="sd">    upper_y: Anny</span>
+<span class="sd">       The upper bound of the y-axis.</span>
+<span class="sd">    lower_y: Anny</span>
+<span class="sd">       The lower bound of the y-axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Static lock used by all charts to ensure more than one chart isn&#39;t being plotted at the same time.</span>
+    <span class="n">plot_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_x</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_x</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">upper_y</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lower_y</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Matplotlib-specific fields.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Holds a mapping between decorator key and `Decorator`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+
+        <span class="c1"># Chart settings.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_x</span> <span class="o">=</span> <span class="n">start_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span> <span class="o">=</span> <span class="n">end_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_upper_y</span> <span class="o">=</span> <span class="n">upper_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lower_y</span> <span class="o">=</span> <span class="n">lower_y</span>
+
+        <span class="c1">##############################################################################</span>
+        <span class="c1"># Chart appearance settings, that cannot be set in the .mplstyle file. #</span>
+        <span class="c1">##############################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_fontweight</span> <span class="o">=</span> <span class="s2">&quot;normal&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        x and y ticks&#39; labels&#39; font weight. Acceptable values:</span>
+<span class="sd">        For more info, see: http://matplotlib.org/api/text_api.html#matplotlib.text.Text</span>
+<span class="sd">        Acceptable values:</span>
+<span class="sd">        [a numeric value in range 0-1000 | ‘ultralight’ | ‘light’ | ‘normal’ | ‘regular’ | ‘book’ | ‘medium’ |</span>
+<span class="sd">        ‘roman’ |‘semibold’ | ‘demibold’ | ‘demi’ | ‘bold’ | ‘heavy’ | ‘extra bold’ | ‘black’ ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_fontsize</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        x and y ticks&#39; labels&#39; font size. Acceptable values:</span>
+<span class="sd">        [size in points | ‘xx-small’ | ‘x-small’ | ‘small’ | ‘medium’ | ‘large’ | ‘x-large’ | ‘xx-large’ ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_color</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Foreground color of all x and y ticks&#39; labels. Acceptable values:</span>
+<span class="sd">        Any matplotlib color, for example &quot;black&quot; or &quot;#8ac72e&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">Orientation</span><span class="o">.</span><span class="n">Vertical</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines where secondary axes should be created. When Vertical, a vertical axes is created using ``twinx``,</span>
+<span class="sd">        otherwise a horizontal axes is created using ``twiny``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Axes is the object on which the chart is plotted (&quot;the drawing area&quot;).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span>
+
+    <span class="nd">@axes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">ax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">secondary_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A secondary axes on which data is plotted. Created by calling setup_secondary_axes_if_necessary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span>
+
+<div class="viewcode-block" id="Chart.plot"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the chart. The underlying figure stays hidden until the show() method is called.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        figsize: Tuple[float, float]</span>
+<span class="sd">            The figure size to draw the chart at in inches. This is a tuple of (width, height) passed directly</span>
+<span class="sd">            to matplotlib&#39;s ``plot`` function. The values are expressed in inches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Chart.render_as_base64_image"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.render_as_base64_image">[docs]</a>    <span class="k">def</span> <span class="nf">render_as_base64_image</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span> <span class="n">optimise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the chart and returns the base64 image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Lock the plot_lock.</span>
+        <span class="k">with</span> <span class="n">Chart</span><span class="o">.</span><span class="n">plot_lock</span><span class="p">:</span>
+            <span class="c1"># Render the chart.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span>
+
+            <span class="c1"># Render as PNG.</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+
+            <span class="n">buffer</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Optimise file size.</span>
+        <span class="k">if</span> <span class="n">optimise</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="c1"># Optimise image by changing its color space. Use the Antialias filter to preserve quality as much as</span>
+            <span class="c1"># possible.</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">ANTIALIAS</span><span class="p">)</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Re-save the image with the converted color space and with the optimise flag set to ensure PIL performs</span>
+            <span class="c1"># an optimise pass on the file.</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Encode as base64.</span>
+        <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="Chart.apply_data_element_decorators"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.apply_data_element_decorators">[docs]</a>    <span class="k">def</span> <span class="nf">apply_data_element_decorators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_element_decorators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;DataElementDecorator&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots all DataElementDecorators added to a chart. This function should set `legend_artist` field in each</span>
+<span class="sd">        plotted DataElementDecorator (if applicable).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_element_decorators: List[DataElementDecorator]</span>
+<span class="sd">            non-empty list of DataElementDecorators that should be plotted on the chart</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Chart.show"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows the chart. It is necessary to call the plot function first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Chart.close"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Closes the window containing the figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">set_x_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end_x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_x</span> <span class="o">=</span> <span class="n">start_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span> <span class="o">=</span> <span class="n">end_x</span>
+
+    <span class="k">def</span> <span class="nf">get_decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">assert_is_qfseries</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data_container</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_container</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Chart can only work with instances of QFSeries. &quot;</span>
+                             <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not accepted as the data container&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data_container</span><span class="p">))))</span>
+
+<div class="viewcode-block" id="Chart.determine_end_x"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.determine_end_x">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">determine_end_x</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">series_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implements a heuristic for determining the x-axis end date based on a start date and series list.</span>
+
+<span class="sd">        This is done by checking the year difference between the most recent date among the data points in all of the</span>
+<span class="sd">        specified series and the specified start date. If the</span>
+<span class="sd">        difference is greater than or equal to 10 years, the nearest date aligned to a 5 year boundary will be</span>
+<span class="sd">        returned. Otherwise a datetime representing the nearest future January is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">series_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="c1"># Determine the most recent date out of all the data points in the specified series.</span>
+        <span class="n">latest_end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">series_list</span><span class="p">:</span>
+            <span class="c1"># Presumably the last index will always be the most recent.</span>
+            <span class="n">series</span> <span class="o">=</span> <span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">last_series_date</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">last_series_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_series_date</span> <span class="o">&gt;</span> <span class="n">latest_end_date</span><span class="p">:</span>
+                <span class="n">latest_end_date</span> <span class="o">=</span> <span class="n">last_series_date</span>
+
+        <span class="c1"># Determine (roughly) how many years passed since ``start``.</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="p">(</span><span class="n">latest_end_date</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">//</span> <span class="mi">365</span>
+
+        <span class="n">the_year</span> <span class="o">=</span> <span class="n">latest_end_date</span><span class="o">.</span><span class="n">year</span>
+        <span class="k">if</span> <span class="n">years</span> <span class="o">&gt;=</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="c1"># Work out the nearest future year that is divisible by `the_range`.</span>
+            <span class="n">the_range</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">years</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="k">else</span> <span class="mi">2</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">the_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">the_year</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">the_range</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">the_year</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">the_year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Chart.get_axes_colors"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.get_axes_colors">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_axes_colors</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the list of colors used for plotting on each Axes object. Colors are taken from the currently set</span>
+<span class="sd">        plotting style.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">by_key</span><span class="p">()[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Chart.add_decorator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.add_decorator">[docs]</a>    <span class="k">def</span> <span class="nf">add_decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decorator</span><span class="p">:</span> <span class="n">ChartDecorator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds the new decorator to the chart.</span>
+
+<span class="sd">        Each decorator must have a unique key that also doesn&#39;t clash with</span>
+<span class="sd">        any series keys because both are used for legend label data. If there is already a decorator</span>
+<span class="sd">        registered under the specified key, the operation will raise the AssertionError.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        decorator: ChartDecorator</span>
+<span class="sd">            decorator to be added</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">decorator</span><span class="o">.</span><span class="n">key</span>
+        <span class="k">assert</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="p">,</span> <span class="s2">&quot;The key &#39;</span><span class="si">{}</span><span class="s2">&#39; is already used for another decorator.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">decorator</span></div>
+
+<div class="viewcode-block" id="Chart.setup_secondary_axes_if_necessary"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.setup_secondary_axes_if_necessary">[docs]</a>    <span class="k">def</span> <span class="nf">setup_secondary_axes_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a secondary axes if one has not already been created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_axes_if_necessary</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="n">Orientation</span><span class="o">.</span><span class="n">Vertical</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">twiny</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">get_data_element_decorators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+        <span class="n">data_element_decorators</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">decorator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">):</span>
+                <span class="n">data_element_decorators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decorator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_element_decorators</span>
+
+<div class="viewcode-block" id="Chart.extract_series_data"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.charts.chart.Chart.html#qf_lib.plotting.charts.chart.Chart.extract_series_data">[docs]</a>    <span class="k">def</span> <span class="nf">extract_series_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract data from data element decorators added to the chart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_element_decorators</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">)):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">series</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_setup_axes_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (nrows, ncols, axnum)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">ax</span>
+            <span class="c1"># Set tick properties.</span>
+            <span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_major_ticks</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_fontweight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tick</span><span class="o">.</span><span class="n">label1</span><span class="o">.</span><span class="n">set_fontweight</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_fontweight</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_fontsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tick</span><span class="o">.</span><span class="n">label1</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_fontsize</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tick</span><span class="o">.</span><span class="n">label1</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Make sure the specified figsize is set.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_adjust_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set&#39;s default style properties, which couldn&#39;t be set using style sheets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># make x labels horizontal</span>
+        <span class="n">artist</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_majorticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Remove right and top lines around the graph.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Only show ticks on left and bottom spines.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Move grid lines below all other lines.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Set y-axis limits.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upper_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lower_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Find the max value from all data series in the chart.</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_max_value</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">max_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># add 20% to give a bit of padding.</span>
+                <span class="n">max_value</span> <span class="o">+=</span> <span class="n">max_value</span> <span class="o">*</span> <span class="mf">0.20</span>
+            <span class="c1"># Find the min value from all data series in the chart.</span>
+            <span class="n">min_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_min_value</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">min_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># subtract 20% to give a bit of padding.</span>
+                <span class="n">min_value</span> <span class="o">-=</span> <span class="n">min_value</span> <span class="o">*</span> <span class="mf">0.20</span>
+
+            <span class="c1"># Use either the user-specified value or one that was computed above.</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="n">max_value</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upper_y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upper_y</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="n">min_value</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lower_y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lower_y</span>
+            <span class="k">assert</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Top must not be None. Is your chart missing series?&quot;</span>
+            <span class="k">assert</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Bottom must not be None. Is your chart missing series?&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">bottom</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_apply_decorators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+        <span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+
+        <span class="n">legend_decorators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">regular_decorators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data_element_decorators</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># this method of assuring that LegendDecorator.decorate() is being called at the end is not the best way</span>
+        <span class="c1"># to do it. It introduces a dependency of Chart on the LegendDecorator.</span>
+        <span class="k">for</span> <span class="n">decorator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">LegendDecorator</span><span class="p">):</span>
+                <span class="n">legend_decorators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decorator</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">):</span>
+                <span class="n">data_element_decorators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decorator</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">regular_decorators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">decorator</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">data_element_decorators</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_data_element_decorators</span><span class="p">(</span><span class="n">data_element_decorators</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">decorator</span> <span class="ow">in</span> <span class="n">regular_decorators</span> <span class="o">+</span> <span class="n">legend_decorators</span><span class="p">:</span>
+            <span class="n">decorator</span><span class="o">.</span><span class="n">decorate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Set x-axis limits. These have to be set after decorators are applied.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_align_gridlines</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_align_gridlines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secondary_axes</span>
+
+        <span class="n">y1_min</span><span class="p">,</span> <span class="n">y1_max</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+        <span class="n">y2_min</span><span class="p">,</span> <span class="n">y2_max</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+
+        <span class="n">y1_range</span> <span class="o">=</span> <span class="n">y1_max</span> <span class="o">-</span> <span class="n">y1_min</span>
+        <span class="n">y2_range</span> <span class="o">=</span> <span class="n">y2_max</span> <span class="o">-</span> <span class="n">y2_min</span>
+
+        <span class="n">y_ticks</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()</span>
+
+        <span class="n">new_y2_ticks</span> <span class="o">=</span> <span class="n">y2_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_ticks</span> <span class="o">-</span> <span class="n">y1_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">y1_range</span> <span class="o">*</span> <span class="n">y2_range</span>
+
+        <span class="n">ax2</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">new_y2_ticks</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_trim_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_x</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_x</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_generate_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a new key if ``key`` is ``None``, otherwise returns ``key``.</span>
+
+<span class="sd">        Used by LineChart and KDEChart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">adjusted_key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">if</span> <span class="n">adjusted_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">adjusted_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+
+        <span class="k">assert</span> <span class="n">adjusted_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="p">,</span> <span class="s2">&quot;Key &#39;</span><span class="si">{}</span><span class="s2">&#39; is already used.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">adjusted_key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">adjusted_key</span>
+
+    <span class="k">def</span> <span class="nf">_get_data_min_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">decorator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">):</span>
+                <span class="n">data_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trim_data</span><span class="p">(</span><span class="n">decorator</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">data_min</span> <span class="o">&lt;</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">data_min</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_get_data_max_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">decorator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorators</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">):</span>
+                <span class="n">data_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trim_data</span><span class="p">(</span><span class="n">decorator</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">data_max</span> <span class="o">&gt;</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">data_max</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

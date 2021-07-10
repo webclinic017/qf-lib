@@ -1,0 +1,9 @@
+DataElementDecorator
+======================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.data_element_decorator
+
+.. autoclass:: DataElementDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

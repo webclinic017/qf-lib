@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.fast_alpha_model_tester.fast_alpha_models_tester &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.fast_alpha_model_tester.fast_alpha_models_tester</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.fast_alpha_model_tester.fast_alpha_models_tester</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.alpha_model</span> <span class="kn">import</span> <span class="n">AlphaModel</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract</span> <span class="kn">import</span> <span class="n">Contract</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.fast_alpha_model_tester.backtest_summary</span> <span class="kn">import</span> <span class="n">BacktestSummary</span><span class="p">,</span> <span class="n">BacktestSummaryElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.fast_alpha_model_tester.fast_data_handler</span> <span class="kn">import</span> <span class="n">FastDataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.trade</span> <span class="kn">import</span> <span class="n">Trade</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.exceptions.future_contracts_exceptions</span> <span class="kn">import</span> <span class="n">NoValidTickerException</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.timer</span> <span class="kn">import</span> <span class="n">SettableTimer</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.numberutils.is_finite_number</span> <span class="kn">import</span> <span class="n">is_finite_number</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.cast_dataframe</span> <span class="kn">import</span> <span class="n">cast_dataframe</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dimension_names</span> <span class="kn">import</span> <span class="n">TICKERS</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.futures_chain</span> <span class="kn">import</span> <span class="n">FuturesChain</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.simple_returns_series</span> <span class="kn">import</span> <span class="n">SimpleReturnsSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.helpers</span> <span class="kn">import</span> <span class="n">cast_data_array_to_proper_type</span><span class="p">,</span> <span class="n">tickers_dict_to_data_array</span>
+<span class="kn">from</span> <span class="nn">qf_lib.portfolio_construction.portfolio_models.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+
+
+<span class="k">class</span> <span class="nc">FastAlphaModelTesterConfig</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_type: type[AlphaModel]</span>
+<span class="sd">        type of the alpha model that needs to be tested</span>
+<span class="sd">    kwargs:</span>
+<span class="sd">        all arguments that should be passed to the init function of the alpha model (may contain data_handler but</span>
+<span class="sd">        it will be overwritten, when initializing the model)</span>
+<span class="sd">    modeled_params: Union[str, Sequence[str]]</span>
+<span class="sd">        strings, representing the init parameters of AlphaModel that are being verified in the test. The kwargs dict</span>
+<span class="sd">        needs to contain them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">AlphaModel</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">modeled_params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="n">model_type</span>  <span class="c1"># type: Type[AlphaModel]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters_names</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">modeled_params</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">param</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters_names</span> <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters_names</span><span class="p">),</span> <span class="s2">&quot;The modeled_params need to be passed in the kwargs&quot;</span>
+
+    <span class="k">def</span> <span class="nf">generate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_type</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">data_handler</span><span class="o">=</span><span class="n">data_handler</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">model_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters_names</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FastAlphaModelTester"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.fast_alpha_model_tester.fast_alpha_models_tester.FastAlphaModelTester.html#qf_lib.backtesting.fast_alpha_model_tester.fast_alpha_models_tester.FastAlphaModelTester">[docs]</a><span class="k">class</span> <span class="nc">FastAlphaModelTester</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ModelTester in which portfolio construction is simulated by always following the suggested Exposures from</span>
+<span class="sd">    AlphaModels. All Tickers are traded with same weights (weights are constant across time).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha_model_configs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FastAlphaModelTesterConfig</span><span class="p">],</span>
+                 <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span>
+                 <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+                 <span class="n">data_handler</span><span class="p">:</span> <span class="n">FastDataHandler</span><span class="p">,</span> <span class="n">timer</span><span class="p">:</span> <span class="n">SettableTimer</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span> <span class="o">=</span> <span class="n">start_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span> <span class="o">=</span> <span class="n">end_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span> <span class="o">=</span> <span class="n">contract_ticker_mapper</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_model_configs</span> <span class="o">=</span> <span class="n">alpha_model_configs</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">alpha_model_configs</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> \
+            <span class="s2">&quot;All passed FastAlphaModelTesterConfig should have the same alpha model type&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_type</span> <span class="o">=</span> <span class="n">alpha_model_configs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span> <span class="o">=</span> <span class="n">data_handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="n">timer</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tickers_to_contracts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_valid_tickers_to_contracts</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tickers_to_contracts</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">FastDataHandler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;You are using a deprecated type of DataHandler. In FastAlphaModelsTester &quot;</span>
+                                <span class="s2">&quot;use of FastDataHandler is suggested.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_alpha_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BacktestSummary</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> parameters sets to be tested&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_model_configs</span><span class="p">)))</span>
+        <span class="n">prices_data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_for_backtest</span><span class="p">()</span>
+        <span class="n">exposure_values_df_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_exposures_for_all_params_sets</span><span class="p">()</span>
+        <span class="n">backtest_summary_elem_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_backtest_summary_elements</span><span class="p">(</span><span class="n">exposure_values_df_list</span><span class="p">,</span>
+                                                                               <span class="n">prices_data_array</span><span class="p">)</span>
+        <span class="n">backtest_summary</span> <span class="o">=</span> <span class="n">BacktestSummary</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_type</span><span class="p">,</span> <span class="n">backtest_summary_elem_list</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">backtest_summary</span>
+
+    <span class="k">def</span> <span class="nf">_get_valid_tickers_to_contracts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Contract</span><span class="p">]:</span>
+
+        <span class="n">tickers_to_contracts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+                    <span class="n">ticker</span><span class="o">.</span><span class="n">initialize_data_provider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="p">)</span>
+                <span class="n">contract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">ticker_to_contract</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+                <span class="n">tickers_to_contracts</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">contract</span>
+            <span class="k">except</span> <span class="n">NoValidTickerException</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No valid ticker for </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">tickers_to_contracts</span>
+
+    <span class="k">def</span> <span class="nf">_get_data_for_backtest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataArray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a QFDataArray containing OHLCV values for all tickers passes to Fast Alpha Models Tester.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading all price values of tickers:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">set_current_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">)</span>
+        <span class="n">tickers_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+                <span class="n">fc</span> <span class="o">=</span> <span class="n">FuturesChain</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="p">)</span>
+                <span class="n">tickers_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">,</span>
+                                                    <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tickers_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">,</span>
+                                                                    <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">)</span>
+
+        <span class="n">prices_data_array</span> <span class="o">=</span> <span class="n">tickers_dict_to_data_array</span><span class="p">(</span><span class="n">tickers_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">prices_data_array</span>
+
+    <span class="k">def</span> <span class="nf">_generate_exposures_for_all_params_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generating exposures:&quot;</span><span class="p">)</span>
+        <span class="n">exposure_values_df_list</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_exposure_values</span><span class="p">)</span>
+                                                                <span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">)</span>
+                                                                <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span>
+                                                                <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_model_configs</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Finished generation of exposures.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">exposure_values_df_list</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_backtest_summary_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure_values_df_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QFDataFrame</span><span class="p">],</span>
+                                             <span class="n">prices_data_array</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BacktestSummaryElement</span><span class="p">]:</span>
+
+        <span class="n">open_prices_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_open_prices</span><span class="p">(</span><span class="n">prices_data_array</span><span class="p">)</span>
+        <span class="n">open_to_open_returns_df</span> <span class="o">=</span> <span class="n">open_prices_df</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generating backtest summaries:&quot;</span><span class="p">)</span>
+        <span class="n">tickers_for_backtests</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ticker</span><span class="p">]</span> <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tickers_for_backtests</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_tickers</span><span class="p">]</span>
+
+        <span class="n">all_params</span> <span class="o">=</span> <span class="p">[(</span><span class="n">config</span><span class="p">,</span> <span class="n">exposure_values_df</span><span class="p">,</span> <span class="n">tickers</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">exposure_values_df</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_model_configs</span><span class="p">,</span> <span class="n">exposure_values_df_list</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">tickers</span> <span class="ow">in</span> <span class="n">tickers_for_backtests</span><span class="p">]</span>
+
+        <span class="n">backtest_summary_elem_list</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">)(</span>
+            <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_calculate_backtest_summary</span><span class="p">)(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">prices_data_array</span><span class="p">,</span>
+                                                      <span class="n">open_to_open_returns_df</span><span class="p">[</span><span class="n">tickers</span><span class="p">],</span>
+                                                      <span class="n">exposure_values_df</span><span class="p">[</span><span class="n">tickers</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">config</span><span class="p">,</span> <span class="n">exposure_values_df</span><span class="p">,</span> <span class="n">tickers</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">all_params</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">backtest_summary_elem_list</span>
+
+    <span class="k">def</span> <span class="nf">_get_open_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_data_array</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PricesDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns PricesDataFrame consisting of only Open prices. &quot;&quot;&quot;</span>
+        <span class="n">open_prices_df</span> <span class="o">=</span> <span class="n">cast_data_array_to_proper_type</span><span class="p">(</span><span class="n">prices_data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">],</span>
+                                                        <span class="n">use_prices_types</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">open_prices_df</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_backtest_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">config</span><span class="p">:</span> <span class="n">FastAlphaModelTesterConfig</span><span class="p">,</span>
+                                    <span class="n">prices_data_array</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">,</span>
+                                    <span class="n">open_to_open_returns_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span>
+                                    <span class="n">exposure_values_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BacktestSummaryElement</span><span class="p">:</span>
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+
+        <span class="n">portfolio_rets_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_portfolio_returns_tms</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">open_to_open_returns_df</span><span class="p">,</span> <span class="n">exposure_values_df</span><span class="p">)</span>
+        <span class="n">trades</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_trades</span><span class="p">(</span><span class="n">prices_data_array</span><span class="p">,</span> <span class="n">exposure_values_df</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BacktestSummaryElement</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">model_parameters</span><span class="p">(),</span> <span class="n">config</span><span class="o">.</span><span class="n">model_parameters_names</span><span class="p">,</span>
+                                      <span class="n">portfolio_rets_tms</span><span class="p">,</span> <span class="n">trades</span><span class="p">,</span> <span class="n">tickers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_portfolio_returns_tms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">open_to_open_returns_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span>
+                                         <span class="n">exposure_values_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">SimpleReturnsSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SimpleReturnsSeries of the portfolio - for each date equal to the portfolio performance over the last</span>
+<span class="sd">        open-to-open period, ex. value indexed as 2010-02-15 would refer to the portfolio value change between</span>
+<span class="sd">        open at 14th and open at 15th, and would be based on the signal from 2010-02-13;</span>
+
+<span class="sd">        the first index of the series is the Day 3 of the backtest, as the first signal calculation occurs</span>
+<span class="sd">        after Day 1 (see ORDER OF ACTIONS below)</span>
+<span class="sd">        the last index of the series is test_end_date and the portfolio exposure is being set to zero</span>
+<span class="sd">        on the opening of the test_end_date</span>
+
+<span class="sd">        ORDER OF ACTIONS:</span>
+
+<span class="sd">        -- Day 1 --</span>
+<span class="sd">        signal is generated, based on the historic data INCLUDING prices from Day 1</span>
+<span class="sd">        suggested exposure for Day 2 is calculated</span>
+
+<span class="sd">        -- Day 2 --</span>
+<span class="sd">        a trade is entered, held or exited (or nothing happens) regarding the suggested exposure</span>
+<span class="sd">        this action is performed on the opening of the day</span>
+
+<span class="sd">        -- Day 3 --</span>
+<span class="sd">        at the opening the open-to-open return is calculated</span>
+<span class="sd">        now it is possible to estimate current portfolio value</span>
+<span class="sd">        the simple return of the portfolio (Day 3 to Day 2) is saved and indexed with Day 3 date</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">open_to_open_returns_df</span> <span class="o">=</span> <span class="n">open_to_open_returns_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="n">shifted_signals_df</span> <span class="o">=</span> <span class="n">exposure_values_df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">shifted_signals_df</span> <span class="o">=</span> <span class="n">shifted_signals_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+        <span class="n">daily_returns_of_strategies_df</span> <span class="o">=</span> <span class="n">shifted_signals_df</span> <span class="o">*</span> <span class="n">open_to_open_returns_df</span>
+        <span class="n">daily_returns_of_strategies_df</span> <span class="o">=</span> <span class="n">daily_returns_of_strategies_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+
+        <span class="n">daily_returns_of_strategies_df</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span>
+            <span class="n">daily_returns_of_strategies_df</span><span class="p">,</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">)</span>  <span class="c1"># type: SimpleReturnsDataFrame</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="o">.</span><span class="n">one_over_n_weights</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+        <span class="c1"># for strategies based on more than one ticker (ex. VolLongShort) use the line below:</span>
+        <span class="c1"># weights = QFSeries(np.ones(daily_returns_of_strategies_df.num_of_columns))</span>
+
+        <span class="n">portfolio_rets_tms</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="o">.</span><span class="n">constant_weights</span><span class="p">(</span><span class="n">daily_returns_of_strategies_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">portfolio_rets_tms</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_trades</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_array</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">,</span> <span class="n">exposures_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Trade</span><span class="p">]:</span>
+        <span class="n">trade_data_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">shifted_signals_df</span> <span class="o">=</span> <span class="n">exposures_df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">exposures_tms</span> <span class="ow">in</span> <span class="n">shifted_signals_df</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">trade_data_partial_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_trades_for_ticker</span><span class="p">(</span><span class="n">prices_array</span><span class="p">,</span> <span class="n">exposures_tms</span><span class="p">,</span> <span class="n">ticker</span><span class="p">)</span>
+            <span class="n">trade_data_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">trade_data_partial_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">trade_data_list</span>
+
+    <span class="k">def</span> <span class="nf">generate_trades_for_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_array</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">,</span> <span class="n">exposures_tms</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Trade</span><span class="p">]:</span>
+
+        <span class="n">open_prices_tms</span> <span class="o">=</span> <span class="n">cast_data_array_to_proper_type</span><span class="p">(</span><span class="n">prices_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">],</span>
+                                                         <span class="n">use_prices_types</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># historical data cropped to the time frame of the backtest (from start date till end date)</span>
+        <span class="n">historical_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">exposures_tms</span><span class="p">,</span> <span class="n">open_prices_tms</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">:]</span>
+
+        <span class="n">prev_exposure</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">trades_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">trade_start_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">trade_exposure</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">trade_start_price</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># If the first exposure is nan - skip it</span>
+        <span class="n">first_exposure</span> <span class="o">=</span> <span class="n">historical_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">first_exposure</span><span class="p">):</span>
+            <span class="n">historical_data</span> <span class="o">=</span> <span class="n">historical_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">for</span> <span class="n">curr_date</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">historical_data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">curr_exposure</span><span class="p">,</span> <span class="n">curr_price</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="c1"># skipping the nan Open prices</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">curr_price</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Open price is None, cannot create trade on </span><span class="si">{}</span><span class="s2"> for </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">curr_date</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ticker</span><span class="p">)))</span>
+                <span class="k">continue</span>
+
+            <span class="n">out_of_the_market</span> <span class="o">=</span> <span class="n">trade_exposure</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">out_of_the_market</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">prev_exposure</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">curr_exposure</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">trade_start_date</span> <span class="o">=</span> <span class="n">curr_date</span>
+                    <span class="n">trade_exposure</span> <span class="o">=</span> <span class="n">curr_exposure</span>
+                    <span class="n">trade_start_price</span> <span class="o">=</span> <span class="n">curr_price</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">prev_exposure</span> <span class="o">!=</span> <span class="mf">0.0</span>
+
+                <span class="n">exposure_change</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">curr_exposure</span> <span class="o">-</span> <span class="n">prev_exposure</span><span class="p">)</span>
+                <span class="n">should_close_position</span> <span class="o">=</span> <span class="n">exposure_change</span> <span class="o">!=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">should_close_position</span><span class="p">:</span>
+                    <span class="n">trades_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Trade</span><span class="p">(</span>
+                        <span class="n">start_time</span><span class="o">=</span><span class="n">trade_start_date</span><span class="p">,</span>
+                        <span class="n">end_time</span><span class="o">=</span><span class="n">curr_date</span><span class="p">,</span>
+                        <span class="n">contract</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tickers_to_contracts</span><span class="p">[</span><span class="n">ticker</span><span class="p">],</span>
+                        <span class="n">pnl</span><span class="o">=</span><span class="p">(</span><span class="n">curr_price</span> <span class="o">/</span> <span class="n">trade_start_price</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">trade_exposure</span><span class="p">,</span>
+                        <span class="n">commission</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">direction</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">trade_exposure</span><span class="p">)</span>
+                    <span class="p">))</span>
+                    <span class="n">trade_start_date</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">trade_exposure</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">trade_start_price</span> <span class="o">=</span> <span class="kc">None</span>
+
+                    <span class="n">going_into_opposite_direction</span> <span class="o">=</span> <span class="n">curr_exposure</span> <span class="o">!=</span> <span class="mf">0.0</span>
+                    <span class="k">if</span> <span class="n">going_into_opposite_direction</span><span class="p">:</span>
+                        <span class="n">trade_start_date</span> <span class="o">=</span> <span class="n">curr_date</span>
+                        <span class="n">trade_exposure</span> <span class="o">=</span> <span class="n">curr_exposure</span>
+                        <span class="n">trade_start_price</span> <span class="o">=</span> <span class="n">curr_price</span>
+
+            <span class="n">prev_exposure</span> <span class="o">=</span> <span class="n">curr_exposure</span>
+
+        <span class="k">return</span> <span class="n">trades_list</span>
+
+    <span class="k">def</span> <span class="nf">_generate_exposure_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">FastAlphaModelTesterConfig</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">FastDataHandler</span><span class="p">,</span>
+                                  <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the given Alpha model and its parameters, generates the dataframe containing all exposure values, that</span>
+<span class="sd">        will be returned by the model through signals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">generate_model</span><span class="p">(</span><span class="n">data_handler</span><span class="p">)</span>
+
+        <span class="n">current_exposures_values</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">TICKERS</span><span class="p">))</span>
+        <span class="n">current_exposures_values</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">backtest_dates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+
+        <span class="n">exposure_values_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">backtest_dates</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">TICKERS</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+                <span class="c1"># Even if the tickers were already initialize, during pickling process, the data handler and timer</span>
+                <span class="c1"># information is lost</span>
+                <span class="n">ticker</span><span class="o">.</span><span class="n">initialize_data_provider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">curr_datetime</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">backtest_dates</span><span class="p">):</span>
+            <span class="n">new_exposures</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">tickers</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">set_current_time</span><span class="p">(</span><span class="n">curr_datetime</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">curr_exp_value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">count</span><span class="p">(),</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">current_exposures_values</span><span class="p">):</span>
+                <span class="n">curr_exp</span> <span class="o">=</span> <span class="n">Exposure</span><span class="p">(</span><span class="n">curr_exp_value</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">curr_exp_value</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">new_exp</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">calculate_exposure</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">curr_exp</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">NoValidTickerException</span><span class="p">:</span>
+                    <span class="n">new_exp</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">new_exposures</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_exp</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">new_exp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+            <span class="c1"># assuming that we always follow the new_exposures from strategy, disregarding confidence levels</span>
+            <span class="c1"># and expected moves, looking only at the suggested exposure</span>
+            <span class="n">current_exposures_values</span> <span class="o">=</span> <span class="n">new_exposures</span>
+            <span class="n">exposure_values_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">current_exposures_values</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:]</span>
+
+        <span class="n">exposure_values_df</span> <span class="o">=</span> <span class="n">exposure_values_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">exposure_values_df</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

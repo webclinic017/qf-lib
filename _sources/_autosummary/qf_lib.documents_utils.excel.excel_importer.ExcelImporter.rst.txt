@@ -1,0 +1,9 @@
+ExcelImporter
+=========================================================
+
+.. currentmodule:: qf_lib.documents_utils.excel.excel_importer
+
+.. autoclass:: ExcelImporter
+	:show-inheritance:
+	:autosummary:
+	:members:

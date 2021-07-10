@@ -1,0 +1,589 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.bloomberg.bloomberg_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.bloomberg.bloomberg_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.bloomberg.bloomberg_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">tickers_as_strings</span><span class="p">,</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.bloomberg_future_ticker</span> <span class="kn">import</span> <span class="n">BloombergFutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.abstract_price_data_provider</span> <span class="kn">import</span> <span class="n">AbstractPriceDataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.helpers</span> <span class="kn">import</span> <span class="n">normalize_data_array</span><span class="p">,</span> <span class="n">cast_dataframe_to_proper_type</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.tickers_universe_provider</span> <span class="kn">import</span> <span class="n">TickersUniverseProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">blpapi</span>
+
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.futures_data_provider</span> <span class="kn">import</span> <span class="n">FuturesDataProvider</span>
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.historical_data_provider</span> <span class="kn">import</span> <span class="n">HistoricalDataProvider</span>
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.reference_data_provider</span> <span class="kn">import</span> <span class="n">ReferenceDataProvider</span>
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.tabular_data_provider</span> <span class="kn">import</span> <span class="n">TabularDataProvider</span>
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.exceptions</span> <span class="kn">import</span> <span class="n">BloombergError</span>
+    <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.bloomberg_names</span> <span class="kn">import</span> <span class="n">REF_DATA_SERVICE_URI</span>
+    <span class="n">is_blpapi_installed</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">is_blpapi_installed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No Bloomberg API installed. If you would like to use BloombergDataProvider first install the blpapi&quot;</span>
+                  <span class="s2">&quot; library&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BloombergDataProvider"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider">[docs]</a><span class="k">class</span> <span class="nc">BloombergDataProvider</span><span class="p">(</span><span class="n">AbstractPriceDataProvider</span><span class="p">,</span> <span class="n">TickersUniverseProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data Provider which provides financial data from Bloomberg.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">bloomberg</span><span class="o">.</span><span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">bloomberg</span><span class="o">.</span><span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_blpapi_installed</span><span class="p">:</span>
+            <span class="n">session_options</span> <span class="o">=</span> <span class="n">blpapi</span><span class="o">.</span><span class="n">SessionOptions</span><span class="p">()</span>
+            <span class="n">session_options</span><span class="o">.</span><span class="n">setServerHost</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+            <span class="n">session_options</span><span class="o">.</span><span class="n">setServerPort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+            <span class="n">session_options</span><span class="o">.</span><span class="n">setAutoRestartOnDisconnection</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">blpapi</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">session_options</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_historical_data_provider</span> <span class="o">=</span> <span class="n">HistoricalDataProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reference_data_provider</span> <span class="o">=</span> <span class="n">ReferenceDataProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tabular_data_provider</span> <span class="o">=</span> <span class="n">TabularDataProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_futures_data_provider</span> <span class="o">=</span> <span class="n">FuturesDataProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_historical_data_provider</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reference_data_provider</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tabular_data_provider</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_futures_data_provider</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t import the Bloomberg API. Check if the necessary dependencies are installed.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BloombergDataProvider.connect"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Connects to Bloomberg data service and holds a connection.</span>
+<span class="sd">        Connecting might take about 10-15 seconds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_blpapi_installed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t import the Bloomberg API. Check if the necessary dependencies are installed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to start session with host: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; on port: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">openService</span><span class="p">(</span><span class="n">REF_DATA_SERVICE_URI</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to open service: &quot;</span> <span class="o">+</span> <span class="n">REF_DATA_SERVICE_URI</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns tickers of futures contracts, which belong to the same futures contract chain as the provided ticker</span>
+<span class="sd">        (tickers), along with their expiration dates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: BloombergFutureTicker, Sequence[BloombergFutureTicker]</span>
+<span class="sd">            future tickers for which future chains should be retrieved</span>
+<span class="sd">        expiration_date_fields: ExpirationDateField, Sequence[ExpirationDateField]</span>
+<span class="sd">            field that should be downloaded as the expiration date field</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[BloombergFutureTicker, Union[QFSeries, QFDataFrame]]</span>
+<span class="sd">            Dictionary mapping each BloombergFutureTicker to a QFSeries or QFDataFrame, containing specific future</span>
+<span class="sd">            contracts tickers (BloombergTickers), indexed by these tickers</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        BloombergError</span>
+<span class="sd">            When couldn&#39;t get the data from Bloomberg Service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_is_connected</span><span class="p">()</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergFutureTicker</span><span class="p">)</span>
+        <span class="n">expiration_date_fields</span><span class="p">,</span> <span class="n">got_single_expiration_date_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">expiration_date_fields</span><span class="p">,</span>
+                                                                                   <span class="n">ExpirationDateField</span><span class="p">)</span>
+
+        <span class="c1"># Create a dictionary, which is mapping BloombergFutureTickers to lists of tickers related to specific future</span>
+        <span class="c1"># contracts belonging to the chain, e.g. it will map Cotton Bloomberg future ticker into:</span>
+        <span class="c1"># [BloombergTicker(&quot;CTH7 Comdty&quot;), BloombergTicker(&quot;CTK7 Comdty&quot;), BloombergTicker(&quot;CTN7 Comdty&quot;),</span>
+        <span class="c1"># BloombergTicker(&quot;CTV7 Comdty&quot;), BloombergTicker(&quot;CTZ7 Comdty&quot;) ... ]</span>
+        <span class="n">future_ticker_to_chain_tickers_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_futures_data_provider</span><span class="o">.</span><span class="n">get_list_of_tickers_in_the_future_chain</span><span class="p">(</span>
+            <span class="n">tickers</span><span class="p">)</span>  <span class="c1"># type: Dict[BloombergFutureTicker, List[BloombergTicker]]</span>
+
+        <span class="k">def</span> <span class="nf">get_futures_expiration_dates</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]])</span> <span class="o">-&gt;</span> \
+                <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            For a ticker (tickers) it returns a QFSeries or QFDataFrame consisting of the expiration dates fields of</span>
+<span class="sd">            Future Contracts, that are defined by the given tickers.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            specific_tickers</span>
+<span class="sd">                tickers for which the expiration dates of future contracts should be retrieved</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            QFSeries, QFDataFrame</span>
+<span class="sd">                Container containing all the dates, indexed by tickers</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="c1"># Download the expiration dates for each of the future contracts</span>
+            <span class="n">mapping_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration_date_field_str_map</span><span class="p">()</span>
+            <span class="n">expiration_date_fields_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapping_dict</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">expiration_date_fields</span><span class="p">]</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_values</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span> <span class="n">expiration_date_fields_str</span><span class="p">)</span>  <span class="c1"># type: Union[QFSeries, QFDataFrame]</span>
+
+            <span class="c1"># Drop these futures, for which no expiration date was found and cast all string dates into datetime</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">)</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">str_to_expiration_date_field_map</span><span class="p">())</span>
+
+            <span class="k">return</span> <span class="n">exp_dates</span>
+
+        <span class="n">all_specific_tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ticker</span> <span class="k">for</span> <span class="n">specific_tickers_list</span> <span class="ow">in</span> <span class="n">future_ticker_to_chain_tickers_list</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                                <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">specific_tickers_list</span><span class="p">]</span>
+        <span class="n">futures_expiration_dates</span> <span class="o">=</span> <span class="n">get_futures_expiration_dates</span><span class="p">(</span><span class="n">all_specific_tickers</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">specific_futures_index</span><span class="p">(</span><span class="n">future_ticker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns an Index of specific tickers for the given future ticker, which appeared in the futures</span>
+<span class="sd">            expiration dates dataframe / series.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">specific_tickers_list</span> <span class="o">=</span> <span class="n">future_ticker_to_chain_tickers_list</span><span class="p">[</span><span class="n">future_ticker</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">futures_expiration_dates</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">specific_tickers_list</span><span class="p">)</span>
+
+        <span class="n">ticker_to_future_expiration_dates</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">future_ticker</span><span class="p">:</span> <span class="n">futures_expiration_dates</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">specific_futures_index</span><span class="p">(</span><span class="n">future_ticker</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">future_ticker</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ticker_to_future_expiration_dates</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_current_values"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_current_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_values</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the current values of fields for given tickers.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: BloombergTicker, Sequence[BloombergTicker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: str, Sequence[str]</span>
+<span class="sd">            fields of securities which should be retrieved</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame/QFSeries</span>
+<span class="sd">            Either QFDataFrame with 2 dimensions: ticker, field or QFSeries with 1 dimensions: ticker of field</span>
+<span class="sd">            (depending if many tickers or fields was provided) is returned.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        BloombergError</span>
+<span class="sd">            When couldn&#39;t get the data from Bloomberg Service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_is_connected</span><span class="p">()</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+
+        <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># to keep the order of tickers and fields we reindex the data frame</span>
+        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">tickers</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># squeeze unused dimensions</span>
+        <span class="n">tickers_indices</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">got_single_ticker</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">fields_indices</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">got_single_field</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">squeezed_result</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">tickers_indices</span><span class="p">,</span> <span class="n">fields_indices</span><span class="p">]</span>
+
+        <span class="n">casted_result</span> <span class="o">=</span> <span class="n">cast_dataframe_to_proper_type</span><span class="p">(</span><span class="n">squeezed_result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">casted_result</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+            <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+            <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">override_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">override_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets historical data from Bloomberg from the (start_date - end_date) time range. In case of frequency, which is</span>
+<span class="sd">        higher than daily frequency (intraday data), the data is indexed by the start_date. E.g. Time range: 8:00 - 8:01,</span>
+<span class="sd">        frequency: 1 minute - indexed with the 8:00 timestamp</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: None, str, Sequence[str]</span>
+<span class="sd">            fields of securities which should be retrieved. If None, all available fields will be returned</span>
+<span class="sd">            (only supported by few DataProviders)</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            date representing the beginning of historical period from which data should be retrieved</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            date representing the end of historical period from which data should be retrieved;</span>
+<span class="sd">            if no end_date was provided, by default the current date will be used</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+<span class="sd">        currency: str</span>
+<span class="sd">        override_name: str</span>
+<span class="sd">        override_value: str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries, QFDataFrame, QFDataArray</span>
+<span class="sd">            If possible the result will be squeezed, so that instead of returning QFDataArray, data of lower</span>
+<span class="sd">            dimensionality will be returned. The results will be either an QFDataArray (with 3 dimensions: date, ticker,</span>
+<span class="sd">            field), a QFDataFrame (with 2 dimensions: date, ticker or field; it is also possible to get 2 dimensions</span>
+<span class="sd">            ticker and field if single date was provided) or QFSeries (with 1 dimensions: date).</span>
+<span class="sd">            If no data is available in the database or an non existing ticker was provided an empty structure</span>
+<span class="sd">            (QFSeries, QFDataFrame or QFDataArray) will be returned returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Fields being None is not supported by </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_is_connected</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">)</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+
+        <span class="n">tickers_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">BloombergTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">()):</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">}</span>
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_historical_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">currency</span><span class="p">,</span> <span class="n">override_name</span><span class="p">,</span> <span class="n">override_value</span><span class="p">)</span>
+
+        <span class="c1"># Map each of the tickers in data array with corresponding ticker from tickers_mapping dictionary</span>
+        <span class="k">def</span> <span class="nf">_map_ticker</span><span class="p">(</span><span class="n">ticker</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tickers_mapping</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ticker</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="n">data_array</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">_map_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data_array</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+
+        <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalize_data_array</span><span class="p">(</span>
+            <span class="n">data_array</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_date</span><span class="p">,</span> <span class="n">got_single_ticker</span><span class="p">,</span> <span class="n">got_single_field</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">normalized_result</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">BloombergFutureTicker</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.expiration_date_field_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.expiration_date_field_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">expiration_date_field_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">expiration_date_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ExpirationDateField</span><span class="o">.</span><span class="n">FirstNotice</span><span class="p">:</span> <span class="s2">&quot;FUT_NOTICE_FIRST&quot;</span><span class="p">,</span>
+            <span class="n">ExpirationDateField</span><span class="o">.</span><span class="n">LastTradeableDate</span><span class="p">:</span> <span class="s2">&quot;LAST_TRADEABLE_DT&quot;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">expiration_date_field_dict</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.price_field_to_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.price_field_to_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;PX_OPEN&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;PX_HIGH&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;PX_LOW&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;PX_LAST&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;PX_VOLUME&#39;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">price_field_dict</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_tickers_universe"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tickers_universe">[docs]</a>    <span class="k">def</span> <span class="nf">get_tickers_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">universe_ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">date</span> <span class="ow">and</span> <span class="n">date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">!=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BloombergDataProvider does not provide historical tickers_universe data&quot;</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;INDX_MEMBERS&#39;</span>
+        <span class="n">ticker_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabular_data</span><span class="p">(</span><span class="n">universe_ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">BloombergTicker</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;Member Ticker and Exchange Code&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; Equity&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">fields</span> <span class="ow">in</span> <span class="n">ticker_data</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tickers</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_unique_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_unique_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_unique_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">universe_ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BloombergDataProvider does not provide historical tickers_universe data&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BloombergDataProvider.get_tabular_data"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_tabular_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides current tabular data from Bloomberg.</span>
+
+<span class="sd">        Was tested on &#39;INDX_MEMBERS&#39; and &#39;MERGERS_AND_ACQUISITIONS&#39; requests. There is no guarantee that</span>
+<span class="sd">        all other request will be handled, as returned data structures might vary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        ticker: BloombergTicker</span>
+<span class="sd">            ticker for security that should be retrieved</span>
+<span class="sd">        field: str</span>
+<span class="sd">            field of security that should be retrieved</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List</span>
+<span class="sd">            tabular data for the given ticker and field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Field being None is not supported by </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_is_connected</span><span class="p">()</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tabular_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_connect_if_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_assert_is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">BloombergError</span><span class="p">(</span><span class="s2">&quot;Connection to Bloomberg was not successful.&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

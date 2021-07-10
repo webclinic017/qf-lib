@@ -1,0 +1,9 @@
+HaverTicker
+=========================================
+
+.. currentmodule:: qf_lib.common.tickers.tickers
+
+.. autoclass:: HaverTicker
+	:show-inheritance:
+	:autosummary:
+	:members:

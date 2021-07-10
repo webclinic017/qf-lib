@@ -1,0 +1,6 @@
+iso_to_gregorian
+===============================================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.iso_to_gregorian
+
+.. autofunction:: iso_to_gregorian

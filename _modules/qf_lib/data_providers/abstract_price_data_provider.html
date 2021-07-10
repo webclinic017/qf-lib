@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.abstract_price_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.abstract_price_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.abstract_price_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.cast_dataframe</span> <span class="kn">import</span> <span class="n">cast_dataframe</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.cast_series</span> <span class="kn">import</span> <span class="n">cast_series</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+
+
+<div class="viewcode-block" id="AbstractPriceDataProvider"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider">[docs]</a><span class="k">class</span> <span class="nc">AbstractPriceDataProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An interface for data providers containing historical data of stocks, indices, futures</span>
+<span class="sd">    and other asset classes. This is a base class of any simple data provider (a data provider that is associated with</span>
+<span class="sd">    single data base, for example: Quandl, Bloomberg, Yahoo.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractPriceDataProvider.get_price"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.get_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+                  <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> \
+            <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">&gt;</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="p">(</span>
+            <span class="nb">bool</span><span class="p">(</span><span class="n">start_date</span> <span class="ow">and</span> <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">got_single_date</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Single date queries are not supported yet&quot;</span><span class="p">)</span>
+
+        <span class="n">fields_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_field_to_str</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_history</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">fields_str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="c1"># Convert to PriceSeries / PriceDataFrame and replace the string index with PriceField index</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_single_price_field</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_single_ticker</span><span class="p">(</span><span class="n">tickers</span><span class="p">):</span>
+                <span class="n">container</span> <span class="o">=</span> <span class="n">cast_series</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">container</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_to_field_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str_to_price_field_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_first_ticker</span><span class="p">(</span><span class="n">tickers</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_single_ticker</span><span class="p">(</span><span class="n">tickers</span><span class="p">):</span>
+                <span class="c1"># Many fields and single ticker - replace columns in PricesDataFrame</span>
+                <span class="n">container</span> <span class="o">=</span> <span class="n">cast_dataframe</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">)</span>
+                <span class="n">renaming_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">field_str</span><span class="p">:</span> <span class="n">str_to_field_dict</span><span class="p">[</span><span class="n">field_str</span><span class="p">]</span> <span class="k">for</span> <span class="n">field_str</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">columns</span><span class="p">}</span>
+                <span class="n">container</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">renaming_dict</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">container</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="n">str_to_field_dict</span><span class="p">[</span><span class="n">field_str</span><span class="p">]</span>
+                                                            <span class="k">for</span> <span class="n">field_str</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">container</span></div>
+
+<div class="viewcode-block" id="AbstractPriceDataProvider.price_field_to_str_map"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.price_field_to_str_map">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method has to be implemented in each data provider in order to be able to use get_price.</span>
+<span class="sd">        Returns dictionary containing mapping between PriceField and corresponding string that has to be used by</span>
+<span class="sd">        get_history method to get appropriate type of price series.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        ticker: None, Ticker</span>
+<span class="sd">            ticker is optional and might be uses by particular data providers to create appropriate dictionary</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[PriceField, str]</span>
+<span class="sd">             mapping between PriceFields and corresponding strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AbstractPriceDataProvider.expiration_date_field_str_map"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.expiration_date_field_str_map">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">expiration_date_field_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method has to be implemented in each data provider in order to be able to use get_futures_chain_tickers.</span>
+<span class="sd">        Returns dictionary containing mapping between ExpirationDateField and corresponding string that has to be used</span>
+<span class="sd">        by get_futures_chain_tickers method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        ticker: None, Ticker</span>
+<span class="sd">            ticker is optional and might be uses by particular data providers to create appropriate dictionary</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[ExpirationDateField, str]</span>
+<span class="sd">             mapping between ExpirationDateField and corresponding strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AbstractPriceDataProvider.str_to_expiration_date_field_map"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.str_to_expiration_date_field_map">[docs]</a>    <span class="k">def</span> <span class="nf">str_to_expiration_date_field_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ExpirationDateField</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inverse of str_to_expiration_date_field_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">field_str_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration_date_field_str_map</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="n">inv_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">field_str_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="n">inv_dict</span></div>
+
+<div class="viewcode-block" id="AbstractPriceDataProvider.str_to_price_field_map"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.str_to_price_field_map">[docs]</a>    <span class="k">def</span> <span class="nf">str_to_price_field_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inverse of price_field_to_str_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">field_str_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">price_field_to_str_map</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="n">inv_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">field_str_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="n">inv_dict</span></div>
+
+    <span class="k">def</span> <span class="nf">_map_field_to_str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The method maps enum to sting that is recognised by the specific database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fields</span>
+<span class="sd">            fields of securities which should be retrieved</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str, Sequence[str]</span>
+<span class="sd">            String representation of the field or fields that corresponds the API provided by a specific data provider</span>
+<span class="sd">            Depending on the input it returns:</span>
+<span class="sd">            None -&gt; None</span>
+<span class="sd">            PriceField -&gt; str</span>
+<span class="sd">            Sequence[PriceField] -&gt; List[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">field_str_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_first_ticker</span><span class="p">(</span><span class="n">tickers</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_single_price_field</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fields</span> <span class="ow">in</span> <span class="n">field_str_dict</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">field_str_dict</span><span class="p">[</span><span class="n">fields</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Field </span><span class="si">{}</span><span class="s2"> is not recognised by the data provider. Available Fields: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">field_str_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_str_dict</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_str_dict</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Field </span><span class="si">{}</span><span class="s2"> is not recognised by the data provider. Available Fields: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">field_str_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_single_price_field</span><span class="p">(</span><span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]]):</span>
+        <span class="k">return</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_single_ticker</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_get_first_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_single_ticker</span><span class="p">(</span><span class="n">tickers</span><span class="p">):</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">tickers</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">tickers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ticker</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

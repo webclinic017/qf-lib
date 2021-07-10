@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.quandl.quandl_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.quandl.quandl_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.quandl.quandl_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.quandl_db_type</span> <span class="kn">import</span> <span class="n">QuandlDBType</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">QuandlTicker</span><span class="p">,</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_to_string</span> <span class="kn">import</span> <span class="n">date_to_str</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.helpers</span> <span class="kn">import</span> <span class="n">tickers_dict_to_data_array</span><span class="p">,</span> \
+    <span class="n">normalize_data_array</span><span class="p">,</span> <span class="n">get_fields_from_tickers_data_dict</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">quandl</span>
+    <span class="n">is_quandl_installed</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">is_quandl_installed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No quandl installed. If you would like to use QuandlDataProvider first install the quandl library.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="QuandlDataProvider"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider">[docs]</a><span class="k">class</span> <span class="nc">QuandlDataProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class providing the Quandl data.</span>
+<span class="sd">    The table database: WIKI/PRICES offers stock prices, dividends and splits for 3000 US publicly-traded companies.</span>
+<span class="sd">    This database is updated at 9:15 PM EST every weekday.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">quandl_key</span>
+            <span class="n">quandl</span><span class="o">.</span><span class="n">ApiConfig</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No quandl_key parameter found in Settings. If you want to use QuandlDataProvider, add &quot;</span>
+                                <span class="s2">&quot;quandl_key in the settings json file.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QuandlDataProvider.get_price"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.get_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">]],</span>
+                  <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_history</span><span class="p">(</span>
+            <span class="n">convert_to_prices_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tickers</span><span class="o">=</span><span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QuandlDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_history</span><span class="p">(</span>
+            <span class="n">convert_to_prices_types</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tickers</span><span class="o">=</span><span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">convert_to_prices_types</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">]],</span>
+            <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> \
+            <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NOTE: Only use one Quandl Database at the time.</span>
+<span class="sd">        Do not mix multiple databases in one query - this is the natural limitation coming from the fact that column</span>
+<span class="sd">        names (fields) are different across databases.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">QuandlTicker</span><span class="p">)</span>
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">got_single_field</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># all existing fields will be present in the result</span>
+
+        <span class="n">result_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">ticker_group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">database_name</span><span class="p">):</span>
+            <span class="n">ticker_group</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ticker_group</span><span class="p">)</span>
+
+            <span class="n">partial_result_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_for_single_database</span><span class="p">(</span>
+                <span class="n">convert_to_prices_types</span><span class="p">,</span> <span class="n">ticker_group</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+            <span class="n">result_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">partial_result_dict</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">get_fields_from_tickers_data_dict</span><span class="p">(</span><span class="n">result_dict</span><span class="p">)</span>
+
+        <span class="n">result_data_array</span> <span class="o">=</span> <span class="n">tickers_dict_to_data_array</span><span class="p">(</span><span class="n">result_dict</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+        <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalize_data_array</span><span class="p">(</span>
+            <span class="n">result_data_array</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_date</span><span class="p">,</span> <span class="n">got_single_ticker</span><span class="p">,</span> <span class="n">got_single_field</span><span class="p">,</span>
+            <span class="n">use_prices_types</span><span class="o">=</span><span class="n">convert_to_prices_types</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">normalized_result</span>
+
+    <span class="k">def</span> <span class="nf">_get_result_for_single_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">convert_to_prices_types</span><span class="p">,</span> <span class="n">ticker_group</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+        <span class="n">first_ticker</span> <span class="o">=</span> <span class="n">ticker_group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: QuandlTicker</span>
+        <span class="n">db_name</span> <span class="o">=</span> <span class="n">first_ticker</span><span class="o">.</span><span class="n">database_name</span>
+        <span class="n">db_type</span> <span class="o">=</span> <span class="n">first_ticker</span><span class="o">.</span><span class="n">database_type</span>
+
+        <span class="k">if</span> <span class="n">convert_to_prices_types</span><span class="p">:</span>
+            <span class="n">fields_as_strings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_fields_to_str</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">db_type</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields_as_strings</span> <span class="o">=</span> <span class="n">fields</span>
+
+        <span class="k">if</span> <span class="n">db_type</span> <span class="o">==</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Table</span><span class="p">:</span>
+            <span class="n">partial_result_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_history_from_table</span><span class="p">(</span>
+                <span class="n">ticker_group</span><span class="p">,</span> <span class="n">fields_as_strings</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">db_type</span> <span class="o">==</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Timeseries</span><span class="p">:</span>
+            <span class="n">partial_result_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_history_from_timeseries</span><span class="p">(</span>
+                <span class="n">ticker_group</span><span class="p">,</span> <span class="n">fields_as_strings</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Quandl Database type: </span><span class="si">{}</span><span class="s2"> is not supported.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">db_type</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">convert_to_prices_types</span><span class="p">:</span>
+            <span class="n">str_to_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_to_price_field_map</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">db_type</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ticker_data_df</span> <span class="ow">in</span> <span class="n">partial_result_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">price_field_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">str_to_field</span><span class="p">[</span><span class="n">field_str</span><span class="p">]</span> <span class="k">for</span> <span class="n">field_str</span> <span class="ow">in</span> <span class="n">ticker_data_df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+                <span class="n">ticker_data_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">price_field_columns</span>
+
+        <span class="k">return</span> <span class="n">partial_result_dict</span>
+
+    <span class="k">def</span> <span class="nf">_get_fields_from_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_dict</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dates_fields_values</span> <span class="ow">in</span> <span class="n">result_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dates_fields_values</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="QuandlDataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">QuandlTicker</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="nf">_map_fields_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">],</span> <span class="n">database_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_type</span><span class="p">:</span> <span class="n">QuandlDBType</span><span class="p">):</span>
+        <span class="n">field_to_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_price_field_to_str_map</span><span class="p">(</span><span class="n">database_name</span><span class="p">,</span> <span class="n">database_type</span><span class="p">)</span>
+        <span class="n">fields_as_strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">field_to_str</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fields_as_strings</span>
+
+    <span class="k">def</span> <span class="nf">_str_to_price_field_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_type</span><span class="p">:</span> <span class="n">QuandlDBType</span><span class="p">):</span>
+        <span class="n">field_to_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_price_field_to_str_map</span><span class="p">(</span><span class="n">database_name</span><span class="p">,</span> <span class="n">database_type</span><span class="p">)</span>
+        <span class="n">str_to_field</span> <span class="o">=</span> <span class="p">{</span><span class="n">field_str</span><span class="p">:</span> <span class="n">field</span> <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">field_str</span> <span class="ow">in</span> <span class="n">field_to_str</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="k">return</span> <span class="n">str_to_field</span>
+
+    <span class="k">def</span> <span class="nf">_price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">database_type</span><span class="p">:</span> <span class="n">QuandlDBType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">database_type</span> <span class="o">==</span> <span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Table</span> <span class="ow">and</span> <span class="n">database_name</span> <span class="o">==</span> <span class="s1">&#39;WIKI/PRICES&#39;</span><span class="p">:</span>
+            <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;adj_open&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;adj_high&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;adj_low&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;adj_close&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;adj_volume&#39;</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">database_name</span> <span class="o">==</span> <span class="s1">&#39;WIKI&#39;</span><span class="p">:</span>
+            <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;Adj. Open&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;Adj. High&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;Adj. Low&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;Adj. Close&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;Adj. Volume&#39;</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">database_name</span> <span class="o">==</span> <span class="s1">&#39;WSE&#39;</span><span class="p">:</span>
+            <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;Open&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;Close&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;Volume&#39;</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">database_name</span> <span class="o">==</span> <span class="s1">&#39;CHRIS&#39;</span><span class="p">:</span>
+            <span class="c1"># database of continuous futures - only Previous Settlement available</span>
+            <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;Previous Settlement&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">database_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ICE&#39;</span><span class="p">,</span> <span class="s1">&#39;CME&#39;</span><span class="p">,</span> <span class="s1">&#39;EUREX&#39;</span><span class="p">]:</span>
+            <span class="c1"># mapping for individual futures contracts</span>
+            <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;Open&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;Settle&#39;</span><span class="p">,</span>
+                <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;Volume&#39;</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span>
+                <span class="s2">&quot;Quandl Database: </span><span class="si">{}</span><span class="s2"> is not supported. PriceField -&gt; string mapping is required.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">database_name</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">price_field_dict</span>
+
+    <span class="k">def</span> <span class="nf">_get_history_from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers_of_single_db</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+        <span class="c1"># Possibly this method is not generic enough, but I couldn&#39;t find another table db to test it.</span>
+        <span class="n">field_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ticker&#39;</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+            <span class="n">field_options</span><span class="p">[</span><span class="s1">&#39;qopts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;columns&#39;</span><span class="p">:</span> <span class="n">columns</span><span class="p">}</span>
+
+        <span class="n">db_name</span> <span class="o">=</span> <span class="n">tickers_of_single_db</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">database_name</span>
+        <span class="n">result_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers_of_single_db</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">ticker</span><span class="o">=</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">field_options</span><span class="p">)</span>
+        <span class="c1"># at this point we have a large DataFrame with rows corresponding to different tickers</span>
+        <span class="c1"># we group it by ticker</span>
+        <span class="n">ticker_grouping</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;ticker&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ticker_str</span><span class="p">,</span> <span class="n">ticker_df</span> <span class="ow">in</span> <span class="n">ticker_grouping</span><span class="p">:</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">QuandlTicker</span><span class="p">(</span><span class="n">ticker</span><span class="o">=</span><span class="n">ticker_str</span><span class="p">,</span> <span class="n">database_name</span><span class="o">=</span><span class="n">db_name</span><span class="p">,</span> <span class="n">database_type</span><span class="o">=</span><span class="n">QuandlDBType</span><span class="o">.</span><span class="n">Table</span><span class="p">)</span>
+            <span class="n">dates_fields_values_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_single_ticker_table</span><span class="p">(</span><span class="n">ticker_df</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+            <span class="n">result_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">dates_fields_values_df</span>
+
+        <span class="k">return</span> <span class="n">result_dict</span>
+
+    <span class="k">def</span> <span class="nf">_get_history_from_timeseries</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">QuandlTicker</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NOTE: Only use one Quandl Database at the time. Do not mix multiple databases.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>  <span class="c1"># allows iterating the sequence more then once</span>
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">]</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date_to_str</span><span class="p">(</span><span class="n">start_date</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;end_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date_to_str</span><span class="p">(</span><span class="n">end_date</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">quandl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: pd.DataFrame</span>
+
+        <span class="k">def</span> <span class="nf">extract_ticker_name</span><span class="p">(</span><span class="n">column_name</span><span class="p">):</span>
+            <span class="n">ticker_str</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">column_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">QuandlTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">ticker_str</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ticker</span>
+
+        <span class="n">ticker_grouping</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">extract_ticker_name</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ticker_to_df</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># type: Dict[str, pd.DataFrame]  # string -&gt; DataFrame[dates, fields]</span>
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">ticker_data_df</span> <span class="ow">in</span> <span class="n">ticker_grouping</span><span class="p">:</span>
+            <span class="n">tickers_and_fields</span> <span class="o">=</span> <span class="p">(</span><span class="n">column_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">ticker_data_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tickers_and_fields</span><span class="p">]</span>
+            <span class="n">ticker_data_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">field_names</span>
+
+            <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># select only required fields</span>
+                <span class="n">ticker_data_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_only_required_fields</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">ticker_data_df</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+                <span class="c1"># if there was no data for the given ticker, skip the ticker</span>
+                <span class="k">if</span> <span class="n">ticker_data_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="n">ticker_to_df</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticker_data_df</span>
+
+        <span class="k">return</span> <span class="n">ticker_to_df</span>
+
+    <span class="k">def</span> <span class="nf">_select_only_required_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">ticker_data</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+        <span class="n">requested_fields_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="n">got_fields_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ticker_data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">missing_fields</span> <span class="o">=</span> <span class="n">requested_fields_set</span> <span class="o">-</span> <span class="n">got_fields_set</span>
+
+        <span class="k">if</span> <span class="n">missing_fields</span><span class="p">:</span>
+            <span class="n">missing_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">ticker</span><span class="o">.</span><span class="n">field_to_column_name</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">missing_fields</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Columns </span><span class="si">{}</span><span class="s2"> have not been found in the Quandl response&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">missing_columns</span><span class="p">))</span>
+
+        <span class="n">fields_to_select</span> <span class="o">=</span> <span class="n">requested_fields_set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">got_fields_set</span><span class="p">)</span>
+
+        <span class="c1"># if there are no fields which should be selected, return None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fields_to_select</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">ticker_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">fields_to_select</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_format_single_ticker_table</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="c1"># create index from column and remove redundant info</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ticker&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># type: pd.DataFrame</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+        <span class="c1"># cut the dates if necessary</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">end_date</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">table</span>
+
+<div class="viewcode-block" id="QuandlDataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Downloading Future Chain Tickers in QuandlDataProvider is not supported yet&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">expiration_date_field_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">pass</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

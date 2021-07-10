@@ -1,0 +1,486 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.containers.series.qf_series &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.containers.series.qf_series</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.containers.series.qf_series</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas.core.construction</span> <span class="kn">import</span> <span class="n">is_empty_data</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.time_indexed_container</span> <span class="kn">import</span> <span class="n">TimeIndexedContainer</span>
+
+
+<div class="viewcode-block" id="QFSeries"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries">[docs]</a><span class="k">class</span> <span class="nc">QFSeries</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">TimeIndexedContainer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for all time-indexed series used in the quant-fin project.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">copy</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">fastpath</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_empty_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">fastpath</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_constructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QFSeries</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_constructor_expanddim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+        <span class="k">return</span> <span class="n">QFDataFrame</span>
+
+<div class="viewcode-block" id="QFSeries.to_log_returns"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.to_log_returns">[docs]</a>    <span class="k">def</span> <span class="nf">to_log_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LogReturnsSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts timeseries to the timeseries of logarithmic returns. First date of prices in the returns timeseries</span>
+<span class="sd">        won&#39;t be present.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        LogReturnsSeries</span>
+<span class="sd">            timeseries of log returns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QFSeries.to_simple_returns"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.to_simple_returns">[docs]</a>    <span class="k">def</span> <span class="nf">to_simple_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SimpleReturnsSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts timeseries to the timeseries of simple returns. First date of prices in the returns timeseries won&#39;t</span>
+<span class="sd">        be present.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleReturnsSeries</span>
+<span class="sd">            timeseries of simple returns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QFSeries.to_prices"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.to_prices">[docs]</a>    <span class="k">def</span> <span class="nf">to_prices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suggested_initial_date</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PricesSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a timeseries into series of prices. The timeseries of prices returned will have an extra date</span>
+<span class="sd">        at the beginning (in comparison to the returns&#39; timeseries). The difference between the extra</span>
+<span class="sd">        date and the rest of the dates can be inferred from the returns&#39; timeseries or can be calculated using</span>
+<span class="sd">        the frequency passed as the optional argument. Additional date at the beginning (so called &quot;initial date&quot;)</span>
+<span class="sd">        is caused by the fact, that return for the first date of prices timeseries cannot be calculated, so it&#39;s</span>
+<span class="sd">        missing. Thus, during the opposite conversion, extra date at the beginning will be added.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        initial_price</span>
+<span class="sd">            initial price of the timeseries. If no price will be specified, then it will be assumed to be 1.</span>
+<span class="sd">        suggested_initial_date</span>
+<span class="sd">            the first date or initial value for the prices series. It won&#39;t be necessarily the first date of the price</span>
+<span class="sd">            series (e.g. if the method is run on the PricesSeries then it won&#39;t be used).</span>
+<span class="sd">        frequency</span>
+<span class="sd">            the frequency of the returns&#39; timeseries. It is used to infer the initial date for the prices series.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PricesSeries</span>
+<span class="sd">            series of prices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QFSeries.min_max_normalized"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.min_max_normalized">[docs]</a>    <span class="k">def</span> <span class="nf">min_max_normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_min_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">original_max_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalizes the data using min-max scaling: it maps all the data to the [0;1] range, so that 0 corresponds</span>
+<span class="sd">        to the minimal value in the original series and 1 corresponds to the maximal value. It is also possible</span>
+<span class="sd">        to specify values which should correspond to 0 and 1 after applying the normalization. It is useful if the same</span>
+<span class="sd">        normalization parameters are used to normalize different data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        original_min_value</span>
+<span class="sd">            value which should correspond to 0 after applying the normalization</span>
+<span class="sd">        original_max_value</span>
+<span class="sd">            value which should correspond to 1 after applying the normalization</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        normalized_series</span>
+<span class="sd">            series of normalized values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># assert that user specified either both min and max values or none of them</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">original_min_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">original_max_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> \
+               <span class="p">(</span><span class="n">original_min_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">original_max_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">original_min_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">original_max_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">original_min_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">original_max_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="n">values_span</span> <span class="o">=</span> <span class="n">original_max_value</span> <span class="o">-</span> <span class="n">original_min_value</span>
+        <span class="n">normalized_values</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">original_min_value</span><span class="p">)</span> <span class="o">/</span> <span class="n">values_span</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constructor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">normalized_values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span><span class="o">.</span><span class="n">__finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QFSeries.exponential_average"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.exponential_average">[docs]</a>    <span class="k">def</span> <span class="nf">exponential_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambda_coeff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the exponential average of a series.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lambda_coeff</span>
+<span class="sd">            lambda coefficient</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries</span>
+<span class="sd">            exponential average of the series</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">smoothed_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="n">current_value_weighted</span> <span class="o">=</span> <span class="n">lambda_coeff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">prev_value_weighted</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">lambda_coeff</span><span class="p">)</span> <span class="o">*</span> <span class="n">smoothed_series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">smoothed_value</span> <span class="o">=</span> <span class="n">current_value_weighted</span> <span class="o">+</span> <span class="n">prev_value_weighted</span>
+            <span class="n">smoothed_series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">smoothed_value</span>
+
+        <span class="k">return</span> <span class="n">smoothed_series</span></div>
+
+<div class="viewcode-block" id="QFSeries.rolling_window_with_benchmark"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.rolling_window_with_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">rolling_window_with_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">benchmark</span><span class="p">:</span> <span class="s2">&quot;QFSeries&quot;</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                      <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;QFSeries&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Looks at a number of windows of size ``window_size`` and transforms the data in those windows based on the</span>
+<span class="sd">        specified ``func``.</span>
+
+<span class="sd">        The window indices are stepped at a rate specified by ``step``. This function runs a &quot;correlated&quot;</span>
+<span class="sd">        rolling window iteration. The ``func`` must accept two arguments, one from each series.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        benchmark</span>
+<span class="sd">            The benchmark to compare to.</span>
+<span class="sd">        window_size</span>
+<span class="sd">            The size of the window to look at specified as the number of data points.</span>
+<span class="sd">        func</span>
+<span class="sd">            The function to call during each iteration. When ``other`` is ``None`` this function should take</span>
+<span class="sd">            two ``QFSeries`` arguments and return a value. (Usually a number such as a ``float``).</span>
+<span class="sd">        step</span>
+<span class="sd">            The amount of data points to step through after each iteration, i.e. how much to move the window by in</span>
+<span class="sd">            each iteration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries</span>
+<span class="sd">            A ``QFSeries`` containing the transformed data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">()</span>
+
+        <span class="c1"># Intersect the two series&#39; indexes.</span>
+        <span class="n">self_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">benchmark_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">benchmark</span><span class="p">)</span>
+        <span class="n">self_series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">self_series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="n">benchmark_series</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">benchmark_series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="n">intersected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">self_series</span><span class="p">,</span> <span class="n">benchmark_series</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intersected</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>  <span class="c1"># Just to make PyCharm silent.</span>
+
+        <span class="c1"># Apply a rolling window transformation on the QFSeries.</span>
+        <span class="c1"># Based on https://github.com/quantopian/pyfolio/blob/master/pyfolio/timeseries.py#L616.</span>
+        <span class="n">window_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersected</span><span class="p">):</span>
+            <span class="c1"># Calculate the position of the window&#39;s end.</span>
+            <span class="n">window_end</span> <span class="o">=</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">window_size</span>
+            <span class="c1"># Get the start and end dates at the current window indexes.</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">intersected</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">window_start</span><span class="p">]</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">intersected</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">window_end</span><span class="p">]</span>
+
+            <span class="c1"># Return the data for the current window.</span>
+            <span class="n">strategy_slice</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">intersected</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+            <span class="n">benchmark_slice</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">intersected</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">strategy_slice</span><span class="p">,</span> <span class="n">benchmark_slice</span><span class="p">)</span>
+
+            <span class="n">window_start</span> <span class="o">+=</span> <span class="n">step</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="QFSeries.rolling_window"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.rolling_window">[docs]</a>    <span class="k">def</span> <span class="nf">rolling_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Union</span><span class="p">[</span><span class="s2">&quot;QFSeries&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                       <span class="n">optimised</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFSeries&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Looks at a number of windows of size ``window_size`` and transforms the data in those windows based on the</span>
+<span class="sd">        specified ``func``.</span>
+
+<span class="sd">        The window indices are stepped at a rate specified by ``step``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        window_size</span>
+<span class="sd">            The size of the window to look at specified as the number of data points.</span>
+<span class="sd">        func</span>
+<span class="sd">            The function to call during each iteration. When ``other`` is ``None`` this function should take one</span>
+<span class="sd">            ``QFSeries`` and return a value (Usually a number such as a ``float``). Otherwise, this function should take</span>
+<span class="sd">            two ``QFSeries`` arguments and return a value.</span>
+<span class="sd">        step</span>
+<span class="sd">            The amount of data points to step through after each iteration, i.e. how much to move the window by in</span>
+<span class="sd">            each iteration.</span>
+<span class="sd">        optimised</span>
+<span class="sd">            Whether the more efficient pandas algorithm should be used for the rolling window application.</span>
+<span class="sd">            Note: This has some limitations: The ``step`` must be 1 and ``func`` will get an ``ndarray``</span>
+<span class="sd">            parameter which only contains values and no index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries</span>
+<span class="sd">            A ``QFSeries`` containing the transformed data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">optimised</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">qf_lib.containers.series.cast_series</span> <span class="kn">import</span> <span class="n">cast_series</span>
+            <span class="k">assert</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Optimised rolling is only possible with a step of 1.&quot;</span>
+            <span class="n">uncasted_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window_size</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cast_series</span><span class="p">(</span><span class="n">uncasted_result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constructor</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">()</span>
+
+        <span class="c1"># Apply a rolling window transformation on the QFSeries.</span>
+        <span class="c1"># Based on https://github.com/quantopian/pyfolio/blob/master/pyfolio/timeseries.py#L616.</span>
+        <span class="n">window_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># Calculate the position of the window&#39;s end.</span>
+            <span class="n">window_end</span> <span class="o">=</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="c1"># Get the start and end dates at the current window indexes.</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">window_start</span><span class="p">]</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">window_end</span><span class="p">]</span>
+
+            <span class="c1"># Return the data for the current window.</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+
+            <span class="n">window_start</span> <span class="o">+=</span> <span class="n">step</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="QFSeries.get_frequency"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.get_frequency">[docs]</a>    <span class="k">def</span> <span class="nf">get_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Frequency</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempts to infer the frequency of this series. The analysis uses pandas&#39; infer_freq, as well as a heuristic</span>
+<span class="sd">        to reduce the amount of ``Irregular`` results.</span>
+
+<span class="sd">        See the implementation of the Frequency.infer_freq function for more information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">infer_freq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QFSeries.total_cumulative_return"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries.total_cumulative_return">[docs]</a>    <span class="k">def</span> <span class="nf">total_cumulative_return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the total cumulative return for the series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

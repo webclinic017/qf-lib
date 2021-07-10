@@ -1,0 +1,9 @@
+DistChart
+===========================================
+
+.. currentmodule:: qf_lib.plotting.charts.dist_chart
+
+.. autoclass:: DistChart
+	:show-inheritance:
+	:autosummary:
+	:members:

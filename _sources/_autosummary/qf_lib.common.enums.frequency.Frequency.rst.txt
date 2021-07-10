@@ -1,0 +1,9 @@
+Frequency
+=======================================
+
+.. currentmodule:: qf_lib.common.enums.frequency
+
+.. autoclass:: Frequency
+	:show-inheritance:
+	:autosummary:
+	:members:

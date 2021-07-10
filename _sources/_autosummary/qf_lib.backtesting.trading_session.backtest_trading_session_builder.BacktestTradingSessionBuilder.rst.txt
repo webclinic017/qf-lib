@@ -1,0 +1,9 @@
+BacktestTradingSessionBuilder
+=================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.trading_session.backtest_trading_session_builder
+
+.. autoclass:: BacktestTradingSessionBuilder
+	:show-inheritance:
+	:autosummary:
+	:members:

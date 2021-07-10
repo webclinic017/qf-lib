@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.portfolio_construction.portfolio_models.portfolio &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.portfolio_construction.portfolio_models.portfolio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.portfolio_construction.portfolio_models.portfolio</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_to_string</span> <span class="kn">import</span> <span class="n">date_to_str</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dimension_names</span> <span class="kn">import</span> <span class="n">TICKERS</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.cast_series</span> <span class="kn">import</span> <span class="n">cast_series</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.simple_returns_series</span> <span class="kn">import</span> <span class="n">SimpleReturnsSeries</span>
+
+
+<div class="viewcode-block" id="Portfolio"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio">[docs]</a><span class="k">class</span> <span class="nc">Portfolio</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="n">EPSILON</span> <span class="o">=</span> <span class="mf">1e-5</span>
+
+<div class="viewcode-block" id="Portfolio.get_weights"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.get_weights">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        a series indexed with names of assets containing weights (one for each asset).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Portfolio.constant_weights"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.constant_weights">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">constant_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assets_rets_df</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">SimpleReturnsSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the time series of portfolio returns (given the weights of portfolio&#39;s assets). Weights of assets</span>
+<span class="sd">        are assumed to be the same all the time (there is a rebalancing on each time tick, e.g. every day if the series</span>
+<span class="sd">        has a daily frequency).</span>
+
+<span class="sd">        The method also calculates the allocation matrix. However since the weights are constant, so are</span>
+<span class="sd">        the allocations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        assets_rets_df</span>
+<span class="sd">            simple returns of assets which create the portfolio</span>
+<span class="sd">        weights</span>
+<span class="sd">            weights of assets creating the portfolio</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[SimpleReturnsSeries, QFDataFrame]</span>
+<span class="sd">            timeseries of portfolio&#39;s returns, dataframe indexed with dates and showing allocations in time (one column per asset)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="n">assets_rets_df</span><span class="o">.</span><span class="n">num_of_columns</span>
+
+        <span class="n">weights_sum</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">weights_sum</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">&gt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EPSILON</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Sum of all weights is not equal to 1.0: sum(weights) = </span><span class="si">{:f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weights_sum</span><span class="p">))</span>
+
+        <span class="n">num_of_assets</span> <span class="o">=</span> <span class="n">assets_rets_df</span><span class="o">.</span><span class="n">num_of_rows</span>
+
+        <span class="n">portfolio_rets</span> <span class="o">=</span> <span class="n">assets_rets_df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">portfolio_rets_tms</span> <span class="o">=</span> <span class="n">SimpleReturnsSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">portfolio_rets</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="n">allocation_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="p">(</span><span class="n">num_of_assets</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">allocation_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">allocation_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                                    <span class="n">columns</span><span class="o">=</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">portfolio_rets_tms</span><span class="p">,</span> <span class="n">allocation_df</span></div>
+
+<div class="viewcode-block" id="Portfolio.drifting_weights"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.drifting_weights">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">drifting_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assets_rets_df</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">SimpleReturnsSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the time series of portfolio returns (given the initial weights of portfolio&#39;s assets).</span>
+<span class="sd">        Weights of assets change over time because there is no rebalancing.</span>
+
+<span class="sd">        The method also calculates the allocation matrix which shows what portfolio consists of on each date.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        assets_rets_df</span>
+<span class="sd">            simple returns of assets which create the portfolio</span>
+<span class="sd">        weights</span>
+<span class="sd">            weights of assets which create the portfolio</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[SimpleReturnsSeries, QFDataFrame]</span>
+<span class="sd">            timeseries of portfolio&#39;s returns, dataframe indexed with dates and showing allocations in time (one column per asset)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="n">assets_rets_df</span><span class="o">.</span><span class="n">num_of_columns</span>
+
+        <span class="n">weights_sum</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">weights_sum</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EPSILON</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Sum of all weights is not equal to 1.0: sum(weights) = </span><span class="si">{:f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weights_sum</span><span class="p">))</span>
+
+        <span class="c1"># create a data frame with cumulative returns with a row of zeroes at the beginning</span>
+        <span class="n">assets_prices_df</span> <span class="o">=</span> <span class="n">assets_rets_df</span><span class="o">.</span><span class="n">to_prices</span><span class="p">(</span><span class="n">initial_prices</span><span class="o">=</span><span class="n">weights</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">portfolio_total_value_tms</span> <span class="o">=</span> <span class="n">cast_series</span><span class="p">(</span><span class="n">assets_prices_df</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">PricesSeries</span><span class="p">)</span>
+        <span class="n">portfolio_rets</span> <span class="o">=</span> <span class="n">portfolio_total_value_tms</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>
+        <span class="n">portfolio_rets</span> <span class="o">*=</span> <span class="n">weights_sum</span>  <span class="c1"># scale returns so that they correspond to the level of investment</span>
+
+        <span class="c1"># to get an allocation matrix one needs to divide each row of assets&#39; prices by the cumulative</span>
+        <span class="c1"># portfolio return at that time</span>
+        <span class="n">portfolio_total_values</span> <span class="o">=</span> <span class="n">portfolio_total_value_tms</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># make it a vertical vector</span>
+        <span class="n">normalizing_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">portfolio_total_values</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">assets_prices_df</span><span class="o">.</span><span class="n">num_of_columns</span><span class="p">))</span>
+        <span class="n">allocation_matrix</span> <span class="o">=</span> <span class="n">assets_prices_df</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="n">normalizing_factor</span>
+
+        <span class="c1"># to keep the correct level of investment values in allocation matrix need to be multiplied by the sum</span>
+        <span class="c1"># of weights</span>
+        <span class="n">allocation_matrix</span> <span class="o">*=</span> <span class="n">weights_sum</span>
+        <span class="n">allocation_matrix</span> <span class="o">=</span> <span class="n">allocation_matrix</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="n">allocation_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">data</span><span class="o">=</span><span class="n">allocation_matrix</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">portfolio_rets</span><span class="p">,</span> <span class="n">allocation_df</span></div>
+
+<div class="viewcode-block" id="Portfolio.different_allocations_tms"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.different_allocations_tms">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">different_allocations_tms</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assets_rets_df</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">allocations_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">SimpleReturnsSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the time series of portfolio returns given the allocations on each date. The portfolio returns</span>
+<span class="sd">        are calculated by multiplying returns of assets by corresponding allocations&#39; values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        assets_rets_df</span>
+<span class="sd">            simple returns of assets which create the portfolio</span>
+<span class="sd">        allocations_df</span>
+<span class="sd">            dataframe indexed with dates, showing allocations in time (one column per asset)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleReturnsSeries</span>
+<span class="sd">            timeseries of portfolio&#39;s returns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">allocations_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> \
+            <span class="s2">&quot;Different column values for assets and allocation matrix&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">assets_rets_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">allocations_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> \
+            <span class="s2">&quot;Different dates for assets and allocation matrix&quot;</span>
+
+        <span class="c1"># get indices of rows for which: sum of weights is greater than 1. The result of where is a tuple (for a vector</span>
+        <span class="c1"># it&#39;s a 1-element tuple, for a matrix -- a 2-element tuple and so on). Thus it&#39;s necessary to unwrap the result</span>
+        <span class="c1"># from a tuple, to get the array of indices (instead of 1-elem. tuple consisted of an array).</span>
+        <span class="n">incorrect_weights_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">allocations_df</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EPSILON</span>  <span class="c1"># type: np.ndarray</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">incorrect_weights_rows</span><span class="p">):</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="n">allocations_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">incorrect_weights_rows</span><span class="p">]</span>
+            <span class="n">dates_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">date_to_str</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">])</span>
+
+            <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Weights don&#39;t sum up to 1 for the following dates: &quot;</span> <span class="o">+</span> <span class="n">dates_str</span><span class="p">)</span>
+
+        <span class="n">scaled_returns</span> <span class="o">=</span> <span class="n">assets_rets_df</span> <span class="o">*</span> <span class="n">allocations_df</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">portfolio_rets</span> <span class="o">=</span> <span class="n">scaled_returns</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">portfolio_rets_tms</span> <span class="o">=</span> <span class="n">SimpleReturnsSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">portfolio_rets</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">allocations_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">portfolio_rets_tms</span></div>
+
+<div class="viewcode-block" id="Portfolio.one_over_n_weights"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.html#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.one_over_n_weights">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">one_over_n_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the one-over-n weights for given tickers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_of_tickers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+        <span class="n">weight_of_each_asset</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">num_of_tickers</span>
+
+        <span class="n">weights_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">weight_of_each_asset</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_of_tickers</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">TICKERS</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">weights_values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">weights</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

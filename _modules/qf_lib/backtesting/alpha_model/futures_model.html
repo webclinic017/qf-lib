@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.alpha_model.futures_model &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.alpha_model.futures_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.alpha_model.futures_model</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Memory</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">to_datetime</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.alpha_model</span> <span class="kn">import</span> <span class="n">AlphaModel</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.exceptions.not_enough_data_exception</span> <span class="kn">import</span> <span class="n">NotEnoughDataException</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.average_true_range</span> <span class="kn">import</span> <span class="n">average_true_range</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.numberutils.is_finite_number</span> <span class="kn">import</span> <span class="n">is_finite_number</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.futures_adjustment_method</span> <span class="kn">import</span> <span class="n">FuturesAdjustmentMethod</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.futures_chain</span> <span class="kn">import</span> <span class="n">FuturesChain</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="FuturesModel"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html#qf_lib.backtesting.alpha_model.futures_model.FuturesModel">[docs]</a><span class="k">class</span> <span class="nc">FuturesModel</span><span class="p">(</span><span class="n">AlphaModel</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Type of alpha model, which can be easily integrated with any type of Tickers (plain Ticker objects, as well as</span>
+<span class="sd">    FutureTickers). It provides the functionality which allows to download the daily OHLCV prices data frame,</span>
+<span class="sd">    regardless of ticker type (the get_data function).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_of_bars_needed: int</span>
+<span class="sd">        number of bars necessary to compute the exposure</span>
+<span class="sd">    risk_estimation_factor: float</span>
+<span class="sd">        float value which estimates the risk level of the specific AlphaModel. Corresponds to the level at which</span>
+<span class="sd">        the stop-loss should be placed.</span>
+<span class="sd">    data_handler: DataHandler</span>
+<span class="sd">        DataHandler which provides data for the ticker</span>
+<span class="sd">    cache_path: Optional[str]</span>
+<span class="sd">        path to a directory, which could be used by the model for caching purposes. If provided, the model will cache</span>
+<span class="sd">        the outputs of get_data function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_of_bars_needed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">,</span>
+                 <span class="n">cache_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">risk_estimation_factor</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">)</span>
+
+        <span class="c1"># Precomputed futures chains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">futures_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">FuturesChain</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cache_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">memory</span> <span class="o">=</span> <span class="n">Memory</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_name_to_ticker</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_bars_needed</span> <span class="o">=</span> <span class="n">num_of_bars_needed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_bars_atr</span> <span class="o">=</span> <span class="n">num_of_bars_needed</span>
+
+<div class="viewcode-block" id="FuturesModel.get_signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal">[docs]</a>    <span class="k">def</span> <span class="nf">get_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">current_exposure</span><span class="p">:</span> <span class="n">Exposure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signal</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_name_to_ticker</span><span class="p">[</span><span class="n">ticker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="n">suggested_exposure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_exposure</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">current_exposure</span><span class="p">)</span>
+        <span class="n">fraction_at_risk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_fraction_at_risk</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+        <span class="n">specific_ticker</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">get_current_specific_ticker</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="n">ticker</span>
+        <span class="n">last_available_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">specific_ticker</span><span class="p">)</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">suggested_exposure</span><span class="p">,</span> <span class="n">fraction_at_risk</span><span class="p">,</span> <span class="n">last_available_price</span><span class="p">,</span> <span class="n">alpha_model</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">signal</span></div>
+
+<div class="viewcode-block" id="FuturesModel.get_data"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">aggregate_volume</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Downloads the OHCLV Prices data frame for the given ticker. In case of a FutureTicker, the function downloads</span>
+<span class="sd">        the Futures Chain and applies backward adjustment to the prices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ticker_str: str</span>
+<span class="sd">            string representing the ticker for which the data should be downloaded</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            last date for the data to be fetched</span>
+<span class="sd">        aggregate_volume: bool</span>
+<span class="sd">            used only in case of future tickers - if set to True, the volume data would not be the volume for the</span>
+<span class="sd">            given contract, but the volume aggregated across all contracts (for each day the volume will be simply</span>
+<span class="sd">            the sum of all volumes of the existing contracts of the given future asset)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">+</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_of_bars_needed</span> <span class="o">+</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="n">ticker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker_name_to_ticker</span><span class="p">[</span><span class="n">ticker_str</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">futures_data</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                                 <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># Ticker was not preloaded or the FutureChain has expired</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">futures_data</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">FuturesChain</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="p">,</span>
+                                                         <span class="n">FuturesAdjustmentMethod</span><span class="o">.</span><span class="n">BACK_ADJUSTED</span><span class="p">)</span>
+
+                <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">futures_data</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                                 <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">aggregate_volume</span><span class="p">:</span>
+                <span class="n">data_frame</span><span class="p">[</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_aggregated_volume</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+
+        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_frame</span></div>
+
+    <span class="k">def</span> <span class="nf">_compute_aggregated_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">FutureTicker</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">]:</span>
+        <span class="c1"># Compute the TOTAL VOLUME (aggregated across contracts)</span>
+        <span class="n">futures_chain_tickers_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_futures_chain_tickers</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span>
+                                                                               <span class="n">ExpirationDateField</span><span class="o">.</span><span class="n">all_dates</span><span class="p">())[</span><span class="n">ticker</span><span class="p">]</span>
+        <span class="c1"># Get the minimum date</span>
+        <span class="n">futures_chain_tickers</span> <span class="o">=</span> <span class="n">futures_chain_tickers_df</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">futures_chain_tickers</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span><span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">futures_chain_tickers</span> <span class="o">=</span> <span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+        <span class="n">futures_chain_tickers</span> <span class="o">=</span> <span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">end_date</span> <span class="o">+</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="mi">6</span><span class="p">)]</span>
+        <span class="n">all_specific_tickers</span> <span class="o">=</span> <span class="n">futures_chain_tickers</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">volume_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">all_specific_tickers</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">volume_df</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">volume_df</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">compute_atr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_df</span><span class="p">:</span> <span class="n">PricesDataFrame</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">prices_df</span> <span class="o">=</span> <span class="n">prices_df</span><span class="p">[[</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">]]</span>
+            <span class="n">prices_df</span> <span class="o">=</span> <span class="n">prices_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="c1">#   Compute the ATR</span>
+            <span class="n">atr_values</span> <span class="o">=</span> <span class="n">average_true_range</span><span class="p">(</span><span class="n">prices_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">num_of_bars_atr</span><span class="p">:],</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotEnoughDataException</span><span class="p">(</span><span class="s2">&quot;Not enough data to compute the average true range&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">atr_values</span>
+
+    <span class="k">def</span> <span class="nf">_atr_fraction_at_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">time_period</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">current_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">current_time</span><span class="p">)</span>
+            <span class="n">atr_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_atr</span><span class="p">(</span><span class="n">data_frame</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">atr_value</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_estimation_factor</span> <span class="k">if</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">atr_value</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="n">NotEnoughDataException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_bars_needed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_estimation_factor</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

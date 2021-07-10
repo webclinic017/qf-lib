@@ -1,0 +1,9 @@
+AxesLabelDecorator
+==================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.axes_label_decorator
+
+.. autoclass:: AxesLabelDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

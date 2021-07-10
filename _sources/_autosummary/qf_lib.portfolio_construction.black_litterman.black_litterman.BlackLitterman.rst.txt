@@ -1,0 +1,9 @@
+BlackLitterman
+============================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.black_litterman.black_litterman
+
+.. autoclass:: BlackLitterman
+	:show-inheritance:
+	:autosummary:
+	:members:

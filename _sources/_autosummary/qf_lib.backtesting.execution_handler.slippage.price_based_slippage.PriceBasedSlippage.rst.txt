@@ -1,0 +1,9 @@
+PriceBasedSlippage
+=====================================================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.slippage.price_based_slippage
+
+.. autoclass:: PriceBasedSlippage
+	:show-inheritance:
+	:autosummary:
+	:members:

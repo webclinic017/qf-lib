@@ -1,0 +1,9 @@
+SimpleReturnsDataFrame
+===========================================================================
+
+.. currentmodule:: qf_lib.containers.dataframe.simple_returns_dataframe
+
+.. autoclass:: SimpleReturnsDataFrame
+	:show-inheritance:
+	:autosummary:
+	:members:

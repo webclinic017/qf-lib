@@ -1,0 +1,6 @@
+create_returns_distribution
+===============================================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_returns_distribution
+
+.. autofunction:: create_returns_distribution

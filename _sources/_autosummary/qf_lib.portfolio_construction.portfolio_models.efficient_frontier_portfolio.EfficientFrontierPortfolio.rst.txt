@@ -1,0 +1,9 @@
+EfficientFrontierPortfolio
+======================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio
+
+.. autoclass:: EfficientFrontierPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+BacktestSummaryElement
+==================================================================================
+
+.. currentmodule:: qf_lib.backtesting.fast_alpha_model_tester.backtest_summary
+
+.. autoclass:: BacktestSummaryElement
+	:show-inheritance:
+	:autosummary:
+	:members:

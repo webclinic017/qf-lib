@@ -1,0 +1,6 @@
+close_open_gap
+================================================================
+
+.. currentmodule:: qf_lib.common.utils.close_open_gap.close_open_gap
+
+.. autofunction:: close_open_gap

@@ -1,0 +1,9 @@
+DriftIndependentVolatility
+======================================================================================
+
+.. currentmodule:: qf_lib.common.utils.volatility.drift_independent_volatility
+
+.. autoclass:: DriftIndependentVolatility
+	:show-inheritance:
+	:autosummary:
+	:members:

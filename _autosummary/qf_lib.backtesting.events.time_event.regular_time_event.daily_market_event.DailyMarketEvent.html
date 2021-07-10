@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DailyMarketEvent &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AfterMarketCloseEvent" href="qf_lib.backtesting.events.time_event.regular_time_event.after_market_close_event.AfterMarketCloseEvent.html" />
+    <link rel="prev" title="RegularTimeEvent" href="qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../backtesting.html">backtesting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#data-handler">data_handler</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#events">events</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.time_event.TimeEvent.html">TimeEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent.html">RegularTimeEvent</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DailyMarketEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.after_market_close_event.AfterMarketCloseEvent.html">AfterMarketCloseEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.before_market_open_event.BeforeMarketOpenEvent.html">BeforeMarketOpenEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.market_close_event.MarketCloseEvent.html">MarketCloseEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.market_open_event.MarketOpenEvent.html">MarketOpenEvent</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#execution-handler">execution_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../backtesting.html">backtesting</a> &raquo;</li>
+        
+      <li>DailyMarketEvent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="dailymarketevent">
+<h1>DailyMarketEvent<a class="headerlink" href="#dailymarketevent" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.</code><code class="sig-name descname">DailyMarketEvent</code><a class="reference internal" href="../_modules/qf_lib/backtesting/events/time_event/regular_time_event/daily_market_event.html#DailyMarketEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent.html#qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent" title="qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent</span></code></a></p>
+<p>Class implementing the logic for all events happening every day such as MarketOpenEvent, MarketCloseEvent etc.
+The time has to be set up by calling <code class="docutils literal notranslate"><span class="pre">set_trigger_time</span></code> before being able to run the backtest.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent.trigger_time" title="qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent.trigger_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trigger_time</span></code></a>()</p></td>
+<td><p>Returns the RelativeDelta which describes at what time the RegularTimeEvent occurs (e.g.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent.trigger_time">
+<em class="property">classmethod </em><code class="sig-name descname">trigger_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; qf_lib.common.utils.dateutils.relative_delta.RelativeDelta<a class="reference internal" href="../_modules/qf_lib/backtesting/events/time_event/regular_time_event/daily_market_event.html#DailyMarketEvent.trigger_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.events.time_event.regular_time_event.daily_market_event.DailyMarketEvent.trigger_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the RelativeDelta which describes at what time the RegularTimeEvent occurs
+(e.g. RelativeDelta(hour=16, minute=0, second=0, milisecond=0) for an event which occurs every day at 16:00).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.backtesting.events.time_event.regular_time_event.after_market_close_event.AfterMarketCloseEvent.html" class="btn btn-neutral float-right" title="AfterMarketCloseEvent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event.RegularTimeEvent.html" class="btn btn-neutral float-left" title="RegularTimeEvent" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

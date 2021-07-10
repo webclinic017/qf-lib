@@ -1,0 +1,6 @@
+calmar_ratio
+====================================================
+
+.. currentmodule:: qf_lib.common.utils.ratios.calmar_ratio
+
+.. autofunction:: calmar_ratio

@@ -1,0 +1,6 @@
+annualise_with_sqrt
+=========================================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.annualise_with_sqrt
+
+.. autofunction:: annualise_with_sqrt

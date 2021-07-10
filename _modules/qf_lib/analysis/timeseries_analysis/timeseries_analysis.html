@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.timeseries_analysis.timeseries_analysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.timeseries_analysis.timeseries_analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.timeseries_analysis.timeseries_analysis</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.timeseries_analysis.timeseries_analysis_dto</span> <span class="kn">import</span> <span class="n">TimeseriesAnalysisDTO</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_to_string</span> <span class="kn">import</span> <span class="n">date_to_str</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.annualise_with_sqrt</span> <span class="kn">import</span> <span class="n">annualise_with_sqrt</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.kelly</span> <span class="kn">import</span> <span class="n">kelly</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.calmar_ratio</span> <span class="kn">import</span> <span class="n">calmar_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.gain_to_pain_ratio</span> <span class="kn">import</span> <span class="n">gain_to_pain_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.omega_ratio</span> <span class="kn">import</span> <span class="n">omega_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.sharpe_ratio</span> <span class="kn">import</span> <span class="n">sharpe_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.ratios.sorino_ratio</span> <span class="kn">import</span> <span class="n">sorino_ratio</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.avg_drawdown</span> <span class="kn">import</span> <span class="n">avg_drawdown</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.avg_drawdown_duration</span> <span class="kn">import</span> <span class="n">avg_drawdown_duration</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.cagr</span> <span class="kn">import</span> <span class="n">cagr</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.cvar</span> <span class="kn">import</span> <span class="n">cvar</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.log_to_simple_return</span> <span class="kn">import</span> <span class="n">log_to_simple_return</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.max_drawdown</span> <span class="kn">import</span> <span class="n">max_drawdown</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.simple_to_log_return</span> <span class="kn">import</span> <span class="n">simple_to_log_return</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.volatility.get_volatility</span> <span class="kn">import</span> <span class="n">get_volatility</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.simple_returns_series</span> <span class="kn">import</span> <span class="n">SimpleReturnsSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.table</span> <span class="kn">import</span> <span class="n">Table</span>
+
+
+<div class="viewcode-block" id="TimeseriesAnalysis"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis">[docs]</a><span class="k">class</span> <span class="nc">TimeseriesAnalysis</span><span class="p">(</span><span class="n">TimeseriesAnalysisDTO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used for analysing a timeseries of returns. Calculates and aggregates different statistics of the timeseries,</span>
+<span class="sd">    It contains the following fields:</span>
+
+<span class="sd">    - returns_tms - series of simple returns</span>
+<span class="sd">    - frequency</span>
+<span class="sd">    - start_date</span>
+<span class="sd">    - end_date</span>
+
+<span class="sd">    - total_return</span>
+<span class="sd">    - cagr - annualised return</span>
+
+<span class="sd">    - annualised_vol</span>
+<span class="sd">    - annualised_upside_vol</span>
+<span class="sd">    - annualised_downside_vol</span>
+
+<span class="sd">    - sharpe_ratio</span>
+<span class="sd">    - omega_ratio</span>
+<span class="sd">    - calmar_ratio</span>
+<span class="sd">    - gain_to_pain_ratio</span>
+<span class="sd">    - sorino_ratio</span>
+
+<span class="sd">    - cvar - 5% CVaR expressed related to the specified frequency</span>
+<span class="sd">    - annualised_cvar - annualised 5% CVaR</span>
+<span class="sd">    - max_drawdown - maximum drawdown</span>
+<span class="sd">    - avg_drawdown - average of the whole underwater chart</span>
+<span class="sd">    - avg_drawdown_duration - average duration of a drawdown</span>
+
+<span class="sd">    - best_return</span>
+<span class="sd">    - worst_return</span>
+<span class="sd">    - vavg_positive_return</span>
+<span class="sd">    - avg_negative_return</span>
+<span class="sd">    - skewness</span>
+<span class="sd">    - kurtosis</span>
+<span class="sd">    - kelly</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    returns_timeseries: QFSeries</span>
+<span class="sd">        Analysed timeseries. It should be PriceSeries, SimpleReturnSeries or LogReturnSeries</span>
+<span class="sd">    frequency: Frequency</span>
+<span class="sd">        Corresponds to the frequency od data samples in the seres.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">returns_timeseries</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span> <span class="o">=</span> <span class="n">returns_timeseries</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>  <span class="c1"># type: SimpleReturnsSeries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="n">frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># calculate statistics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_return</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_volatility</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_ratios</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_risk_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_returns_stats</span><span class="p">()</span>
+
+    <span class="c1"># ========= Methods presenting and aggregating results =========</span>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.populate_table"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.populate_table">[docs]</a>    <span class="k">def</span> <span class="nf">populate_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds the data calculated in this analysis to the specified table. The table may be brand new or contain other</span>
+<span class="sd">        analyses of the same kind.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        table</span>
+<span class="sd">            The table to add the data to.</span>
+<span class="sd">        name</span>
+<span class="sd">            Name to give this analysis in the columns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="n">new_table</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">([</span><span class="s2">&quot;Statistic&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_results_list</span><span class="p">():</span>
+            <span class="n">row_name</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">item</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">row_name</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">new_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="n">row_name</span><span class="p">,</span> <span class="n">Table</span><span class="o">.</span><span class="n">Cell</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">new_table</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">new_table</span><span class="p">)</span>
+
+        <span class="n">table</span><span class="o">.</span><span class="n">set_column_names</span><span class="p">(</span><span class="n">new_table</span><span class="o">.</span><span class="n">get_column_names</span><span class="p">())</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">new_table</span><span class="o">.</span><span class="n">rows</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.values_in_table"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.values_in_table">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">values_in_table</span><span class="p">(</span><span class="n">ta_collection</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s1">&#39;TimeseriesAnalysis&#39;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="s1">&#39;TimeseriesAnalysis&#39;</span><span class="p">]],</span>
+                        <span class="n">asset_names</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a string with all the measures in a form of table of the following format:</span>
+
+<span class="sd">                      Asset1    Asset2  ...</span>
+<span class="sd">        Nice_name1    value11   value21 ... unit1</span>
+<span class="sd">        Nice_name2    value12   value22 ... unit2</span>
+<span class="sd">        ...               ...       ... ... unitI</span>
+<span class="sd">        Nice_nameN    value12   value22 ... unitN</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        ta_collection</span>
+<span class="sd">            single TimeseriesAnalysis object or a collection of TimeseriesAnalysis objects</span>
+<span class="sd">        asset_names</span>
+<span class="sd">            names of assets corresponding to objects in ta_collection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ta_collection</span><span class="p">,</span> <span class="n">TimeseriesAnalysis</span><span class="p">):</span>
+            <span class="n">ta_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ta_collection</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ta_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ta_collection</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">asset_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset_names</span><span class="p">]</span>
+
+        <span class="c1"># create a header for the table</span>
+        <span class="k">if</span> <span class="n">asset_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">asset_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ta</span> <span class="ow">in</span> <span class="n">ta_list</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># no header will be printed if series are without names</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">asset_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">asset_names</span><span class="p">:</span>
+                <span class="n">names</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&gt;20}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:24}</span><span class="s1"> </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+        <span class="n">first_ta</span> <span class="o">=</span> <span class="n">ta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># create rows</span>
+        <span class="n">list_of_rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">nice_name</span> <span class="ow">in</span> <span class="n">first_ta</span><span class="o">.</span><span class="n">get_nice_names</span><span class="p">():</span>
+            <span class="n">list_of_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:24}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nice_name</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">ta</span> <span class="ow">in</span> <span class="n">ta_list</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_measures</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list_of_rows</span><span class="p">):</span>
+                <span class="n">list_of_rows</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:&gt;20}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">first_ta</span><span class="o">.</span><span class="n">get_units</span><span class="p">()):</span>
+            <span class="n">list_of_rows</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">list_of_rows</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">row</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.table_for_df"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.table_for_df">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">table_for_df</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a table similar to the one below:</span>
+
+<span class="sd">        Analysed period: start_date - end_date, using frequency data</span>
+<span class="sd">        Name            total_ret        cagr         vol      up_vol    down_vol ...</span>
+<span class="sd">        Asset1              63.93       28.27       19.15       14.06       14.35 ...</span>
+<span class="sd">        Asset2              66.26       29.19       20.74       14.86       15.54 ...</span>
+<span class="sd">        Asset3              66.26       29.19       20.74       14.86       15.54 ...</span>
+<span class="sd">        ...                   ...         ...         ...         ...         ... ...</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------------</span>
+<span class="sd">        df</span>
+<span class="sd">            DataFrame of returns or prices of assets to be analysed</span>
+
+<span class="sd">        frequency</span>
+<span class="sd">            (optional) frequency of the returns or price sampling in the DataFrame. By default daily frequency is used</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name_ta_list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">TimeseriesAnalysis</span><span class="p">(</span><span class="n">asset_tms</span><span class="p">,</span> <span class="n">frequency</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">asset_tms</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()]</span>
+        <span class="n">first_ta</span> <span class="o">=</span> <span class="n">name_ta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;Analysed period: </span><span class="si">{}</span><span class="s2"> - </span><span class="si">{}</span><span class="s2">, using </span><span class="si">{}</span><span class="s2"> data</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">date_to_str</span><span class="p">(</span><span class="n">first_ta</span><span class="o">.</span><span class="n">start_date</span><span class="p">),</span> <span class="n">date_to_str</span><span class="p">(</span><span class="n">first_ta</span><span class="o">.</span><span class="n">end_date</span><span class="p">),</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="n">header_without_dates</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">first_ta</span><span class="o">.</span><span class="n">get_short_names</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">header_without_dates</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&gt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{:12}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="n">header_without_dates</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ta</span> <span class="ow">in</span> <span class="n">name_ta_list</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_measures</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]:</span>
+                <span class="n">values</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:&gt;12}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{:12}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">as_string</span><span class="p">(),</span> <span class="n">values</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.get_short_names"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.get_short_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_short_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of short names of all the measures</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elements</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_results_list</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.get_nice_names"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.get_nice_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_nice_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of long, nice names of all the measures</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elements</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_results_list</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.get_measures"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.get_measures">[docs]</a>    <span class="k">def</span> <span class="nf">get_measures</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of all measures (values)  represented as strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elements</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_results_list</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="TimeseriesAnalysis.get_units"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.get_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_units</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of all units of all measures (values)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elements</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_results_list</span><span class="p">():</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_results_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Tuple[str]]</span>
+<span class="sd">            the list of tuples. Each tuple corresponds to one property of the timeseries and it is of the following format:</span>
+<span class="sd">            (short_name, long_name, value, unit)</span>
+
+<span class="sd">            short_name: is a short string representation that might be treated as a key and should not have spaces in it</span>
+<span class="sd">            long_name: it a nice name of the field</span>
+<span class="sd">            value: is the string representation of the value rounded to 2 decimal places</span>
+<span class="sd">            unit: is an unit in which the value is expressed. Might be empty.</span>
+
+<span class="sd">            All elements of the tuple are strings (including the value, which is a string representation</span>
+<span class="sd">            of the rounded number)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">num_to_str</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="c1"># represents a default</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{:0.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">result_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="n">date_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="s1">&#39;End Date&#39;</span><span class="p">,</span> <span class="n">date_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_date</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;total_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;Total Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_return</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;cagr&#39;</span><span class="p">,</span> <span class="s1">&#39;Annualised Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cagr</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;vol&#39;</span><span class="p">,</span> <span class="s1">&#39;Annualised Volatility&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annualised_vol</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;up_vol&#39;</span><span class="p">,</span> <span class="s1">&#39;Annualised Upside Vol.&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annualised_upside_vol</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;down_vol&#39;</span><span class="p">,</span> <span class="s1">&#39;Annualised Downside Vol.&#39;</span><span class="p">,</span>
+                            <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annualised_downside_vol</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;sharpe&#39;</span><span class="p">,</span> <span class="s1">&#39;Sharpe Ratio&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sharpe_ratio</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="s1">&#39;Omega Ratio&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">omega_ratio</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;calmar&#39;</span><span class="p">,</span> <span class="s1">&#39;Calmar Ratio&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calmar_ratio</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;gain/pain&#39;</span><span class="p">,</span> <span class="s1">&#39;Gain to Pain Ratio&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gain_to_pain_ratio</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;sorino&#39;</span><span class="p">,</span> <span class="s1">&#39;Sorino Ratio&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sorino_ratio</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;cvar&#39;</span><span class="p">,</span> <span class="s1">&#39;5% CVaR&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cvar</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;cvar_an&#39;</span><span class="p">,</span> <span class="s1">&#39;Annualised 5% CVaR&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annualised_cvar</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;max_dd&#39;</span><span class="p">,</span> <span class="s1">&#39;Max Drawdown&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_drawdown</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;avg_dd&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg Drawdown&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_drawdown</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;avg_dd_dur&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg Drawdown Duration&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_drawdown_duration</span><span class="p">),</span> <span class="s1">&#39;days&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;best_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;Best Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_return</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;worst_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;Worst Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worst_return</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;avg_pos_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg Positive Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_positive_return</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;avg_neg_ret&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg Negative Return&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_negative_return</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;%&#39;</span><span class="p">))</span>
+
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;skewness&#39;</span><span class="p">,</span> <span class="s1">&#39;Skewness&#39;</span><span class="p">,</span> <span class="n">num_to_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skewness</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="c1"># result_list.append((&#39;kurtosis&#39;, &#39;Kurtosis&#39;, num_to_str(self.kurtosis), &#39;&#39;))</span>
+        <span class="c1"># result_list.append((&#39;kelly&#39;, &#39;Kelly Value&#39;, num_to_str(self.kelly), &#39;&#39;))</span>
+
+        <span class="n">freq_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;#observ&#39;</span><span class="p">,</span> <span class="s1">&#39;No. of </span><span class="si">{}</span><span class="s1"> samples&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">freq_str</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result_list</span>
+
+    <span class="c1"># ========= Methods calculating statistics of the timeseries =========</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_return</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">total_cumulative_return</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cagr</span> <span class="o">=</span> <span class="n">cagr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_volatility</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annualised_vol</span> <span class="o">=</span> <span class="n">get_volatility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">annualise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">positive_returns_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">negative_returns_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">annualised_upside_vol</span> <span class="o">=</span> <span class="n">get_volatility</span><span class="p">(</span><span class="n">positive_returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">annualise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annualised_downside_vol</span> <span class="o">=</span> <span class="n">get_volatility</span><span class="p">(</span><span class="n">negative_returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">annualise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_ratios</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sharpe_ratio</span> <span class="o">=</span> <span class="n">sharpe_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">omega_ratio</span> <span class="o">=</span> <span class="n">omega_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calmar_ratio</span> <span class="o">=</span> <span class="n">calmar_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gain_to_pain_ratio</span> <span class="o">=</span> <span class="n">gain_to_pain_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sorino_ratio</span> <span class="o">=</span> <span class="n">sorino_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_risk_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cvar</span> <span class="o">=</span> <span class="n">cvar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># default is the 5% CVaR</span>
+        <span class="n">log_cvar</span> <span class="o">=</span> <span class="n">simple_to_log_return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cvar</span><span class="p">)</span>
+        <span class="n">annualised_log_cvar</span> <span class="o">=</span> <span class="n">annualise_with_sqrt</span><span class="p">(</span><span class="n">log_cvar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annualised_cvar</span> <span class="o">=</span> <span class="n">log_to_simple_return</span><span class="p">(</span><span class="n">annualised_log_cvar</span><span class="p">)</span>
+
+        <span class="n">prices_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">to_prices</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_drawdown</span> <span class="o">=</span> <span class="n">max_drawdown</span><span class="p">(</span><span class="n">prices_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_drawdown</span> <span class="o">=</span> <span class="n">avg_drawdown</span><span class="p">(</span><span class="n">prices_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_drawdown_duration</span> <span class="o">=</span> <span class="n">avg_drawdown_duration</span><span class="p">(</span><span class="n">prices_tms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_returns_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_return</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worst_return</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">)</span>
+
+        <span class="n">positive_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">negative_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">percentage_of_positive_returns</span> <span class="o">=</span> <span class="n">positive_returns</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">percentage_of_negative_returns</span> <span class="o">=</span> <span class="n">negative_returns</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_positive_return</span> <span class="o">=</span> <span class="n">positive_returns</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_negative_return</span> <span class="o">=</span> <span class="n">negative_returns</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kelly</span> <span class="o">=</span> <span class="n">kelly</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skewness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kurtosis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">returns_tms</span><span class="o">.</span><span class="n">kurt</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

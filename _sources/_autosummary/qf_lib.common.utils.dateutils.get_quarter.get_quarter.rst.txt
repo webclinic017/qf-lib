@@ -1,0 +1,6 @@
+get_quarter
+=====================================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.get_quarter
+
+.. autofunction:: get_quarter

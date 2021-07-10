@@ -1,0 +1,6 @@
+list_of_max_drawdowns
+=======================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.list_of_max_drawdowns
+
+.. autofunction:: list_of_max_drawdowns

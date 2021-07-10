@@ -1,0 +1,9 @@
+AbstractMonitor
+==============================================================
+
+.. currentmodule:: qf_lib.backtesting.monitoring.abstract_monitor
+
+.. autoclass:: AbstractMonitor
+	:show-inheritance:
+	:autosummary:
+	:members:

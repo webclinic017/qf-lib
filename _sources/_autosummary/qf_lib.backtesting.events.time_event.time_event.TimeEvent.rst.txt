@@ -1,0 +1,9 @@
+TimeEvent
+=========================================================
+
+.. currentmodule:: qf_lib.backtesting.events.time_event.time_event
+
+.. autoclass:: TimeEvent
+	:show-inheritance:
+	:autosummary:
+	:members:

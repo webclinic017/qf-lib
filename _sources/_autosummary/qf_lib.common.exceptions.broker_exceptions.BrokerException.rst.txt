@@ -1,0 +1,9 @@
+BrokerException
+==========================================================
+
+.. currentmodule:: qf_lib.common.exceptions.broker_exceptions
+
+.. autoclass:: BrokerException
+	:show-inheritance:
+	:autosummary:
+	:members:

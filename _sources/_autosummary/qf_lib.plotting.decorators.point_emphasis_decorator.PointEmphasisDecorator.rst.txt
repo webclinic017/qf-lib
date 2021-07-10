@@ -1,0 +1,9 @@
+PointEmphasisDecorator
+==========================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.point_emphasis_decorator
+
+.. autoclass:: PointEmphasisDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

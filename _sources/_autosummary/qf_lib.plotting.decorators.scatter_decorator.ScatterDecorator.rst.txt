@@ -1,0 +1,9 @@
+ScatterDecorator
+=============================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.scatter_decorator
+
+.. autoclass:: ScatterDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

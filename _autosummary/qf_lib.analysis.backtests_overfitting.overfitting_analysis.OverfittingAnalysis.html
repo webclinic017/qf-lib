@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OverfittingAnalysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TrendStrengthSheet" href="qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html" />
+    <link rel="prev" title="BacktestOverfittingSheet" href="qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../analysis.html">analysis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.common.abstract_document.AbstractDocument.html">AbstractDocument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html">BacktestOverfittingSheet</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OverfittingAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html">TrendStrengthSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet.html">AbstractTearsheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.current_positions_sheet.CurrentPositionsSheet.html">CurrentPositionsSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet.html">PortfolioAnalysisSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.strategy_monitoring_document.StrategyMonitoringDocument.html">StrategyMonitoringDocument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark.html">TearsheetWithBenchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark.html">TearsheetWithoutBenchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html">TimeseriesAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html">TradesGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.trade_analysis.trade_analysis_sheet.TradeAnalysisSheet.html">TradeAnalysisSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.signals_analysis.signals_plotter.SignalsPlotter.html">SignalsPlotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html">ExposureGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet.html">ExposureSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.analysis.exposure_analysis.exposure_settings.ExposureSettings.html">ExposureSettings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../analysis.html">analysis</a> &raquo;</li>
+        
+      <li>OverfittingAnalysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="overfittinganalysis">
+<h1>OverfittingAnalysis<a class="headerlink" href="#overfittinganalysis" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.analysis.backtests_overfitting.overfitting_analysis.</code><code class="sig-name descname">OverfittingAnalysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple_returns_timeseries</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">ranking_function</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">num_of_slices</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">14</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class providing statistics and analysis for checking if backtest is overfitted.
+It is based on the algorithms described in “The probability of backtest overfitting” by Bailey,
+Borwein, Lopez de Prado and Jim Zhu.</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_expected_return" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_expected_return"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_expected_return</span></code></a>()</p></td>
+<td><p>Returns the expected return of best strategies in the Out-Of-Sample.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_overfitting_probability" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_overfitting_probability"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_overfitting_probability</span></code></a>()</p></td>
+<td><p>Returns the probability of backtest overfitting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_probability_of_loss" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_probability_of_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_probability_of_loss</span></code></a>()</p></td>
+<td><p>Returns the probability of loss for the best strategy.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_relative_rank_logits" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_relative_rank_logits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_relative_rank_logits</span></code></a>(strategies_names)</p></td>
+<td><p>Computes relative ranks for the strategies named in the strategies_names list and afterwards calculates the logits.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.form_different_is_and_oos_sets" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.form_different_is_and_oos_sets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">form_different_is_and_oos_sets</span></code></a>(…)</p></td>
+<td><p>Splits slices into two groups of equal sizes for all possible combinations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.get_best_strategies_is_oos_qualities" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.get_best_strategies_is_oos_qualities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_best_strategies_is_oos_qualities</span></code></a>()</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>dataframe with two columns: OOS and IS, each row contains the quality value of the best IS strategy for both</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.rank_strategies" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.rank_strategies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rank_strategies</span></code></a>(df, ascending)</p></td>
+<td><p>Rank strategies using the ranking function.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Attributes</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.is_ranking" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.is_ranking"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_ranking</span></code></a></p></td>
+<td><p>List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.oos_ranking" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.oos_ranking"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oos_ranking</span></code></a></p></td>
+<td><p>List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.best_is_strategies_names" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.best_is_strategies_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">best_is_strategies_names</span></code></a></p></td>
+<td><p>List of strategies with the maximum rank.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.best_is_strategies_names">
+<code class="sig-name descname">best_is_strategies_names</code><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.best_is_strategies_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of strategies with the maximum rank. If multiple values equal the maximum, the first strategy with
+that rank is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_expected_return">
+<code class="sig-name descname">calculate_expected_return</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.calculate_expected_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_expected_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the expected return of best strategies in the Out-Of-Sample.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_overfitting_probability">
+<code class="sig-name descname">calculate_overfitting_probability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.calculate_overfitting_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_overfitting_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the probability of backtest overfitting.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_probability_of_loss">
+<code class="sig-name descname">calculate_probability_of_loss</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.calculate_probability_of_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_probability_of_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the probability of loss for the best strategy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_relative_rank_logits">
+<code class="sig-name descname">calculate_relative_rank_logits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">strategies_names</span><span class="p">:</span> <span class="n">List</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.calculate_relative_rank_logits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_relative_rank_logits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes relative ranks for the strategies named in the strategies_names list and afterwards
+calculates the logits. High logit values imply a consistency between IS and OOS performances,
+which indicates a low lever of backtest overfitting.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.form_different_is_and_oos_sets">
+<code class="sig-name descname">form_different_is_and_oos_sets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple_returns_timeseries</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.form_different_is_and_oos_sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.form_different_is_and_oos_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits slices into two groups of equal sizes for all possible combinations.</p>
+<p>Returns an list of tuples. 1st element of the tuple contains the In-Sample set and the 2nd one contains the
+Out-Of-Sample set (both in form of QFDataFrames). Each tuple contains one of possible combinations
+of slices forming IS and OOS sets. E.g. if there are 4 slices: A,B,C,D then one of possible
+combinations is IS: A,B and OOS: C,D. The given example will be one of rows of the result list.
+A and B (C and D) will be concatenated (so that there will be one timeseries AB),
+and so will be one CD timeseries.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.get_best_strategies_is_oos_qualities">
+<code class="sig-name descname">get_best_strategies_is_oos_qualities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.get_best_strategies_is_oos_qualities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.get_best_strategies_is_oos_qualities" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dataframe with two columns: OOS and IS, each row contains the quality value of the best IS strategy for both
+in sample (quality of the best strategy) nad out of sample (quality of the strategy that was in this
+combination set, the best one in the in-sample period).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.is_ranking">
+<code class="sig-name descname">is_ranking</code><em class="property">: Optional<span class="p">[</span>List<span class="p">[</span>QFDataFrame<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.is_ranking" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies
+names. Looking at one of these data frames we can learn which strategy (described using its name) had the
+highest performance (“rank”) and what was that performance (“quality”) in the In-Sample period.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.oos_ranking">
+<code class="sig-name descname">oos_ranking</code><em class="property">: Optional<span class="p">[</span>List<span class="p">[</span>QFDataFrame<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.oos_ranking" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies
+names. Looking at one of these data frames we can learn which strategy (described using its name) had the
+highest performance (“rank”) and what was that performance (“quality”) in the Out-Of-Sample period.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.rank_strategies">
+<code class="sig-name descname">rank_strategies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">ascending</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><a class="reference internal" href="../_modules/qf_lib/analysis/backtests_overfitting/overfitting_analysis.html#OverfittingAnalysis.rank_strategies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.rank_strategies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rank strategies using the ranking function. The worst strategy should be marked as 1.
+:param df: dataframe containing different strategies returns in the columns
+:type df: SimpleReturnsDataFrame
+:param ascending: if True - the smaller the measure, the worse is the strategy
+:type ascending: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>data frame indexed by strategy names with two columns: quality (containing the quality measure
+computed for the given strategy, e.g. sharpe ratio) and rank.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html" class="btn btn-neutral float-right" title="TrendStrengthSheet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html" class="btn btn-neutral float-left" title="BacktestOverfittingSheet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

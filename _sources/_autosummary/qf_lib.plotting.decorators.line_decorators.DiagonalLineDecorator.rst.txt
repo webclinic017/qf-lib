@@ -1,0 +1,9 @@
+DiagonalLineDecorator
+================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.line_decorators
+
+.. autoclass:: DiagonalLineDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

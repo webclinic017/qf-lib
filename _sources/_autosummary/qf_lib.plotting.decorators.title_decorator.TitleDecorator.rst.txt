@@ -1,0 +1,9 @@
+TitleDecorator
+=========================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.title_decorator
+
+.. autoclass:: TitleDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+BoxplotChart
+=================================================
+
+.. currentmodule:: qf_lib.plotting.charts.boxplot_chart
+
+.. autoclass:: BoxplotChart
+	:show-inheritance:
+	:autosummary:
+	:members:

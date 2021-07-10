@@ -1,0 +1,6 @@
+rolling_volatility
+====================================================================
+
+.. currentmodule:: qf_lib.common.utils.volatility.rolling_volatility
+
+.. autofunction:: rolling_volatility

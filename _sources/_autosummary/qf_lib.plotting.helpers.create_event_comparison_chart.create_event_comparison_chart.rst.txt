@@ -1,0 +1,6 @@
+create_event_comparison_chart
+===================================================================================
+
+.. currentmodule:: qf_lib.plotting.helpers.create_event_comparison_chart
+
+.. autofunction:: create_event_comparison_chart

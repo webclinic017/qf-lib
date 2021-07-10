@@ -1,0 +1,9 @@
+PricesDataFrame
+============================================================
+
+.. currentmodule:: qf_lib.containers.dataframe.prices_dataframe
+
+.. autoclass:: PricesDataFrame
+	:show-inheritance:
+	:autosummary:
+	:members:

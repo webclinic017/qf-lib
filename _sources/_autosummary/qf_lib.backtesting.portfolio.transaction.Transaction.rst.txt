@@ -1,0 +1,9 @@
+Transaction
+====================================================
+
+.. currentmodule:: qf_lib.backtesting.portfolio.transaction
+
+.. autoclass:: Transaction
+	:show-inheritance:
+	:autosummary:
+	:members:

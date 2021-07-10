@@ -1,0 +1,9 @@
+InitialRiskStatsFactory
+=====================================================================================
+
+.. currentmodule:: qf_lib.backtesting.fast_alpha_model_tester.initial_risk_stats
+
+.. autoclass:: InitialRiskStatsFactory
+	:show-inheritance:
+	:autosummary:
+	:members:

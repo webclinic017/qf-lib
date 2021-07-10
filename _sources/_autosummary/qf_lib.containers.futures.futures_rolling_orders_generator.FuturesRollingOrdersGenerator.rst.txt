@@ -1,0 +1,9 @@
+FuturesRollingOrdersGenerator
+========================================================================================
+
+.. currentmodule:: qf_lib.containers.futures.futures_rolling_orders_generator
+
+.. autoclass:: FuturesRollingOrdersGenerator
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.plotting.helpers.create_line_chart &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.plotting.helpers.create_line_chart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.plotting.helpers.create_line_chart</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.line_decorators</span> <span class="kn">import</span> <span class="n">HorizontalLineDecorator</span><span class="p">,</span> <span class="n">VerticalLineDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.point_emphasis_decorator</span> <span class="kn">import</span> <span class="n">PointEmphasisDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.span_decorator</span> <span class="kn">import</span> <span class="n">SpanDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+
+
+<div class="viewcode-block" id="create_line_chart"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.helpers.create_line_chart.create_line_chart.html#qf_lib.plotting.helpers.create_line_chart.create_line_chart">[docs]</a><span class="k">def</span> <span class="nf">create_line_chart</span><span class="p">(</span>
+        <span class="n">data_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">]],</span> <span class="n">names_list</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">recession_series</span><span class="p">:</span> <span class="n">QFSeries</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">horizontal_lines_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">vertical_lines_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">disable_dot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">start_x</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">end_x</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">upper_y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lower_y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dot_decimal_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">recession_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a new line chart based on the settings specified.</span>
+
+<span class="sd">    This function makes certain assumptions about the line chart, it can be customised via the parameters which should</span>
+<span class="sd">    cover &gt;90% of use cases. For more customisation use the ``LineChart`` class directly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_list: List[Union[QFSeries, DataElementDecorator]]</span>
+<span class="sd">        A list of ``QFSeries`` or ``DataElementDecorator``s to plot on the chart.</span>
+<span class="sd">    names_list: List[str]</span>
+<span class="sd">        A list of strings specifying the labels for the series, horizontal and vertical lines respectively. ``None``</span>
+<span class="sd">        can be specified for labels to not display it for a specific series, or line.</span>
+<span class="sd">    title: str</span>
+<span class="sd">        The title of the graph, specify ``None`` if you don&#39;t want the chart to show a title.</span>
+<span class="sd">    recession_series: QFSeries</span>
+<span class="sd">        A ``QFSeries`` specifying where recessions occurred on the chart, will be highlighted using grey rectangles</span>
+<span class="sd">        on the graph.</span>
+<span class="sd">    horizontal_lines_list: List[float]</span>
+<span class="sd">        An optional list of values where a horizontal line should be drawn.</span>
+<span class="sd">    vertical_lines_list: List[float]</span>
+<span class="sd">        An optional list of values where a vertical line should be drawn.</span>
+<span class="sd">    disable_dot: bool</span>
+<span class="sd">        Whether a marker on the last point should be disabled.</span>
+<span class="sd">    start_x: datetime</span>
+<span class="sd">        The date where plotting should begin.</span>
+<span class="sd">    end_x: datetime</span>
+<span class="sd">        The date where plotting should end.</span>
+<span class="sd">    upper_y: float</span>
+<span class="sd">        The upper bound y-axis value at which plotting should begin.</span>
+<span class="sd">    lower_y: float</span>
+<span class="sd">        The lower bound y-axis value at which plotting should begin.</span>
+<span class="sd">    dot_decimal_points: int</span>
+<span class="sd">        How many decimal places to show after the decimal points when drawing text for &quot;dot&quot;.</span>
+<span class="sd">    recession_name: str</span>
+<span class="sd">        A string specifying the recession label. If &quot;None&quot; or missing, will not be included.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    LineChart</span>
+<span class="sd">        The constructed ``LineChart``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># If `end_x` was not specified, use a heuristic to determine it.</span>
+    <span class="k">if</span> <span class="n">end_x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">start_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">end_x</span> <span class="o">=</span> <span class="n">LineChart</span><span class="o">.</span><span class="n">determine_end_x</span><span class="p">(</span><span class="n">start_x</span><span class="p">,</span> <span class="n">data_list</span><span class="p">)</span>
+
+    <span class="c1"># Create a new Line Chart.</span>
+    <span class="n">line_chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">start_x</span><span class="o">=</span><span class="n">start_x</span><span class="p">,</span> <span class="n">end_x</span><span class="o">=</span><span class="n">end_x</span><span class="p">,</span> <span class="n">upper_y</span><span class="o">=</span><span class="n">upper_y</span><span class="p">,</span> <span class="n">lower_y</span><span class="o">=</span><span class="n">lower_y</span><span class="p">)</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">tick_fontweight</span> <span class="o">=</span> <span class="s2">&quot;bold&quot;</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">tick_color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+
+    <span class="n">names_index</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Current legend label.</span>
+    <span class="n">legend_decorator</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;legend&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Retrieve necessary data.</span>
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">DataElementDecorator</span><span class="p">))</span>
+        <span class="c1"># Add the current series with a label taken from ``names_list``.</span>
+        <span class="n">data_element</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_element</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="n">data_element</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">line_id</span> <span class="o">=</span> <span class="n">data_element</span><span class="o">.</span><span class="n">key</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data_element</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve the last data point.</span>
+        <span class="n">point_to_emphasise</span> <span class="o">=</span> \
+            <span class="p">(</span><span class="n">_get_last_valid_value</span><span class="p">(</span><span class="n">data_element</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">_get_last_valid_value</span><span class="p">(</span><span class="n">data_element</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+
+        <span class="n">series_label</span> <span class="o">=</span> <span class="n">_get_name</span><span class="p">(</span><span class="n">names_list</span><span class="p">,</span> <span class="n">names_index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">series_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">legend_decorator</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span>
+                <span class="n">data_element</span><span class="p">,</span> <span class="n">series_label</span> <span class="o">+</span> <span class="s2">&quot; [</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">point_to_emphasise</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b %y&quot;</span><span class="p">)))</span>
+
+        <span class="n">names_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">disable_dot</span><span class="p">:</span>
+            <span class="c1"># Emphasise the last data point.</span>
+            <span class="n">point_emphasis</span> <span class="o">=</span> <span class="n">PointEmphasisDecorator</span><span class="p">(</span>
+                <span class="n">data_element</span><span class="p">,</span> <span class="n">point_to_emphasise</span><span class="p">,</span> <span class="n">decimal_points</span><span class="o">=</span><span class="n">dot_decimal_points</span><span class="p">,</span>
+                <span class="n">key</span><span class="o">=</span><span class="s2">&quot;point_emphasis_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line_id</span><span class="p">),</span> <span class="n">use_secondary_axes</span><span class="o">=</span><span class="n">data_element</span><span class="o">.</span><span class="n">use_secondary_axes</span><span class="p">)</span>
+            <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">point_emphasis</span><span class="p">)</span>
+
+    <span class="c1"># Create a title.</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+
+    <span class="c1"># Create spans (rectangles) to highlight the recession periods.</span>
+    <span class="k">if</span> <span class="n">recession_series</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">span_decorator</span> <span class="o">=</span> <span class="n">SpanDecorator</span><span class="o">.</span><span class="n">from_int_list</span><span class="p">(</span><span class="n">recession_series</span><span class="p">,</span> <span class="s2">&quot;span&quot;</span><span class="p">)</span>
+        <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">span_decorator</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">recession_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">legend_decorator</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">span_decorator</span><span class="p">,</span> <span class="n">recession_name</span><span class="p">)</span>
+
+    <span class="c1"># Create horizontal lines.</span>
+    <span class="k">if</span> <span class="n">horizontal_lines_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">hline</span> <span class="ow">in</span> <span class="n">horizontal_lines_list</span><span class="p">:</span>
+            <span class="n">line_decorator</span> <span class="o">=</span> <span class="n">HorizontalLineDecorator</span><span class="p">(</span><span class="n">hline</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;hline&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hline</span><span class="p">))</span>
+            <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">)</span>
+            <span class="n">series_label</span> <span class="o">=</span> <span class="n">_get_name</span><span class="p">(</span><span class="n">names_list</span><span class="p">,</span> <span class="n">names_index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">series_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">legend_decorator</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">,</span> <span class="n">series_label</span><span class="p">)</span>
+
+            <span class="n">names_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Create vertical lines.</span>
+    <span class="k">if</span> <span class="n">vertical_lines_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">vline</span> <span class="ow">in</span> <span class="n">vertical_lines_list</span><span class="p">:</span>
+            <span class="n">line_decorator</span> <span class="o">=</span> <span class="n">VerticalLineDecorator</span><span class="p">(</span><span class="n">vline</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;vline&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">vline</span><span class="p">))</span>
+            <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">)</span>
+            <span class="n">series_label</span> <span class="o">=</span> <span class="n">_get_name</span><span class="p">(</span><span class="n">names_list</span><span class="p">,</span> <span class="n">names_index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">series_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">legend_decorator</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">,</span> <span class="n">series_label</span><span class="p">)</span>
+            <span class="n">names_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Add a legend.</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend_decorator</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">line_chart</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_last_valid_value</span><span class="p">(</span><span class="nb">list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pandas</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="nb">list</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find non-NaN value inside list. Your series may be full of NaNs.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_name</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Could not find Legend name at index </span><span class="si">{}</span><span class="s2">. Pass `None` if you do not wish to &quot;</span>
+                         <span class="s2">&quot;specify it.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">names</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

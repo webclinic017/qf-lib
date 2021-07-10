@@ -1,0 +1,9 @@
+ReturnAttributionAnalysis
+=======================================================================================
+
+.. currentmodule:: qf_lib.common.timeseries_analysis.return_attribution_analysis
+
+.. autoclass:: ReturnAttributionAnalysis
+	:show-inheritance:
+	:autosummary:
+	:members:

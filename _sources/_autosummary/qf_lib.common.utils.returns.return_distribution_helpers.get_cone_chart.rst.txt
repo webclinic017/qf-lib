@@ -1,0 +1,6 @@
+get_cone_chart
+======================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.return_distribution_helpers
+
+.. autofunction:: get_cone_chart

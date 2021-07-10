@@ -1,0 +1,9 @@
+MultiFactorPortfolio
+=========================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio
+
+.. autoclass:: MultiFactorPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

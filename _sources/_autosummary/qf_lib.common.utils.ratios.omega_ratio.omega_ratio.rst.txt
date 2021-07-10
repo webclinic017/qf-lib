@@ -1,0 +1,6 @@
+omega_ratio
+==================================================
+
+.. currentmodule:: qf_lib.common.utils.ratios.omega_ratio
+
+.. autofunction:: omega_ratio

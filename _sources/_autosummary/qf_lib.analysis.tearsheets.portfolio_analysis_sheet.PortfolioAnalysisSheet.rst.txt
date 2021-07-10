@@ -1,0 +1,9 @@
+PortfolioAnalysisSheet
+==========================================================================
+
+.. currentmodule:: qf_lib.analysis.tearsheets.portfolio_analysis_sheet
+
+.. autoclass:: PortfolioAnalysisSheet
+	:show-inheritance:
+	:autosummary:
+	:members:

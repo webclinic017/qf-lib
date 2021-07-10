@@ -1,0 +1,9 @@
+Chart
+==================================
+
+.. currentmodule:: qf_lib.plotting.charts.chart
+
+.. autoclass:: Chart
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.containers.qf_data_array &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.containers.qf_data_array</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.containers.qf_data_array</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Hashable</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">from</span> <span class="nn">xarray.core</span> <span class="kn">import</span> <span class="n">dtypes</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dimension_names</span> <span class="kn">import</span> <span class="n">FIELDS</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">,</span> <span class="n">DATES</span>
+
+
+<div class="viewcode-block" id="QFDataArray"><a class="viewcode-back" href="../../../_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray">[docs]</a><span class="k">class</span> <span class="nc">QFDataArray</span><span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indexes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">fastpath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use the class method `create()` for creating QFDataArrays.</span>
+<span class="sd">        DO NOT CREATE QFDataArrays using __init__() method (don&#39;t create it like this: QFDataArray()).</span>
+<span class="sd">        The __init__ method should be used only by xr.DataArray internal methods.</span>
+
+<span class="sd">        Important: Regardless of the xarray warning message the __slots__ should not be implemented, as they result</span>
+<span class="sd">        in Recursion Error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fastpath</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_dimensions_are_correct</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">indexes</span><span class="p">,</span> <span class="n">fastpath</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># Makes it possible to set indices in this way: qf_data_array.fields = [&quot;OPEN&quot;, &quot;CLOSE&quot;].</span>
+        <span class="c1"># Otherwise one would need to set them like this: qf_data_array[FIELDS] = [&quot;OPEN&quot;, &quot;CLOSE&quot;]</span>
+        <span class="c1"># if name == TICKERS or name == DATES or name == FIELDS:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">FIELDS</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">,</span> <span class="n">DATES</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QFDataArray.create"><a class="viewcode-back" href="../../../_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">datetime</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">],</span>
+               <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span>
+               <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+               <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFDataArray&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper method for creating a QFDataArray. __init__() methods can&#39;t be used for that, because its signature</span>
+<span class="sd">        must be the same as the signature of xr.DataArray.__init__().</span>
+
+<span class="sd">        Example: a = QFDataArray.create(dates=pd.date_range(&#39;2017-01-01&#39;, periods=3), tickers=[&#39;a&#39;, &#39;b&#39;],</span>
+<span class="sd">        fields=[&#39;field&#39;], data=[[[1.0], [2.0]], [[3.0], [4.0]], [[5.0], [6.0]]])</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data</span>
+<span class="sd">            data that should be put in the array (it&#39;s dimensions must be in the proper order: dates, tickers, fields).</span>
+<span class="sd">        dates</span>
+<span class="sd">            dates index (labels)</span>
+<span class="sd">        tickers</span>
+<span class="sd">            tickers index (labels)</span>
+<span class="sd">        fields</span>
+<span class="sd">            fields index (labels)</span>
+<span class="sd">        name</span>
+<span class="sd">            name of the QFDataArray</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataArray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="p">{</span><span class="n">DATES</span><span class="p">:</span> <span class="n">dates</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">:</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">FIELDS</span><span class="p">:</span> <span class="n">fields</span><span class="p">}</span>
+        <span class="n">dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">DATES</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">,</span> <span class="n">FIELDS</span><span class="p">)</span>
+
+        <span class="c1"># if no data is provided, the empty array will be created</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)))</span>
+            <span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">return</span> <span class="n">QFDataArray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QFDataArray.from_xr_data_array"><a class="viewcode-back" href="../../../_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray.from_xr_data_array">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_xr_data_array</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xr_data_array</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFDataArray&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts regular xr.DataArray into QFDataArray.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xr_data_array</span>
+<span class="sd">            xr.DataArray with 3 dimensions: dates, tickers and fields.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataArray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xr_data_array</span> <span class="o">=</span> <span class="n">xr_data_array</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">DATES</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">,</span> <span class="n">FIELDS</span><span class="p">)</span>
+        <span class="n">qf_data_array</span> <span class="o">=</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">xr_data_array</span><span class="o">.</span><span class="n">dates</span><span class="p">,</span> <span class="n">xr_data_array</span><span class="o">.</span><span class="n">tickers</span><span class="p">,</span> <span class="n">xr_data_array</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">xr_data_array</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">xr_data_array</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qf_data_array</span></div>
+
+<div class="viewcode-block" id="QFDataArray.concat"><a class="viewcode-back" href="../../../_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray.concat">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">objs</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">data_vars</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="s1">&#39;different&#39;</span><span class="p">,</span> <span class="n">compat</span><span class="o">=</span><span class="s1">&#39;equals&#39;</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">fill_value</span><span class="o">=</span><span class="n">dtypes</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">combine_attrs</span><span class="o">=</span><span class="s1">&#39;override&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;QFDataArray&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Concatenates different xr.DataArrays and then converts the result to QFDataArray.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        xr.concat()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="n">objs</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">data_vars</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">compat</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">combine_attrs</span><span class="p">)</span>  <span class="c1"># type: xr.DataArray</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">from_xr_data_array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">asof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">datetime</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">QFDataFrame</span><span class="p">:</span>
+        <span class="n">tickers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">dates</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dates must be equal to the number of tickers&quot;</span><span class="p">)</span>
+
+        <span class="n">asof_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">dates</span><span class="p">)):</span>
+            <span class="n">ticker_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">ticker</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">ticker_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">ticker_data</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span>  <span class="c1"># type: QFDataFrame</span>
+            <span class="n">data_asof</span> <span class="o">=</span> <span class="n">ticker_df</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+            <span class="n">asof_values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data_asof</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">asof_values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">to_index</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">to_index</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_check_if_dimensions_are_correct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="p">):</span>
+        <span class="n">expected_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">DATES</span><span class="p">,</span> <span class="n">TICKERS</span><span class="p">,</span> <span class="n">FIELDS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">actual_dimensions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">):</span>
+            <span class="n">actual_dimensions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actual_dimensions</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">actual_dimensions</span> <span class="o">!=</span> <span class="n">expected_dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimensions must be equal to: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">expected_dimensions</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

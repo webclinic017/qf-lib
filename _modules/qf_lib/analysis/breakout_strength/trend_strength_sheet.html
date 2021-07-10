@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.breakout_strength.trend_strength_sheet &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.breakout_strength.trend_strength_sheet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.breakout_strength.trend_strength_sheet</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.breakout_strength.trend_strength</span> <span class="kn">import</span> <span class="n">trend_strength</span><span class="p">,</span> <span class="n">down_trend_strength</span><span class="p">,</span> <span class="n">up_trend_strength</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.matplotlib_location</span> <span class="kn">import</span> <span class="n">Location</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.date_to_string</span> <span class="kn">import</span> <span class="n">date_to_str</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.document</span> <span class="kn">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.chart</span> <span class="kn">import</span> <span class="n">ChartElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.heading</span> <span class="kn">import</span> <span class="n">HeadingElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.new_page</span> <span class="kn">import</span> <span class="n">NewPageElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.page_header</span> <span class="kn">import</span> <span class="n">PageHeaderElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.paragraph</span> <span class="kn">import</span> <span class="n">ParagraphElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.chart</span> <span class="kn">import</span> <span class="n">Chart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_position_decorator</span> <span class="kn">import</span> <span class="n">AxesPositionDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.line_decorators</span> <span class="kn">import</span> <span class="n">HorizontalLineDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.starting_dir</span> <span class="kn">import</span> <span class="n">get_starting_dir_abs_path</span>
+
+
+<div class="viewcode-block" id="TrendStrengthSheet"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html#qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet">[docs]</a><span class="k">class</span> <span class="nc">TrendStrengthSheet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a PDF containing main statistics of strength of a day trend.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        settings containing header information (should contain company_name and logo_path)</span>
+<span class="sd">    pdf_exporter: PDFExporter</span>
+<span class="sd">        used to create PDF document</span>
+<span class="sd">    price_provider: DataProvider</span>
+<span class="sd">        data provider used to download prices</span>
+<span class="sd">    window_len: int</span>
+<span class="sd">        size of window used in rolling windows</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span> <span class="n">price_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span> <span class="o">=</span> <span class="n">pdf_exporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price_provider</span> <span class="o">=</span> <span class="n">price_provider</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_len</span> <span class="o">=</span> <span class="n">window_len</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_to_trend_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># if True, the daily trend will be calculated from Open to Open of the next day,</span>
+        <span class="c1"># if False, the daily trend will be calculated from Open to Close of the same day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># position is linked to the position of axis in tearsheet.mplstyle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.94</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">400</span>
+
+<div class="viewcode-block" id="TrendStrengthSheet.build_document"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html#qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.build_document">[docs]</a>    <span class="k">def</span> <span class="nf">build_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+                       <span class="n">use_next_open_instead_of_close</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Trend Strength&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build the document.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        --------------</span>
+<span class="sd">        tickers: Sequence[Ticker]</span>
+<span class="sd">            tickers of all tested instruments</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            start date of the study</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            end date of the study</span>
+<span class="sd">        use_next_open_instead_of_close: bool</span>
+<span class="sd">            if True, the daily trend will be calculated from Open to Open of the next day,</span>
+<span class="sd">            if False, the daily trend will be calculated from Open to Close of the same day</span>
+<span class="sd">        title: str</span>
+<span class="sd">            title of the document to be created</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span> <span class="o">=</span> <span class="n">use_next_open_instead_of_close</span>
+
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;O-O&quot;</span> <span class="k">if</span> <span class="n">use_next_open_instead_of_close</span> <span class="k">else</span> <span class="s2">&quot;O-C&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span> <span class="o">=</span> <span class="n">tickers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">start_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_to_trend_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tickers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_page</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished evaluating trend strength of:  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error while processing </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_summary</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_header</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">price_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">price_provider</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">ohlcv</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_date</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_insert_table_with_overall_measures</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">ticker</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_price_chart</span><span class="p">(</span><span class="n">price_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_trend_strength_chart</span><span class="p">(</span><span class="n">price_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_up_and_down_trend_strength</span><span class="p">(</span><span class="n">price_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>  <span class="c1"># add page break</span>
+
+    <span class="k">def</span> <span class="nf">_add_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logo_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">get_starting_dir_abs_path</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">logo_path</span><span class="p">)</span>
+        <span class="n">company_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">company_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">PageHeaderElement</span><span class="p">(</span><span class="n">logo_path</span><span class="p">,</span> <span class="n">company_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_insert_table_with_overall_measures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_df</span><span class="p">:</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">column_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Measure&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">css_class</span><span class="o">=</span><span class="s2">&quot;table stats-table&quot;</span><span class="p">)</span>
+
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Instrument&quot;</span><span class="p">,</span> <span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">()])</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="n">prices_df</span><span class="p">[</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">]</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Start date&quot;</span><span class="p">,</span> <span class="n">date_to_str</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;End date&quot;</span><span class="p">,</span> <span class="n">date_to_str</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])])</span>
+
+        <span class="n">trend_strength_overall</span> <span class="o">=</span> <span class="n">trend_strength</span><span class="p">(</span><span class="n">prices_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Overall strength of the day trends&quot;</span><span class="p">,</span> <span class="n">trend_strength_overall</span><span class="p">])</span>
+
+        <span class="n">trend_strength_1y</span> <span class="o">=</span> <span class="n">trend_strength</span><span class="p">(</span><span class="n">prices_df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">252</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Strength of the day trends in last 1Y&quot;</span><span class="p">,</span> <span class="n">trend_strength_1y</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker_to_trend_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">trend_strength_1y</span><span class="p">,</span> <span class="n">trend_strength_overall</span><span class="p">)</span>
+
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Up trends strength&quot;</span><span class="p">,</span> <span class="n">up_trend_strength</span><span class="p">(</span><span class="n">prices_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)])</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Down trends strength&quot;</span><span class="p">,</span> <span class="n">down_trend_strength</span><span class="p">(</span><span class="n">prices_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_price_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+        <span class="n">close_tms</span> <span class="o">=</span> <span class="n">prices_df</span><span class="p">[</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">]</span>
+        <span class="n">price_tms</span> <span class="o">=</span> <span class="n">close_tms</span><span class="o">.</span><span class="n">to_prices</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">start_x</span><span class="o">=</span><span class="n">price_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_x</span><span class="o">=</span><span class="n">price_tms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">price_elem</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">price_tms</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">price_elem</span><span class="p">)</span>
+        <span class="n">line_decorator</span> <span class="o">=</span> <span class="n">HorizontalLineDecorator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;h_line&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">)</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">()</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">price_elem</span><span class="p">,</span> <span class="s2">&quot;Close Price&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Price of the instrument&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_axes_position_decorator</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_trend_strength_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">_fun</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">trend_strength</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)</span>
+
+        <span class="n">trend_strength_tms</span> <span class="o">=</span> <span class="n">prices_df</span><span class="o">.</span><span class="n">rolling_time_window</span><span class="p">(</span><span class="n">window_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">window_len</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">_fun</span><span class="p">)</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="n">trend_elem</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">trend_strength_tms</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">trend_elem</span><span class="p">)</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">legend_placement</span><span class="o">=</span><span class="n">Location</span><span class="o">.</span><span class="n">BEST</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;legend&#39;</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">trend_elem</span><span class="p">,</span> <span class="s1">&#39;Trend strength&#39;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Strength of the trend - rolling </span><span class="si">{}</span><span class="s2"> days&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_len</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_axes_position_decorator</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_up_and_down_trend_strength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prices_df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_down_trend_fun</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">down_trend_strength</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_up_trend_fun</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">up_trend_strength</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_next_open_instead_of_close</span><span class="p">)</span>
+
+        <span class="n">up_trend_strength_tms</span> <span class="o">=</span> <span class="n">prices_df</span><span class="o">.</span><span class="n">rolling_time_window</span><span class="p">(</span><span class="n">window_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">window_len</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                              <span class="n">func</span><span class="o">=</span><span class="n">_down_trend_fun</span><span class="p">)</span>
+        <span class="n">down_trend_strength_tms</span> <span class="o">=</span> <span class="n">prices_df</span><span class="o">.</span><span class="n">rolling_time_window</span><span class="p">(</span><span class="n">window_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">window_len</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                                <span class="n">func</span><span class="o">=</span><span class="n">_up_trend_fun</span><span class="p">)</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="n">up_trend_elem</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">up_trend_strength_tms</span><span class="p">)</span>
+        <span class="n">down_trend_elem</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">down_trend_strength_tms</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">up_trend_elem</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">down_trend_elem</span><span class="p">)</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">legend_placement</span><span class="o">=</span><span class="n">Location</span><span class="o">.</span><span class="n">BEST</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;legend&#39;</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">up_trend_elem</span><span class="p">,</span> <span class="s1">&#39;Up trend strength&#39;</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">down_trend_elem</span><span class="p">,</span> <span class="s1">&#39;Down trend strength&#39;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Strength of the up and down trend - rolling </span><span class="si">{}</span><span class="s2"> days&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_len</span><span class="p">)</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_axes_position_decorator</span><span class="p">(</span><span class="n">chart</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Summary&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;1Y strength  -  Overall strength - Ticker</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">pairs_sorted_by_value</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker_to_trend_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pair</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">trend_strength_values</span> <span class="ow">in</span> <span class="n">pairs_sorted_by_value</span><span class="p">:</span>
+            <span class="n">paragraph_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:12.3f}</span><span class="s2"> - </span><span class="si">{:12.3f}</span><span class="s2"> - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">trend_strength_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trend_strength_values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ticker</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="n">paragraph_str</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_axes_position_decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chart</span><span class="p">:</span> <span class="n">Chart</span><span class="p">):</span>
+        <span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span>
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">output_sub_dir</span> <span class="o">=</span> <span class="s2">&quot;trend_strength&quot;</span>
+
+        <span class="c1"># Set the style for the report</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;tearsheet&#39;</span><span class="p">])</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M </span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="p">],</span> <span class="n">output_sub_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

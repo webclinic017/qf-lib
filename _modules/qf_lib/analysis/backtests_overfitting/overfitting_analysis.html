@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.backtests_overfitting.overfitting_analysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.backtests_overfitting.overfitting_analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.backtests_overfitting.overfitting_analysis</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.cagr</span> <span class="kn">import</span> <span class="n">cagr</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="OverfittingAnalysis"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis">[docs]</a><span class="k">class</span> <span class="nc">OverfittingAnalysis</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class providing statistics and analysis for checking if backtest is overfitted.</span>
+<span class="sd">    It is based on the algorithms described in &quot;The probability of backtest overfitting&quot; by Bailey,</span>
+<span class="sd">    Borwein, Lopez de Prado and Jim Zhu.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">multiple_returns_timeseries</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">ranking_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+                 <span class="n">num_of_slices</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span> <span class="o">=</span> <span class="n">num_of_slices</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Number of slices should be an even number&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranking_function</span> <span class="o">=</span> <span class="n">ranking_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiple_returns_timeseries</span> <span class="o">=</span> <span class="n">multiple_returns_timeseries</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_oos_set</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot; Cell matrices with 2 columns and multiple rows. In each cell there is a multiple timeseries</span>
+<span class="sd">        (dates column + one column of returns for each strategy). First column contains In-Sample sets</span>
+<span class="sd">        and the second one contains Out-Of-Sample sets. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_ranking</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[List[QFDataFrame]]</span>
+        <span class="sd">&quot;&quot;&quot; List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies</span>
+<span class="sd">        names. Looking at one of these data frames we can learn which strategy (described using its name) had the</span>
+<span class="sd">        highest performance (&quot;rank&quot;) and what was that performance (&quot;quality&quot;) in the In-Sample period. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">oos_ranking</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[List[QFDataFrame]]</span>
+        <span class="sd">&quot;&quot;&quot; List of QFDataFrames, each of which contains 2 columns - quality and rank, and is indexed by the strategies</span>
+<span class="sd">        names. Looking at one of these data frames we can learn which strategy (described using its name) had the</span>
+<span class="sd">        highest performance (&quot;rank&quot;) and what was that performance (&quot;quality&quot;) in the Out-Of-Sample period. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Optional[List[str]]</span>
+        <span class="sd">&quot;&quot;&quot; List of strategies with the maximum rank. If multiple values equal the maximum, the first strategy with</span>
+<span class="sd">        that rank is returned. &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rankings_computed</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="OverfittingAnalysis.calculate_overfitting_probability"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_overfitting_probability">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_overfitting_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the probability of backtest overfitting. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_is_oos_rankings</span><span class="p">()</span>
+
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_relative_rank_logits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">)</span>
+        <span class="n">logits_distribution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_distribution</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+        <span class="n">pbo</span> <span class="o">=</span> <span class="n">logits_distribution</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">logits_distribution</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pbo</span></div>
+
+<div class="viewcode-block" id="OverfittingAnalysis.calculate_probability_of_loss"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_probability_of_loss">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_probability_of_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the probability of loss for the best strategy. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_is_oos_rankings</span><span class="p">()</span>
+        <span class="n">best_strategies_annualised_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_best_strategies_returns</span><span class="p">()</span>
+        <span class="n">losing_strategies_returns</span> <span class="o">=</span> <span class="p">[</span><span class="n">returns</span> <span class="k">for</span> <span class="n">returns</span> <span class="ow">in</span> <span class="n">best_strategies_annualised_returns</span> <span class="k">if</span> <span class="n">returns</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">pol</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">losing_strategies_returns</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">best_strategies_annualised_returns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pol</span></div>
+
+<div class="viewcode-block" id="OverfittingAnalysis.calculate_expected_return"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_expected_return">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_expected_return</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the expected return of best strategies in the Out-Of-Sample.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_is_oos_rankings</span><span class="p">()</span>
+        <span class="n">best_strategies_annualised_returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_best_strategies_returns</span><span class="p">()</span>
+        <span class="n">expected_return</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">best_strategies_annualised_returns</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">best_strategies_annualised_returns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">expected_return</span></div>
+
+<div class="viewcode-block" id="OverfittingAnalysis.get_best_strategies_is_oos_qualities"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.get_best_strategies_is_oos_qualities">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_strategies_is_oos_qualities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame</span>
+<span class="sd">            dataframe with two columns: OOS and IS, each row contains the quality value of the best IS strategy for both</span>
+<span class="sd">            in sample (quality of the best strategy) nad out of sample (quality of the strategy that was in this</span>
+<span class="sd">            combination set, the best one in the in-sample period).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_is_oos_rankings</span><span class="p">()</span>
+        <span class="n">oos_qualities</span> <span class="o">=</span> <span class="p">[</span><span class="n">oos_ranking</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_is_strategy</span><span class="p">]</span> <span class="k">for</span> <span class="n">oos_ranking</span><span class="p">,</span> <span class="n">best_is_strategy</span>
+                         <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">)]</span>
+        <span class="n">is_qualities</span> <span class="o">=</span> <span class="p">[</span><span class="n">is_ranking</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_is_strategy</span><span class="p">]</span> <span class="k">for</span> <span class="n">is_ranking</span><span class="p">,</span> <span class="n">best_is_strategy</span>
+                        <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;OOS&quot;</span><span class="p">:</span> <span class="n">oos_qualities</span><span class="p">,</span> <span class="s2">&quot;IS&quot;</span><span class="p">:</span> <span class="n">is_qualities</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="OverfittingAnalysis.calculate_relative_rank_logits"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.calculate_relative_rank_logits">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_relative_rank_logits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategies_names</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes relative ranks for the strategies named in the strategies_names list and afterwards</span>
+<span class="sd">        calculates the logits. High logit values imply a consistency between IS and OOS performances,</span>
+<span class="sd">        which indicates a low lever of backtest overfitting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_is_oos_rankings</span><span class="p">()</span>
+        <span class="n">num_of_strategies</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiple_returns_timeseries</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">relative_ranks</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">oos_ranking</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_is_strategy</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_of_strategies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">oos_ranking</span><span class="p">,</span> <span class="n">best_is_strategy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oos_ranking</span><span class="p">,</span> <span class="n">strategies_names</span><span class="p">)])</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">relative_ranks</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">relative_ranks</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">logits</span></div>
+
+    <span class="k">def</span> <span class="nf">create_is_oos_rankings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rankings_computed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oos_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_different_is_and_oos_sets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiple_returns_timeseries</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_ranking</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rank_strategies</span><span class="p">(</span><span class="n">is_element</span><span class="p">)</span> <span class="k">for</span> <span class="n">is_element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_set</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oos_ranking</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rank_strategies</span><span class="p">(</span><span class="n">oos_element</span><span class="p">)</span> <span class="k">for</span> <span class="n">oos_element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oos_set</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">is_element</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="k">for</span> <span class="n">is_element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_ranking</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rankings_computed</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="OverfittingAnalysis.form_different_is_and_oos_sets"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.form_different_is_and_oos_sets">[docs]</a>    <span class="k">def</span> <span class="nf">form_different_is_and_oos_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">multiple_returns_timeseries</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Splits slices into two groups of equal sizes for all possible combinations.</span>
+
+<span class="sd">        Returns an list of tuples. 1st element of the tuple contains the In-Sample set and the 2nd one contains the</span>
+<span class="sd">        Out-Of-Sample set (both in form of QFDataFrames). Each tuple contains one of possible combinations</span>
+<span class="sd">        of slices forming IS and OOS sets. E.g. if there are 4 slices: A,B,C,D then one of possible</span>
+<span class="sd">        combinations is IS: A,B and OOS: C,D. The given example will be one of rows of the result list.</span>
+<span class="sd">        A and B (C and D) will be concatenated (so that there will be one timeseries AB),</span>
+<span class="sd">        and so will be one CD timeseries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Drop all rows not aligned to num_of_slices. E.g if the df has 233 rows and the num_of_slices is 50,</span>
+        <span class="c1"># then last 33 rows of the original matrix will be dropped</span>
+        <span class="n">rows_to_keep</span> <span class="o">=</span> <span class="p">(</span><span class="n">multiple_returns_timeseries</span><span class="o">.</span><span class="n">num_of_rows</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span>
+        <span class="n">aligned_df</span> <span class="o">=</span> <span class="n">multiple_returns_timeseries</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">rows_to_keep</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">aligned_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too few rows in the data frame.&quot;</span><span class="p">)</span>
+
+        <span class="n">size_of_slices</span> <span class="o">=</span> <span class="n">aligned_df</span><span class="o">.</span><span class="n">num_of_rows</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span>
+        <span class="n">df_slices</span> <span class="o">=</span> <span class="p">[</span><span class="n">SimpleReturnsDataFrame</span><span class="p">(</span><span class="n">aligned_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">size_of_slices</span><span class="p">,</span> <span class="p">:])</span>
+                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">aligned_df</span><span class="p">),</span> <span class="n">size_of_slices</span><span class="p">)]</span>
+
+        <span class="c1"># The index order of the original data frame should be preserved in both IS and OOS dfs</span>
+        <span class="n">new_index</span> <span class="o">=</span> <span class="n">aligned_df</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">aligned_df</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">is_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span> <span class="k">for</span> <span class="n">slices</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">df_slices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_slices</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="n">oos_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">aligned_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">aligned_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">is_dfs</span><span class="p">]</span>
+
+        <span class="c1"># Adjust the indices at the end, after the oos_dfs and is_dfs are already computed</span>
+        <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">is_dfs</span><span class="p">,</span> <span class="n">oos_dfs</span><span class="p">):</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">new_index</span>
+
+        <span class="k">return</span> <span class="n">is_dfs</span><span class="p">,</span> <span class="n">oos_dfs</span></div>
+
+<div class="viewcode-block" id="OverfittingAnalysis.rank_strategies"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.rank_strategies">[docs]</a>    <span class="k">def</span> <span class="nf">rank_strategies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rank strategies using the ranking function. The worst strategy should be marked as 1.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: SimpleReturnsDataFrame</span>
+<span class="sd">            dataframe containing different strategies returns in the columns</span>
+<span class="sd">        ascending: bool</span>
+<span class="sd">            if True - the smaller the measure, the worse is the strategy</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame</span>
+<span class="sd">            data frame indexed by strategy names with two columns: quality (containing the quality measure</span>
+<span class="sd">            computed for the given strategy, e.g. sharpe ratio) and rank.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rank_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;quality&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ranking_function</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]},</span>
+                              <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="n">rank_df</span> <span class="o">=</span> <span class="n">rank_df</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rank_df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There exist nan or infinite values in the rank_df&quot;</span><span class="p">)</span>
+        <span class="n">rank_df</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rank_df</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rank_df</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_best_strategies_returns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the annual returns of the best IS strategies &quot;&quot;&quot;</span>
+        <span class="n">annual_returns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">oos_set</span><span class="p">,</span> <span class="n">best_strategy_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_oos_set</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_is_strategies_names</span><span class="p">):</span>
+            <span class="n">best_strategy_tms</span> <span class="o">=</span> <span class="n">oos_set</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">best_strategy_name</span><span class="p">]</span>
+            <span class="n">annual_simple_return</span> <span class="o">=</span> <span class="n">cagr</span><span class="p">(</span><span class="n">best_strategy_tms</span><span class="p">,</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+            <span class="n">annual_returns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annual_simple_return</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">annual_returns</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qf_series</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a QFSeries and counts the number occurrences of each value. Then all the occurrences are</span>
+<span class="sd">        normalized so that they all sum up to one.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        QFSeries</span>
+<span class="sd">            series, indexed with the values from the original series, containing the normalized numbers of</span>
+<span class="sd">            occurrences of each of the values</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">occurrences</span> <span class="o">=</span> <span class="n">qf_series</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+        <span class="n">normalized_occurrences</span> <span class="o">=</span> <span class="n">occurrences</span> <span class="o">/</span> <span class="n">occurrences</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">normalized_occurrences</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+StrategyMonitoringDocument
+==================================================================================
+
+.. currentmodule:: qf_lib.analysis.tearsheets.strategy_monitoring_document
+
+.. autoclass:: StrategyMonitoringDocument
+	:show-inheritance:
+	:autosummary:
+	:members:

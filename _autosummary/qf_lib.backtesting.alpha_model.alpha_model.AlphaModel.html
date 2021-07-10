@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AlphaModel &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FuturesModel" href="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html" />
+    <link rel="prev" title="backtesting" href="../backtesting.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../backtesting.html">backtesting</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AlphaModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html">FuturesModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html">AlphaModelStrategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#data-handler">data_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#events">events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#execution-handler">execution_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../backtesting.html">backtesting</a> &raquo;</li>
+        
+      <li>AlphaModel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="alphamodel">
+<h1>AlphaModel<a class="headerlink" href="#alphamodel" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.alpha_model.alpha_model.</code><code class="sig-name descname">AlphaModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">data_handler</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler" title="qf_lib.backtesting.data_handler.data_handler.DataHandler">qf_lib.backtesting.data_handler.data_handler.DataHandler</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/alpha_model.html#AlphaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for all alpha models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>risk_estimation_factor</strong> – float value which estimates the risk level of the specific AlphaModel. Corresponds to the level at which
+the stop-loss should be placed.</p></li>
+<li><p><strong>data_handler</strong> – DataHandler which provides data for the ticker</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_exposure" title="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_exposure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_exposure</span></code></a>(ticker, current_exposure)</p></td>
+<td><p>Returns the expected Exposure, which is the key part of a generated Signal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_fraction_at_risk" title="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_fraction_at_risk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_fraction_at_risk</span></code></a>(ticker)</p></td>
+<td><p>Returns the float value which determines the risk factor for an AlphaModel and a specified Ticker, may be used to calculate the position size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal" title="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_signal</span></code></a>(ticker, current_exposure)</p></td>
+<td><p>Returns the Signal calculated for a specific AlphaModel and a set of data for a specified Ticker</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_exposure">
+<em class="property">abstract </em><code class="sig-name descname">calculate_exposure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a></span></em>, <em class="sig-param"><span class="n">current_exposure</span><span class="p">:</span> <span class="n">qf_lib.backtesting.alpha_model.exposure_enum.Exposure</span></em><span class="sig-paren">)</span> &#x2192; qf_lib.backtesting.alpha_model.exposure_enum.Exposure<a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/alpha_model.html#AlphaModel.calculate_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the expected Exposure, which is the key part of a generated Signal. Exposure suggests the trend
+direction for managing the trading position.
+Uses DataHandler passed when the AlphaModel (child) is initialized - all required data is provided in the child
+class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a>) – Ticker for which suggested signal exposure is calculated.</p></li>
+<li><p><strong>current_exposure</strong> (<em>Exposure</em>) – The actual exposure, based on which the AlphaModel should return its Signal. Can be different from previous
+Signal suggestions, but it should correspond with the current trading position</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_fraction_at_risk">
+<code class="sig-name descname">calculate_fraction_at_risk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/alpha_model.html#AlphaModel.calculate_fraction_at_risk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_fraction_at_risk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the float value which determines the risk factor for an AlphaModel and a specified Ticker,
+may be used to calculate the position size.</p>
+<p>For example: Value of 0.02 means that we should place a Stop Loss 2% below the latest available
+price of the instrument. This value should always be positive</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a>) – Ticker for which the calculation should be made</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>percentage_at_risk value for an AlphaModel and a Ticker, calculated as Normalized Average True Range
+multiplied by the risk_estimation_factor, being a property of each AlphaModel:
+fraction_at_risk = ATR / last_close * risk_estimation_factor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal">
+<code class="sig-name descname">get_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a></span></em>, <em class="sig-param"><span class="n">current_exposure</span><span class="p">:</span> <span class="n">qf_lib.backtesting.alpha_model.exposure_enum.Exposure</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">qf_lib.backtesting.signals.signal.Signal</a><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/alpha_model.html#AlphaModel.get_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Signal calculated for a specific AlphaModel and a set of data for a specified Ticker</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a>) – A ticker of an asset for which the Signal should be generated</p></li>
+<li><p><strong>current_exposure</strong> (<em>Exposure</em>) – The actual exposure, based on which the AlphaModel should return its Signal. Can be different from previous
+Signal suggestions, but it should correspond with the current trading position</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Signal being the suggestion for the next trading period</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">Signal</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html" class="btn btn-neutral float-right" title="FuturesModel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../backtesting.html" class="btn btn-neutral float-left" title="backtesting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

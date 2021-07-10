@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BacktestTradingSessionBuilder &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="common" href="../common.html" />
+    <link rel="prev" title="BacktestTradingSession" href="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../backtesting.html">backtesting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#data-handler">data_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#events">events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#execution-handler">execution_handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.trading_session.trading_session.TradingSession.html">TradingSession</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession.html">BacktestTradingSession</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">BacktestTradingSessionBuilder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../backtesting.html">backtesting</a> &raquo;</li>
+        
+      <li>BacktestTradingSessionBuilder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="backtesttradingsessionbuilder">
+<h1>BacktestTradingSessionBuilder<a class="headerlink" href="#backtesttradingsessionbuilder" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.trading_session.backtest_trading_session_builder.</code><code class="sig-name descname">BacktestTradingSessionBuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_provider</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.data_providers.general_price_provider.GeneralPriceProvider.html#qf_lib.data_providers.general_price_provider.GeneralPriceProvider" title="qf_lib.data_providers.general_price_provider.GeneralPriceProvider">qf_lib.data_providers.general_price_provider.GeneralPriceProvider</a></span></em>, <em class="sig-param"><span class="n">settings</span><span class="p">:</span> <span class="n">qf_lib.settings.Settings</span></em>, <em class="sig-param"><span class="n">pdf_exporter</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter.html#qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter" title="qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter">qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter</a></span></em>, <em class="sig-param"><span class="n">excel_exporter</span><span class="p">:</span> <span class="n">qf_lib.documents_utils.excel.excel_exporter.ExcelExporter</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/trading_session/backtest_trading_session_builder.html#BacktestTradingSessionBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class used to build a Trading Session with all necessary elements, connections and dependencies.
+By default it uses the following settings:</p>
+<ul class="simple">
+<li><p>backtest name is set to “Backtest Results”</p></li>
+<li><p>initial cash is set to 10000000</p></li>
+<li><p>montior type is set to LightBacktestMonitor</p></li>
+<li><p>SimulatedBloombergContractTickerMapper is used to map contracts to tickers</p></li>
+<li><p>no commissions are introduced (FixedCommissionModel(0.0))</p></li>
+<li><p>no slippage is introduced (PriceBasedSlippage(0.0))</p></li>
+<li><p>SimplePositionSizer is used</p></li>
+<li><p>BeforeMarketOpenEvent is triggered at 08:00</p></li>
+<li><p>MarketOpenEvent is triggered at 13:30</p></li>
+<li><p>MarketCloseEvent is triggered at 20:00</p></li>
+<li><p>AfterMarketCloseEvent is triggered at 23:00</p></li>
+</ul>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.build" title="qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(start_date, end_date)</p></td>
+<td><p>Builds a backtest trading session.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.set_benchmark_tms" title="qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.set_benchmark_tms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_benchmark_tms</span></code></a>(benchmark_tms)</p></td>
+<td><p>Sets the benchmark timeseries.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_provider</strong> (<a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><em>DataProvider</em></a>) – data provider used to download all fields and prices used during trading</p></li>
+<li><p><strong>settings</strong> (<em>Settings</em>) – object containing all necessary settings, used for example for connection purposes</p></li>
+<li><p><strong>pdf_exporter</strong> (<a class="reference internal" href="qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter.html#qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter" title="qf_lib.documents_utils.document_exporting.pdf_exporter.PDFExporter"><em>PDFExporter</em></a>) – used to export all trading statistics to PDF</p></li>
+<li><p><strong>excel_exporter</strong> (<em>ExcelExporter</em>) – used to export trading data to Excel</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">end_date</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession.html#qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession" title="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession">qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession</a><a class="reference internal" href="../_modules/qf_lib/backtesting/trading_session/backtest_trading_session_builder.html#BacktestTradingSessionBuilder.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a backtest trading session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_date</strong> (<em>datetime</em>) – starting date of the backtest</p></li>
+<li><p><strong>end_date</strong> (<em>datetime</em>) – last date of the backtest</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>trading session containing all the necessary parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession.html#qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession" title="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession">BacktestTradingSession</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.set_benchmark_tms">
+<code class="sig-name descname">set_benchmark_tms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">benchmark_tms</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/trading_session/backtest_trading_session_builder.html#BacktestTradingSessionBuilder.set_benchmark_tms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.set_benchmark_tms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the benchmark timeseries. If set, the TearsheetWithBenchamrk will be generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>benchmark_tms</strong> (<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><em>QFSeries</em></a>) – timeseries of the benchmark</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../common.html" class="btn btn-neutral float-right" title="common" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.backtesting.trading_session.backtest_trading_session.BacktestTradingSession.html" class="btn btn-neutral float-left" title="BacktestTradingSession" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

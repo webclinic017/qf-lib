@@ -1,0 +1,9 @@
+PriceField
+==========================================
+
+.. currentmodule:: qf_lib.common.enums.price_field
+
+.. autoclass:: PriceField
+	:show-inheritance:
+	:autosummary:
+	:members:

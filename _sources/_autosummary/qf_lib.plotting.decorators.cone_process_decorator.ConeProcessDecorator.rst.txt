@@ -1,0 +1,9 @@
+ConeProcessDecorator
+======================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.cone_process_decorator
+
+.. autoclass:: ConeProcessDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

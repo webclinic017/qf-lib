@@ -1,0 +1,9 @@
+IntradayDataHandler
+=========================================================================
+
+.. currentmodule:: qf_lib.backtesting.data_handler.intraday_data_handler
+
+.. autoclass:: IntradayDataHandler
+	:show-inheritance:
+	:autosummary:
+	:members:

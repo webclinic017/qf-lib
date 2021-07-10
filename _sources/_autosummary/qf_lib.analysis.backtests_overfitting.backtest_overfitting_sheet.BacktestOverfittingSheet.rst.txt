@@ -1,0 +1,9 @@
+BacktestOverfittingSheet
+=========================================================================================
+
+.. currentmodule:: qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet
+
+.. autoclass:: BacktestOverfittingSheet
+	:show-inheritance:
+	:autosummary:
+	:members:

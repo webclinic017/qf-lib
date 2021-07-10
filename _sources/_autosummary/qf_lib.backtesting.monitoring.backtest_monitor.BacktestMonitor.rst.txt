@@ -1,0 +1,9 @@
+BacktestMonitor
+==============================================================
+
+.. currentmodule:: qf_lib.backtesting.monitoring.backtest_monitor
+
+.. autoclass:: BacktestMonitor
+	:show-inheritance:
+	:autosummary:
+	:members:

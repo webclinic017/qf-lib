@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PricesSeries &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ReturnsSeries" href="qf_lib.containers.series.returns_series.ReturnsSeries.html" />
+    <link rel="prev" title="QFSeries" href="qf_lib.containers.series.qf_series.QFSeries.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../containers.html">containers</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../containers.html#series">Series</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html">QFSeries</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PricesSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.containers.series.returns_series.ReturnsSeries.html">ReturnsSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html">SimpleReturnsSeries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qf_lib.containers.series.log_returns_series.LogReturnsSeries.html">LogReturnsSeries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../containers.html#dataframes">DataFrames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers.html#dataarrays">DataArrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers.html#futures">Futures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../containers.html">containers</a> &raquo;</li>
+        
+      <li>PricesSeries</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="pricesseries">
+<h1>PricesSeries<a class="headerlink" href="#pricesseries" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.containers.series.prices_series.PricesSeries">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.containers.series.prices_series.</code><code class="sig-name descname">PricesSeries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fastpath</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/containers/series/prices_series.html#PricesSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.containers.series.prices_series.PricesSeries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.containers.series.qf_series.QFSeries</span></code></a></p>
+<p>Series of prices (for example prices of the SPY).</p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.containers.series.prices_series.PricesSeries.to_log_returns" title="qf_lib.containers.series.prices_series.PricesSeries.to_log_returns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_log_returns</span></code></a>()</p></td>
+<td><p>Converts timeseries to the timeseries of logarithmic returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.containers.series.prices_series.PricesSeries.to_prices" title="qf_lib.containers.series.prices_series.PricesSeries.to_prices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_prices</span></code></a>(initial_price, suggested_initial_date)</p></td>
+<td><p>Converts a timeseries into series of prices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.containers.series.prices_series.PricesSeries.to_simple_returns" title="qf_lib.containers.series.prices_series.PricesSeries.to_simple_returns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_simple_returns</span></code></a>()</p></td>
+<td><p>Converts timeseries to the timeseries of simple returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.containers.series.prices_series.PricesSeries.total_cumulative_return" title="qf_lib.containers.series.prices_series.PricesSeries.total_cumulative_return"><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_cumulative_return</span></code></a>()</p></td>
+<td><p>Calculates the total cumulative return for the series.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.containers.series.prices_series.PricesSeries.to_log_returns">
+<code class="sig-name descname">to_log_returns</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; LogReturnsSeries<a class="reference internal" href="../_modules/qf_lib/containers/series/prices_series.html#PricesSeries.to_log_returns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.containers.series.prices_series.PricesSeries.to_log_returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts timeseries to the timeseries of logarithmic returns. First date of prices in the returns timeseries
+won’t be present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>timeseries of log returns</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="qf_lib.containers.series.log_returns_series.LogReturnsSeries.html#qf_lib.containers.series.log_returns_series.LogReturnsSeries" title="qf_lib.containers.series.log_returns_series.LogReturnsSeries">LogReturnsSeries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.containers.series.prices_series.PricesSeries.to_prices">
+<code class="sig-name descname">to_prices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_price</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suggested_initial_date</span><span class="p">:</span> <span class="n">datetime.datetime</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">frequency</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; [‘PricesSeries’]<a class="reference internal" href="../_modules/qf_lib/containers/series/prices_series.html#PricesSeries.to_prices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.containers.series.prices_series.PricesSeries.to_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a timeseries into series of prices. The timeseries of prices returned will have an extra date
+at the beginning (in comparison to the returns’ timeseries). The difference between the extra
+date and the rest of the dates can be inferred from the returns’ timeseries or can be calculated using
+the frequency passed as the optional argument. Additional date at the beginning (so called “initial date”)
+is caused by the fact, that return for the first date of prices timeseries cannot be calculated, so it’s
+missing. Thus, during the opposite conversion, extra date at the beginning will be added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_price</strong> – initial price of the timeseries. If no price will be specified, then it will be assumed to be 1.</p></li>
+<li><p><strong>suggested_initial_date</strong> – the first date or initial value for the prices series. It won’t be necessarily the first date of the price
+series (e.g. if the method is run on the PricesSeries then it won’t be used).</p></li>
+<li><p><strong>frequency</strong> – the frequency of the returns’ timeseries. It is used to infer the initial date for the prices series.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>series of prices</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">PricesSeries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.containers.series.prices_series.PricesSeries.to_simple_returns">
+<code class="sig-name descname">to_simple_returns</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; SimpleReturnsSeries<a class="reference internal" href="../_modules/qf_lib/containers/series/prices_series.html#PricesSeries.to_simple_returns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.containers.series.prices_series.PricesSeries.to_simple_returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts timeseries to the timeseries of simple returns. First date of prices in the returns timeseries won’t
+be present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>timeseries of simple returns</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">SimpleReturnsSeries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.containers.series.prices_series.PricesSeries.total_cumulative_return">
+<code class="sig-name descname">total_cumulative_return</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/qf_lib/containers/series/prices_series.html#PricesSeries.total_cumulative_return"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.containers.series.prices_series.PricesSeries.total_cumulative_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total cumulative return for the series.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.containers.series.returns_series.ReturnsSeries.html" class="btn btn-neutral float-right" title="ReturnsSeries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.containers.series.qf_series.QFSeries.html" class="btn btn-neutral float-left" title="QFSeries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

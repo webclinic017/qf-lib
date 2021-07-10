@@ -1,0 +1,9 @@
+TearsheetWithBenchmark
+==========================================================================
+
+.. currentmodule:: qf_lib.analysis.tearsheets.tearsheet_with_benchmark
+
+.. autoclass:: TearsheetWithBenchmark
+	:show-inheritance:
+	:autosummary:
+	:members:

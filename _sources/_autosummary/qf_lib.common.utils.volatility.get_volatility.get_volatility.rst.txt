@@ -1,0 +1,6 @@
+get_volatility
+============================================================
+
+.. currentmodule:: qf_lib.common.utils.volatility.get_volatility
+
+.. autofunction:: get_volatility

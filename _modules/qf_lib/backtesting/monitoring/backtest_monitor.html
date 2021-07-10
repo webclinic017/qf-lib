@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.monitoring.backtest_monitor &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.monitoring.backtest_monitor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.monitoring.backtest_monitor</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">makedirs</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.exposure_analysis.exposure_settings</span> <span class="kn">import</span> <span class="n">ExposureSettings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.exposure_analysis.exposure_generator</span> <span class="kn">import</span> <span class="n">ExposureGenerator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.exposure_analysis.exposure_sheet</span> <span class="kn">import</span> <span class="n">ExposureSheet</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.tearsheets.portfolio_analysis_sheet</span> <span class="kn">import</span> <span class="n">PortfolioAnalysisSheet</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.config_exporter</span> <span class="kn">import</span> <span class="n">ConfigExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.error_handling</span> <span class="kn">import</span> <span class="n">ErrorHandling</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.tearsheets.tearsheet_with_benchmark</span> <span class="kn">import</span> <span class="n">TearsheetWithBenchmark</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.tearsheets.tearsheet_without_benchmark</span> <span class="kn">import</span> <span class="n">TearsheetWithoutBenchmark</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.timeseries_analysis.timeseries_analysis</span> <span class="kn">import</span> <span class="n">TimeseriesAnalysis</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.trade_analysis.trade_analysis_sheet</span> <span class="kn">import</span> <span class="n">TradeAnalysisSheet</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.trade_analysis.trades_generator</span> <span class="kn">import</span> <span class="n">TradesGenerator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.monitoring.abstract_monitor</span> <span class="kn">import</span> <span class="n">AbstractMonitor</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.monitoring.backtest_result</span> <span class="kn">import</span> <span class="n">BacktestResult</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.excel.excel_exporter</span> <span class="kn">import</span> <span class="n">ExcelExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.starting_dir</span> <span class="kn">import</span> <span class="n">get_starting_dir_abs_path</span>
+
+
+<span class="k">class</span> <span class="nc">BacktestMonitorSettings</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issue_tearsheet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">issue_portfolio_analysis_sheet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">issue_trade_analysis_sheet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">issue_transaction_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">issue_signal_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">issue_config_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">issue_daily_portfolio_values_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_stats_to_console</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">generate_pnl_chart_per_ticker_in_portfolio_analysis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">display_live_backtest_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">live_backtest_chart_refresh_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">exposure_settings</span><span class="p">:</span> <span class="n">ExposureSettings</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_tearsheet</span> <span class="o">=</span> <span class="n">issue_tearsheet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_portfolio_analysis_sheet</span> <span class="o">=</span> <span class="n">issue_portfolio_analysis_sheet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_trade_analysis_sheet</span> <span class="o">=</span> <span class="n">issue_trade_analysis_sheet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_transaction_log</span> <span class="o">=</span> <span class="n">issue_transaction_log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_signal_log</span> <span class="o">=</span> <span class="n">issue_signal_log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_config_log</span> <span class="o">=</span> <span class="n">issue_config_log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issue_daily_portfolio_value_file</span> <span class="o">=</span> <span class="n">issue_daily_portfolio_values_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_stats_to_console</span> <span class="o">=</span> <span class="n">print_stats_to_console</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_pnl_chart_per_ticker_in_portfolio_analysis</span> <span class="o">=</span> <span class="n">generate_pnl_chart_per_ticker_in_portfolio_analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_live_backtest_progress</span> <span class="o">=</span> <span class="n">display_live_backtest_progress</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">live_backtest_chart_refresh_frequency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">live_backtest_chart_refresh_frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exposure_settings</span> <span class="o">=</span> <span class="n">exposure_settings</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">no_stats</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;BacktestMonitorSettings&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">        Creates Settings that will generate no monitor output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BacktestMonitorSettings</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BacktestMonitor"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html#qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor">[docs]</a><span class="k">class</span> <span class="nc">BacktestMonitor</span><span class="p">(</span><span class="n">AbstractMonitor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This Monitor will be used to monitor backtest run from the script.</span>
+<span class="sd">    It will display the portfolio value as the backtest progresses and generate a PDF at the end.</span>
+<span class="sd">    It is not suitable for the Web application</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backtest_result</span><span class="p">:</span> <span class="n">BacktestResult</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span>
+                 <span class="n">excel_exporter</span><span class="p">:</span> <span class="n">ExcelExporter</span><span class="p">,</span> <span class="n">monitor_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">benchmark_tms</span><span class="p">:</span> <span class="n">QFSeries</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span> <span class="o">=</span> <span class="n">backtest_result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span> <span class="o">=</span> <span class="n">pdf_exporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_excel_exporter</span> <span class="o">=</span> <span class="n">excel_exporter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signals_register</span> <span class="o">=</span> <span class="n">backtest_result</span><span class="o">.</span><span class="n">signals_register</span>
+
+        <span class="c1"># set full display details if no setting is provided</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span> <span class="o">=</span> <span class="n">BacktestMonitorSettings</span><span class="p">()</span> <span class="k">if</span> <span class="n">monitor_settings</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">monitor_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_tms</span> <span class="o">=</span> <span class="n">benchmark_tms</span>
+
+        <span class="n">sub_dir_name</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">backtest_name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;backtesting&quot;</span><span class="p">,</span> <span class="n">sub_dir_name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_live_progress_chart</span><span class="p">(</span><span class="n">backtest_result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csv_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csv_writer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_transactions_log_csv_file</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eod_update_ctr</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="BacktestMonitor.end_of_trading_update"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html#qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.end_of_trading_update">[docs]</a>    <span class="k">def</span> <span class="nf">end_of_trading_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves the results of the backtest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">portfolio_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">portfolio_eod_series</span><span class="p">()</span>
+        <span class="n">portfolio_tms</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">backtest_name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_tearsheet</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_portfolio_analysis_sheet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_trade_analysis_sheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_factor_sector_exposure_sheet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_daily_portfolio_value_file</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_signal_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issue_config_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_print_stats_to_console</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_files</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BacktestMonitor.end_of_day_update"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html#qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.end_of_day_update">[docs]</a>    <span class="k">def</span> <span class="nf">end_of_day_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update real time line chart with current backtest progress every fixed number of days</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eod_update_ctr</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eod_update_ctr</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">live_backtest_chart_refresh_frequency</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_live_chart_update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BacktestMonitor.real_time_update"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html#qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.real_time_update">[docs]</a>    <span class="k">def</span> <span class="nf">real_time_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method will not be used by the historical backtest</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BacktestMonitor.record_transaction"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.html#qf_lib.backtesting.monitoring.backtest_monitor.BacktestMonitor.record_transaction">[docs]</a>    <span class="k">def</span> <span class="nf">record_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the transaction in backtest result (and in the file if set to do so)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_transaction_to_file</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span></div>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_init_live_progress_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backtest_result</span><span class="p">:</span> <span class="n">BacktestResult</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">display_live_backtest_progress</span><span class="p">:</span>
+            <span class="c1"># Set up an empty chart that can be updated</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="p">,</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_autoscaley_on</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">backtest_result</span><span class="o">.</span><span class="n">end_date</span> <span class="k">if</span> <span class="n">backtest_result</span><span class="o">.</span><span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Progress of the backtest - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">backtest_name</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_init_transactions_log_csv_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">TextIOWrapper</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new csv file for every backtest run, writes the header and returns the file handler and writer object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_transaction_log</span><span class="p">:</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_starting_dir_abs_path</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+                <span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+            <span class="n">csv_filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Transactions.csv&quot;</span>
+            <span class="n">csv_filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">csv_filename</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">csv_filename</span><span class="p">))</span>
+
+            <span class="c1"># Write new file header</span>
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;Contract symbol&quot;</span><span class="p">,</span> <span class="s2">&quot;Security type&quot;</span><span class="p">,</span> <span class="s2">&quot;Exchange&quot;</span><span class="p">,</span> <span class="s2">&quot;Contract size&quot;</span><span class="p">,</span> <span class="s2">&quot;Quantity&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;Price&quot;</span><span class="p">,</span> <span class="s2">&quot;Commission&quot;</span><span class="p">]</span>
+
+            <span class="n">file_handler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">file_handler</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+            <span class="n">csv_writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">file_handler</span><span class="p">,</span> <span class="n">csv_writer</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_close_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csv_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_csv_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_save_transaction_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Transaction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Append all details about the Transaction to the CSV trade log.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_transaction_log</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csv_writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_csv_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">security_type</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">exchange</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">contract_size</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">quantity</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+                <span class="n">transaction</span><span class="o">.</span><span class="n">commission</span>
+            <span class="p">])</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_daily_portfolio_value_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portfolio_tms</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_daily_portfolio_value_file</span><span class="p">:</span>
+            <span class="n">xlsx_filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Timeseries.xlsx&quot;</span>
+            <span class="n">xlsx_filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">,</span> <span class="n">xlsx_filename</span><span class="p">)</span>
+            <span class="c1"># export portfolio tms</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_excel_exporter</span><span class="o">.</span><span class="n">export_container</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span>
+                                                  <span class="n">starting_cell</span><span class="o">=</span><span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="n">include_column_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># export leverage tms</span>
+            <span class="n">leverage_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">leverage_series</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_excel_exporter</span><span class="o">.</span><span class="n">export_container</span><span class="p">(</span><span class="n">leverage_tms</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s2">&quot;Leverage&quot;</span><span class="p">,</span>
+                                                  <span class="n">starting_cell</span><span class="o">=</span><span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="n">include_column_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># export benchmark tms if provided</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_tms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_excel_exporter</span><span class="o">.</span><span class="n">export_container</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span>
+                                                      <span class="n">starting_cell</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">include_column_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_portfolio_analysis_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backtest_result</span><span class="p">:</span> <span class="n">BacktestResult</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_portfolio_analysis_sheet</span><span class="p">:</span>
+            <span class="n">pnl_charts_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">generate_pnl_chart_per_ticker_in_portfolio_analysis</span>
+            <span class="n">portfolio_trading_sheet</span> <span class="o">=</span> <span class="n">PortfolioAnalysisSheet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span><span class="p">,</span> <span class="n">backtest_result</span><span class="p">,</span>
+                                                             <span class="n">title</span><span class="o">=</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">backtest_name</span><span class="p">,</span>
+                                                             <span class="n">generate_pnl_chart_per_ticker</span><span class="o">=</span><span class="n">pnl_charts_flag</span><span class="p">)</span>
+            <span class="n">portfolio_trading_sheet</span><span class="o">.</span><span class="n">build_document</span><span class="p">()</span>
+            <span class="n">portfolio_trading_sheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_tearsheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portfolio_tms</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_tearsheet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_tms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tearsheet</span> <span class="o">=</span> <span class="n">TearsheetWithoutBenchmark</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span><span class="p">,</span> <span class="n">portfolio_tms</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">portfolio_tms</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tearsheet</span> <span class="o">=</span> <span class="n">TearsheetWithBenchmark</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span><span class="p">,</span> <span class="n">portfolio_tms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">portfolio_tms</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="n">tearsheet</span><span class="o">.</span><span class="n">build_document</span><span class="p">()</span>
+            <span class="n">tearsheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_print_stats_to_console</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portfolio_tms</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">print_stats_to_console</span><span class="p">:</span>
+            <span class="n">ta</span> <span class="o">=</span> <span class="n">TimeseriesAnalysis</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">TimeseriesAnalysis</span><span class="o">.</span><span class="n">values_in_table</span><span class="p">(</span><span class="n">ta</span><span class="p">))</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_trade_analysis_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create TradeAnalysisSheet and write all the Trades into an Excel file.</span>
+<span class="sd">        Issues a report with R multiply if initial risk is specified, otherwise returns of trades are expressed in %</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_trade_analysis_sheet</span><span class="p">:</span>
+            <span class="n">trades_generator</span> <span class="o">=</span> <span class="n">TradesGenerator</span><span class="p">()</span>
+            <span class="n">portfolio_eod_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">portfolio_eod_series</span><span class="p">()</span>
+            <span class="n">closed_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">closed_positions</span><span class="p">()</span>
+            <span class="n">trades_list</span> <span class="o">=</span> <span class="n">trades_generator</span><span class="o">.</span><span class="n">create_trades_from_backtest_positions</span><span class="p">(</span><span class="n">closed_positions</span><span class="p">,</span> <span class="n">portfolio_eod_series</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">contract_ticker_mapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">contract_ticker_mapper</span>
+                <span class="n">nr_of_assets_traded</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span>
+                    <span class="nb">set</span><span class="p">(</span><span class="n">contract_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">contract</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trades_list</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">start_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">start_date</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                    <span class="k">else</span> <span class="n">portfolio_eod_series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">end_date</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                    <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+                <span class="n">trades_analysis_sheet</span> <span class="o">=</span> <span class="n">TradeAnalysisSheet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span><span class="p">,</span>
+                                                           <span class="n">nr_of_assets_traded</span><span class="o">=</span><span class="n">nr_of_assets_traded</span><span class="p">,</span>
+                                                           <span class="n">trades</span><span class="o">=</span><span class="n">trades_list</span><span class="p">,</span>
+                                                           <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+                                                           <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+                                                           <span class="n">initial_risk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">initial_risk</span><span class="p">,</span>
+                                                           <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Trades analysis sheet&quot;</span><span class="p">)</span>
+                <span class="n">trades_analysis_sheet</span><span class="o">.</span><span class="n">build_document</span><span class="p">()</span>
+                <span class="n">trades_analysis_sheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No trades generated throughout the backtest - &quot;</span>
+                                 <span class="s2">&quot;Trade analysis sheet will not be generated.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_factor_sector_exposure_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">exposure_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exposure_generator</span> <span class="o">=</span> <span class="n">ExposureGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">exposure_settings</span><span class="o">.</span><span class="n">data_provider</span><span class="p">,</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">contract_ticker_mapper</span><span class="p">)</span>
+
+            <span class="c1"># setting ExposureGenerator parameters</span>
+            <span class="n">exposure_generator</span><span class="o">.</span><span class="n">set_positions_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">positions_history</span><span class="p">())</span>
+            <span class="n">exposure_generator</span><span class="o">.</span><span class="n">set_portfolio_nav_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">portfolio_eod_series</span><span class="p">())</span>
+            <span class="n">exposure_generator</span><span class="o">.</span><span class="n">set_sector_exposure_tickers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">exposure_settings</span><span class="o">.</span><span class="n">sector_exposure_tickers</span><span class="p">)</span>
+            <span class="n">exposure_generator</span><span class="o">.</span><span class="n">set_factor_exposure_tickers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">exposure_settings</span><span class="o">.</span><span class="n">factor_exposure_tickers</span><span class="p">)</span>
+
+            <span class="c1"># getting sector exposure</span>
+            <span class="n">sector_df</span> <span class="o">=</span> <span class="n">exposure_generator</span><span class="o">.</span><span class="n">get_sector_exposure</span><span class="p">()</span>
+
+            <span class="c1"># getting factor exposure</span>
+            <span class="n">factor_df</span> <span class="o">=</span> <span class="n">exposure_generator</span><span class="o">.</span><span class="n">get_factor_exposure</span><span class="p">()</span>
+
+            <span class="n">exposure_sheet</span> <span class="o">=</span> <span class="n">ExposureSheet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_exporter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">backtest_name</span><span class="p">)</span>
+
+            <span class="c1"># setting data for charts</span>
+            <span class="n">exposure_sheet</span><span class="o">.</span><span class="n">set_sector_data</span><span class="p">(</span><span class="n">sector_df</span><span class="p">)</span>
+            <span class="n">exposure_sheet</span><span class="o">.</span><span class="n">set_factor_data</span><span class="p">(</span><span class="n">factor_df</span><span class="p">)</span>
+
+            <span class="n">exposure_sheet</span><span class="o">.</span><span class="n">build_document</span><span class="p">()</span>
+            <span class="n">exposure_sheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;DataProvider for Exposure Sheet was not set up. ExposureSheet will not be generated.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_signal_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_signal_log</span><span class="p">:</span>
+            <span class="n">signals_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signals_register</span><span class="o">.</span><span class="n">get_signals</span><span class="p">()</span>
+            <span class="n">xlsx_filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Signals.xlsx&quot;</span>
+            <span class="n">xlsx_filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">xlsx_filename</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">,</span> <span class="n">xlsx_filename</span><span class="p">)</span>
+
+            <span class="c1"># Export the signals only if the data frame is not empty</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">signals_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">sheet_names_to_functions</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;Tickers&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">symbol</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="p">,</span>
+                    <span class="s2">&quot;Suggested exposure&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="p">,</span>
+                    <span class="s2">&quot;Confidence&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="p">,</span>
+                    <span class="s2">&quot;Expected move&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">expected_move</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span><span class="p">,</span>
+                    <span class="s2">&quot;Fraction at risk&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">fraction_at_risk</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span>
+                <span class="p">}</span>
+
+                <span class="k">for</span> <span class="n">sheet_name</span><span class="p">,</span> <span class="n">fun</span> <span class="ow">in</span> <span class="n">sheet_names_to_functions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">signals_df</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_excel_exporter</span><span class="o">.</span><span class="n">export_container</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">,</span>
+                                                          <span class="n">starting_cell</span><span class="o">=</span><span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="n">include_column_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_live_chart_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">display_live_backtest_progress</span><span class="p">:</span>
+            <span class="n">portfolio_tms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">portfolio_eod_series</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+            <span class="c1"># Set the data on x and y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="o">.</span><span class="n">set_xdata</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">portfolio_tms</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+            <span class="c1"># Need both of these in order to rescale</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">relim</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">autoscale_view</span><span class="p">()</span>
+
+            <span class="c1"># We need to draw and flush</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">flush_events</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>  <span class="c1"># we need two grid() calls in order to keep the grid on the chart</span>
+
+    <span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">error_logging</span>
+    <span class="k">def</span> <span class="nf">_issue_config_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_settings</span><span class="o">.</span><span class="n">issue_config_log</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Config.yml&quot;</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_starting_dir_abs_path</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_report_dir</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">ConfigExporter</span><span class="o">.</span><span class="n">print_config</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

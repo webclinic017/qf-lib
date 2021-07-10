@@ -1,0 +1,9 @@
+RiskParityPortfolio
+========================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio
+
+.. autoclass:: RiskParityPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,0 +1,9 @@
+RegressionChart
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.charts.regression_chart
+
+.. autoclass:: RegressionChart
+	:show-inheritance:
+	:autosummary:
+	:members:

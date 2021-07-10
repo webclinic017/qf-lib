@@ -1,0 +1,9 @@
+ValuesAnnotations
+===================================================================
+
+.. currentmodule:: qf_lib.plotting.charts.heatmap.values_annotations
+
+.. autoclass:: ValuesAnnotations
+	:show-inheritance:
+	:autosummary:
+	:members:

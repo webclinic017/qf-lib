@@ -1,0 +1,9 @@
+VerticalSpanDecorator
+========================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.vertical_span_decorator
+
+.. autoclass:: VerticalSpanDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

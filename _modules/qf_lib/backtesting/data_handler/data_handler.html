@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.data_handler.data_handler &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.data_handler.data_handler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.data_handler.data_handler</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.events.time_event.regular_time_event.regular_time_event</span> <span class="kn">import</span> <span class="n">RegularTimeEvent</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.prefetching_data_provider</span> <span class="kn">import</span> <span class="n">PrefetchingDataProvider</span>
+
+
+<div class="viewcode-block" id="DataHandler"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler">[docs]</a><span class="k">class</span> <span class="nc">DataHandler</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DataHandler is a wrapper which can be used with any AbstractPriceDataProvider in both live and backtest</span>
+<span class="sd">    environment. It makes sure that data &quot;from the future&quot; is not passed into components in the backtest environment.</span>
+
+<span class="sd">    DataHandler should be used by all the Backtester&#39;s components (even in the live trading setup).</span>
+
+<span class="sd">    The goal of a DataHandler is to provide backtester&#39;s components with financial data. It also makes sure that</span>
+<span class="sd">    no data from the future (relative to a &quot;current&quot; time of a backtester) is being accessed, that is: that there</span>
+<span class="sd">    is no look-ahead bias.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    data_provider: DataProvider</span>
+<span class="sd">        the underlying data provider</span>
+<span class="sd">    timer: Timer</span>
+<span class="sd">        timer used to keep track of the data &quot;from the future&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">,</span> <span class="n">timer</span><span class="p">:</span> <span class="n">Timer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span> <span class="o">=</span> <span class="n">data_provider</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_frequency</span><span class="p">(</span><span class="n">data_provider</span><span class="o">.</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_data_provider_frequency</span> <span class="o">=</span> <span class="n">data_provider</span><span class="o">.</span><span class="n">frequency</span>  <span class="c1"># type: Optional[Frequency]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="n">timer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_helper</span> <span class="o">=</span> <span class="n">_DataHandlerTimeHelper</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_optimised</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="DataHandler.use_data_bundle"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.use_data_bundle">[docs]</a>    <span class="k">def</span> <span class="nf">use_data_bundle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+                        <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optimises running of the backtest. All the data will be downloaded before the backtest.</span>
+<span class="sd">        Note that requesting during the backtest any other ticker or price field than the ones in the params</span>
+<span class="sd">        of this function will result in an Exception.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            ticker or sequence of tickers of the securities</span>
+<span class="sd">        fields: PriceField, Sequence[PriceField]</span>
+<span class="sd">            PriceField or sequence of PriceFields of the securities</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            initial date that should be downloaded</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            last date that should be downloaded</span>
+<span class="sd">        frequency</span>
+<span class="sd">            frequency of the data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_optimised</span><span class="p">,</span> <span class="s2">&quot;Multiple calls on use_data_bundle() are forbidden&quot;</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_frequency</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_data_provider_frequency</span> <span class="o">=</span> <span class="n">frequency</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span> <span class="o">=</span> <span class="n">PrefetchingDataProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                     <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_optimised</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_check_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify if the provided frequency is compliant with the type of Data Handler used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="DataHandler.historical_price"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.historical_price">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">historical_price</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+            <span class="n">nr_of_bars</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">PricesSeries</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the latest available data samples corresponding to the nr_of_bars.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers</span>
+<span class="sd">            ticker or sequence of tickers of the securities</span>
+<span class="sd">        fields</span>
+<span class="sd">            PriceField or sequence of PriceFields of the securities</span>
+<span class="sd">        nr_of_bars</span>
+<span class="sd">            number of data samples (bars) to be returned.</span>
+<span class="sd">            Note: while requesting more than one ticker, some tickers may have fewer than n_of_bars data points</span>
+<span class="sd">        frequency</span>
+<span class="sd">            frequency of the data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        PricesSeries, PricesDataFrame, QFDataArray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_price"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_price">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+                  <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> \
+            <span class="n">Union</span><span class="p">[</span><span class="n">PricesSeries</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Acceses prices, using the DataProvider get_price functionality, but before makes sure that the query doesn&#39;t</span>
+<span class="sd">        concern data from the future.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        DataProvider.get_price</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_history">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+            <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> \
+            <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs DataProvider.get_history(...) but before makes sure that the query doesn&#39;t concern data from the future.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        DataProvider.get_history</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_futures_chain_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span><span class="o">.</span><span class="n">get_futures_chain_tickers</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">expiration_date_fields</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_last_available_price"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_last_available_price">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_last_available_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span>
+                                 <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the latest available price for given assets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers of the securities which prices should be downloaded</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float, pandas.Series</span>
+<span class="sd">            last_prices series where:</span>
+<span class="sd">            - last_prices.name contains a date of current prices,</span>
+<span class="sd">            - last_prices.index contains tickers</span>
+<span class="sd">            - last_prices.data contains latest available prices for given tickers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_current_price"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_current_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span>
+                          <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Works just like get_last_available_price() but it can return NaNs if data is not available at the current</span>
+<span class="sd">        moment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers of the securities which prices should be downloaded</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float, pandas.Series</span>
+<span class="sd">            current_prices series where:</span>
+<span class="sd">            - current_prices.name contains a date of current prices,</span>
+<span class="sd">            - current_prices.index contains tickers</span>
+<span class="sd">            - current_prices.data contains latest available prices for given tickers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataHandler.get_current_bar"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.get_current_bar">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the current bar(s) for given Ticker(s). If the bar is not available yet, None is returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers of the securities which prices should be downloaded</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.Series, pandas.DataFrame</span>
+<span class="sd">            current bar</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_end_date_without_look_ahead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="DataHandler.supported_ticker_types"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span><span class="o">.</span><span class="n">supported_ticker_types</span><span class="p">()</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">_DataHandlerTimeHelper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper class extracting from DataHandler all the logic connected with time,</span>
+<span class="sd">    that is logic which makes sure that no data from the future is accessed in the backtest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timer</span><span class="p">:</span> <span class="n">Timer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="n">timer</span>
+
+    <span class="k">def</span> <span class="nf">datetime_of_latest_market_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">RegularTimeEvent</span><span class="p">]):</span>
+        <span class="n">time_of_event</span> <span class="o">=</span> <span class="n">event_class</span><span class="o">.</span><span class="n">trigger_time</span><span class="p">()</span>
+
+        <span class="n">now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">today_market_event</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="n">time_of_event</span>
+        <span class="n">yesterday_market_event</span> <span class="o">=</span> <span class="n">today_market_event</span> <span class="o">-</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">now</span> <span class="o">&lt;</span> <span class="n">today_market_event</span><span class="p">:</span>  <span class="c1"># event hasn&#39;t occurred today yet</span>
+            <span class="n">latest_available_market_event</span> <span class="o">=</span> <span class="n">yesterday_market_event</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># event occurred today already</span>
+            <span class="n">latest_available_market_event</span> <span class="o">=</span> <span class="n">today_market_event</span>
+
+        <span class="k">return</span> <span class="n">latest_available_market_event</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

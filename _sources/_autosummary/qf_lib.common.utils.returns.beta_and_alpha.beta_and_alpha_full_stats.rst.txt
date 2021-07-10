@@ -1,0 +1,6 @@
+beta_and_alpha_full_stats
+====================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.beta_and_alpha
+
+.. autofunction:: beta_and_alpha_full_stats

@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>VolatilityForecast &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VolatilityManager" href="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html" />
+    <link rel="prev" title="DriftIndependentVolatility" href="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../common.html">common</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../common.html#enums">enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#exceptions">exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#risk-parity-boxes">risk_parity_boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#tickers">tickers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#timeseries-analysis">timeseries_analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../common.html#utils">utils</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../common.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html">AnalyticalConeBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html">AnalyticalCone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS.html">AnalyticalConeOOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.date_format.DateFormat.html">DateFormat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.Timer.html">Timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.RealTimer.html">RealTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.SettableTimer.html">SettableTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model.DataModel.html">DataModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput.html">DataModelInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html">RollingWindowsEstimator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter.html">DataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html">RollingDataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html">ElasticNetFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified.html">ElasticNetFactorsIdentifierSimplified</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html">StepwiseFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.manager.FactorizationManager.html">FactorizationManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html">Method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats.html">InSampleReturnStats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html">DriftIndependentVolatility</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">VolatilityForecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html">VolatilityManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.data_cleaner.DataCleaner.html">DataCleaner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../common.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../common.html">common</a> &raquo;</li>
+        
+      <li>VolatilityForecast</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="volatilityforecast">
+<h1>VolatilityForecast<a class="headerlink" href="#volatilityforecast" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.common.utils.volatility.volatility_forecast.</code><code class="sig-name descname">VolatilityForecast</code><span class="sig-paren">(</span><em class="sig-param">returns_tms: qf_lib.containers.series.qf_series.QFSeries</em>, <em class="sig-param">vol_process: arch.univariate.volatility.VolatilityProcess</em>, <em class="sig-param">method: str = 'analytic'</em>, <em class="sig-param">horizon: int = 1</em>, <em class="sig-param">annualise: bool = True</em>, <em class="sig-param">frequency: qf_lib.common.enums.frequency.Frequency = &lt;Frequency.DAILY: 252&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/common/utils/volatility/volatility_forecast.html#VolatilityForecast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates class used for vol forecasting: describes the volatility forecast configuration as well as the input
+and output data (output is created and assigned by calling one of the class methods).</p>
+<p>An instance of this class should describe one specific forecast and store its parameters.
+Parameters should NOT be modified after calling one of the calculation methods (only one call is allowed)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>returns_tms</strong> (<a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries"><em>QFSeries</em></a>) – series of returns of the asset</p></li>
+<li><p><strong>vol_process</strong> (<em>VolatilityProcess</em>) – volatility process used for forecasting. For example EGARCH(p=p, o=o, q=q)</p></li>
+<li><p><strong>horizon</strong> (<em>str</em>) – horizon for the volatility forecast. It is expressed in the frequency of the returns provided</p></li>
+<li><p><strong>method</strong> (<em>int</em>) – method of forecast calculation. Possible: ‘analytic’, ‘simulation’ or ‘bootstrap’
+‘analytic’ is the fastest but is not available for EGARCH and possibly some other models.
+For details check arch documentation</p></li>
+<li><p><strong>annualise</strong> (<em>bool</em>) – flag indicating whether the result is annualised; True by default</p></li>
+<li><p><strong>frequency</strong> (<a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><em>Frequency</em></a>) – if annualise is True, this should be the frequency of the returns timeseries that is provided as input;
+not used if annualise is False.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_single_forecast" title="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_single_forecast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_single_forecast</span></code></a>(multiplier)</p></td>
+<td><p>Calculates volatility forecast for single asset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_timeseries" title="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_timeseries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_timeseries</span></code></a>(window_len, multiplier)</p></td>
+<td><p>Calculates volatility forecast for single asset.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_single_forecast">
+<code class="sig-name descname">calculate_single_forecast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiplier</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1000</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/qf_lib/common/utils/volatility/volatility_forecast.html#VolatilityForecast.calculate_single_forecast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_single_forecast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates volatility forecast for single asset. It is expressed in the frequency of returns.
+Value is calculated based on the configuration as in the object attributes. The result of the calculation
+is returned as well as assigned as self.forecasted_volatility object attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>multiplier</strong> (<em>int</em>) – ex. 100 (should be &gt; 1)
+improves the optimization performance, as for very small values the results may be faulty;
+after optimization the results are scaled back (division by multiplier value)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Forecasted value of the volatility.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_timeseries">
+<code class="sig-name descname">calculate_timeseries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window_len</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">multiplier</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><a class="reference internal" href="../_modules/qf_lib/common/utils/volatility/volatility_forecast.html#VolatilityForecast.calculate_timeseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.calculate_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates volatility forecast for single asset. It is expressed in the frequency of returns.
+Value is calculated based on the configuration as in the object attributes. The result of the calculation
+is returned as well as assigned as self.forecasted_volatility object attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window_len</strong> (<em>int</em>) – size of the rolling window, number of rows used as input data to calculate forecasted volatility</p></li>
+<li><p><strong>multiplier</strong> (<em>int</em>) – ex. 100 (should be &gt; 1)
+improves the optimization performance, as for very small values the results may be faulty;
+after optimization the results are scaled back (division by multiplier value)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timeseries of forecasted volatility.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">QFSeries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html" class="btn btn-neutral float-right" title="VolatilityManager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html" class="btn btn-neutral float-left" title="DriftIndependentVolatility" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

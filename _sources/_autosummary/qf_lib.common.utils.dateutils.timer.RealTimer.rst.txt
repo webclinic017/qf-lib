@@ -1,0 +1,9 @@
+RealTimer
+=============================================
+
+.. currentmodule:: qf_lib.common.utils.dateutils.timer
+
+.. autoclass:: RealTimer
+	:show-inheritance:
+	:autosummary:
+	:members:

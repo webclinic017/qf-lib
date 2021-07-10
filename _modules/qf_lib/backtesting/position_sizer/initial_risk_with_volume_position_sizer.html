@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.broker.broker</span> <span class="kn">import</span> <span class="n">Broker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signals_register</span> <span class="kn">import</span> <span class="n">SignalsRegister</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.execution_style</span> <span class="kn">import</span> <span class="n">MarketOrder</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order_factory</span> <span class="kn">import</span> <span class="n">OrderFactory</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.time_in_force</span> <span class="kn">import</span> <span class="n">TimeInForce</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.position_sizer.initial_risk_position_sizer</span> <span class="kn">import</span> <span class="n">InitialRiskPositionSizer</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.numberutils.is_finite_number</span> <span class="kn">import</span> <span class="n">is_finite_number</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.futures_chain</span> <span class="kn">import</span> <span class="n">FuturesChain</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+
+
+<div class="viewcode-block" id="InitialRiskWithVolumePositionSizer"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer.InitialRiskWithVolumePositionSizer.html#qf_lib.backtesting.position_sizer.initial_risk_with_volume_position_sizer.InitialRiskWithVolumePositionSizer">[docs]</a><span class="k">class</span> <span class="nc">InitialRiskWithVolumePositionSizer</span><span class="p">(</span><span class="n">InitialRiskPositionSizer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Variant of initial risk position sizer, which additionally controls the target size based on the mean daily volume.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    broker: Broker</span>
+<span class="sd">    data_handler: DataHandler</span>
+<span class="sd">    order_factory: OrderFactory</span>
+<span class="sd">    contract_ticker_mapper: ContractTickerMapper</span>
+<span class="sd">    initial_risk: float</span>
+<span class="sd">       should be set once for all signals. It corresponds to the value that we are willing to lose</span>
+<span class="sd">       on single trade. For example: initial_risk = 0.02, means that we are willing to lose 2% of portfolio value in</span>
+<span class="sd">       single trade</span>
+<span class="sd">    max_target_percentage: float</span>
+<span class="sd">       max leverage that is accepted by the position sizer.</span>
+<span class="sd">       if None, no max_target_percentage is used.</span>
+<span class="sd">    tolerance_percentage: float</span>
+<span class="sd">       percentage used by OrdersFactory target_percent_orders function; it defines tolerance to the</span>
+<span class="sd">       target percentages</span>
+<span class="sd">    max_volume_percentage: float</span>
+<span class="sd">        percentage used to cap the target value, so that according to historical volume data, the position will not</span>
+<span class="sd">        exceed max_volume_percentage * mean volume within last 100 days</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker</span><span class="p">:</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">:</span> <span class="n">OrderFactory</span><span class="p">,</span>
+                 <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">:</span> <span class="n">SignalsRegister</span><span class="p">,</span> <span class="n">initial_risk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">max_target_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">max_volume_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">,</span> <span class="n">contract_ticker_mapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">,</span> <span class="n">initial_risk</span><span class="p">,</span>
+                         <span class="n">max_target_percentage</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cached_futures_chains_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">FuturesChain</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_volume_percentage</span> <span class="o">=</span> <span class="n">max_volume_percentage</span>
+
+    <span class="k">def</span> <span class="nf">_generate_market_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Order</span><span class="p">]]:</span>
+        <span class="n">target_values</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_to_contract</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_target_value</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span>
+        <span class="p">}</span>
+
+        <span class="n">market_order_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_factory</span><span class="o">.</span><span class="n">target_value_orders</span><span class="p">(</span>
+            <span class="n">target_values</span><span class="p">,</span> <span class="n">MarketOrder</span><span class="p">(),</span> <span class="n">TimeInForce</span><span class="o">.</span><span class="n">OPG</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance_percentage</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">market_order_list</span>
+
+    <span class="k">def</span> <span class="nf">_compute_target_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Caps the target value, so that according to historical volume data, the position will not exceed</span>
+<span class="sd">        max_volume_percentage * mean volume within last 100 days.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">ticker</span>
+
+        <span class="n">portfolio_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broker</span><span class="o">.</span><span class="n">get_portfolio_value</span><span class="p">()</span>
+        <span class="n">target_percentage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_target_percentage</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">target_value</span> <span class="o">=</span> <span class="n">portfolio_value</span> <span class="o">*</span> <span class="n">target_percentage</span>
+
+        <span class="n">end_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">):</span>
+            <span class="c1"># Check if a futures chain instance already exists for this ticker and create it if not</span>
+            <span class="c1"># The default adjustment method will be taken (FuturesAdjustmentMethod.NTH_NEAREST) as the volume should</span>
+            <span class="c1"># not be adjusted</span>
+            <span class="k">if</span> <span class="n">ticker</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_futures_chains_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cached_futures_chains_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">FuturesChain</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="p">)</span>
+
+            <span class="n">volume_series</span><span class="p">:</span> <span class="n">PricesSeries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached_futures_chains_dict</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">,</span>
+                                                                                             <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                                                             <span class="n">frequency</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">volume_series</span><span class="p">:</span> <span class="n">PricesSeries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                                       <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="n">mean_volume</span> <span class="o">=</span> <span class="n">volume_series</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">specific_ticker</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">get_current_specific_ticker</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="n">ticker</span>
+        <span class="n">current_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">specific_ticker</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+        <span class="n">contract_size</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">point_value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">divisor</span> <span class="o">=</span> <span class="n">current_price</span> <span class="o">*</span> <span class="n">contract_size</span>
+        <span class="n">quantity</span> <span class="o">=</span> <span class="n">target_value</span> <span class="o">//</span> <span class="n">divisor</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">mean_volume</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_volume_percentage</span><span class="p">:</span>
+            <span class="n">target_quantity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mean_volume</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_volume_percentage</span><span class="p">)</span>
+            <span class="n">target_value</span> <span class="o">=</span> <span class="n">target_quantity</span> <span class="o">*</span> <span class="n">divisor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;InitialRiskWithVolumePositionSizer: </span><span class="si">{}</span><span class="s2"> - capping </span><span class="si">{}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;Initial quantity: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;Reduced quantity: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_data_handler</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">ticker</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">target_quantity</span><span class="p">))</span>
+
+        <span class="k">assert</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">target_value</span><span class="p">),</span> <span class="s2">&quot;target_value has to be a finite number&quot;</span>
+        <span class="k">return</span> <span class="n">target_value</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+LineChart
+===========================================
+
+.. currentmodule:: qf_lib.plotting.charts.line_chart
+
+.. autoclass:: LineChart
+	:show-inheritance:
+	:autosummary:
+	:members:

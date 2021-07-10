@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.backtesting.signals.signal &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.backtesting.signals.signal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.backtesting.signals.signal</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+
+
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Objects of this class are used in the portfolio construction process. They are returned by AlphaModels to</span>
+<span class="sd">    determine the suggested trend direction as well as its strength</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ticker: Ticker</span>
+<span class="sd">        Ticker for which the signal was generated</span>
+<span class="sd">    suggested_exposure: Exposure</span>
+<span class="sd">        A value of type Exposure which describes the move suggested by a specific AlphaModel - SHORT, LONG or OUT</span>
+<span class="sd">    fraction_at_risk: float</span>
+<span class="sd">        A percentage value which determines the risk factor for an AlphaModel and a specified Ticker, may be used</span>
+<span class="sd">        to calculate the position size.</span>
+<span class="sd">        For example: Value of 0.02 means that we should place a Stop Loss 2% below the latest available</span>
+<span class="sd">        price of the instrument. This value should always be positive</span>
+<span class="sd">    last_available_price: Optional[float]</span>
+<span class="sd">        The last price that was available at the time of generating the signal</span>
+<span class="sd">    confidence: float</span>
+<span class="sd">        A float value in range [0;1] which describes the trust level for the AlphaModel in a current situation.</span>
+<span class="sd">        By default set to 1.0 (maximum)</span>
+<span class="sd">    expected_move: float</span>
+<span class="sd">        A percentage value which determines an expected price change for the upcoming period, may by positive</span>
+<span class="sd">        (uptrend) or negative (downtrend) and the range is unlimited</span>
+<span class="sd">    symbol: Optional[str]</span>
+<span class="sd">        Symbol of the ticker (if None, the default value would be computed as the property ticker of the ticker).</span>
+<span class="sd">        E.g. for BloombergTicker(&quot;Example Equity&quot;) the symbol should be simply equal to &quot;Example Equity&quot; (so there</span>
+<span class="sd">        is no need to provide it). However, in case of e.g. BloombergFutureTicker(&quot;Example&quot;, &quot;Example{} Equity&quot;, 1, 1)</span>
+<span class="sd">        the symbol should point to the specific ticker that was used to generate the signal, e.g. &quot;ExampleZ9 Equity&quot;.</span>
+<span class="sd">        With ticker + symbol fields we are always able to track the exact ticker and contract that were used to generate</span>
+<span class="sd">        a signal.</span>
+<span class="sd">    alpha_model</span>
+<span class="sd">        reference to the alpha model that generated the signal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">suggested_exposure</span><span class="p">:</span> <span class="n">Exposure</span><span class="p">,</span> <span class="n">fraction_at_risk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">last_available_price</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">expected_move</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">symbol</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">alpha_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span> <span class="k">if</span> <span class="n">symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ticker</span><span class="o">.</span><span class="n">ticker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">=</span> <span class="n">suggested_exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_available_price</span> <span class="o">=</span> <span class="n">last_available_price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_move</span> <span class="o">=</span> <span class="n">expected_move</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fraction_at_risk</span> <span class="o">=</span> <span class="n">fraction_at_risk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha_model</span> <span class="o">=</span> <span class="n">alpha_model</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Signal</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_move</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fraction_at_risk</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alpha_model</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">expected_move</span><span class="p">,</span>
+                                      <span class="n">other</span><span class="o">.</span><span class="n">fraction_at_risk</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">alpha_model</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Signal </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Ticker:             </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Suggested Exposure: </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Confidence:         </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Expected Move:      </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Fraction at Risk:   </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Alpha Model:        </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">suggested_exposure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                                                 <span class="bp">self</span><span class="o">.</span><span class="n">expected_move</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fraction_at_risk</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_model</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

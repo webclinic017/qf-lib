@@ -1,0 +1,9 @@
+HistogramChart
+=====================================================
+
+.. currentmodule:: qf_lib.plotting.charts.histogram_chart
+
+.. autoclass:: HistogramChart
+	:show-inheritance:
+	:autosummary:
+	:members:

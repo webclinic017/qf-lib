@@ -1,0 +1,9 @@
+PresetDataProvider
+=============================================================
+
+.. currentmodule:: qf_lib.data_providers.preset_data_provider
+
+.. autoclass:: PresetDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

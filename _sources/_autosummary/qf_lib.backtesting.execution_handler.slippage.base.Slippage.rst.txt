@@ -1,0 +1,9 @@
+Slippage
+===========================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.slippage.base
+
+.. autoclass:: Slippage
+	:show-inheritance:
+	:autosummary:
+	:members:

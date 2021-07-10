@@ -1,0 +1,9 @@
+Portfolio
+================================================
+
+.. currentmodule:: qf_lib.backtesting.portfolio.portfolio
+
+.. autoclass:: Portfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

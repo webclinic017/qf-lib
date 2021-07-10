@@ -1,0 +1,6 @@
+average_true_range
+=======================================================================
+
+.. currentmodule:: qf_lib.common.utils.miscellaneous.average_true_range
+
+.. autofunction:: average_true_range

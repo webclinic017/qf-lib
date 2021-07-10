@@ -1,0 +1,9 @@
+Portfolio
+==================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.portfolio
+
+.. autoclass:: Portfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

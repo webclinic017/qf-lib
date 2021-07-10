@@ -1,0 +1,9 @@
+AbstractDocument
+=========================================================
+
+.. currentmodule:: qf_lib.analysis.common.abstract_document
+
+.. autoclass:: AbstractDocument
+	:show-inheritance:
+	:autosummary:
+	:members:

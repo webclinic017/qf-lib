@@ -1,0 +1,9 @@
+ExposureGenerator
+======================================================================
+
+.. currentmodule:: qf_lib.analysis.exposure_analysis.exposure_generator
+
+.. autoclass:: ExposureGenerator
+	:show-inheritance:
+	:autosummary:
+	:members:

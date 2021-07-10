@@ -1,0 +1,9 @@
+VolatilityForecast
+=====================================================================
+
+.. currentmodule:: qf_lib.common.utils.volatility.volatility_forecast
+
+.. autoclass:: VolatilityForecast
+	:show-inheritance:
+	:autosummary:
+	:members:

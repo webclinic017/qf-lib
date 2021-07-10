@@ -1,0 +1,9 @@
+SquareRootMarketImpactSlippage
+===============================================================================================================
+
+.. currentmodule:: qf_lib.backtesting.execution_handler.slippage.square_root_market_impact_slippage
+
+.. autoclass:: SquareRootMarketImpactSlippage
+	:show-inheritance:
+	:autosummary:
+	:members:

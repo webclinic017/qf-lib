@@ -1,0 +1,9 @@
+MaxExcessReturnPortfolio
+===================================================================================================
+
+.. currentmodule:: qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio
+
+.. autoclass:: MaxExcessReturnPortfolio
+	:show-inheritance:
+	:autosummary:
+	:members:

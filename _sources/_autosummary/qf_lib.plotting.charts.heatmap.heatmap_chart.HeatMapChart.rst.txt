@@ -1,0 +1,9 @@
+HeatMapChart
+=========================================================
+
+.. currentmodule:: qf_lib.plotting.charts.heatmap.heatmap_chart
+
+.. autoclass:: HeatMapChart
+	:show-inheritance:
+	:autosummary:
+	:members:

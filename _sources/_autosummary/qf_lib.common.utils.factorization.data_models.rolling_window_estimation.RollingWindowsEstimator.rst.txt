@@ -1,0 +1,9 @@
+RollingWindowsEstimator
+===============================================================================================
+
+.. currentmodule:: qf_lib.common.utils.factorization.data_models.rolling_window_estimation
+
+.. autoclass:: RollingWindowsEstimator
+	:show-inheritance:
+	:autosummary:
+	:members:

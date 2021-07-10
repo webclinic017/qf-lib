@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.exposure_analysis.exposure_generator &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.exposure_analysis.exposure_generator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.exposure_analysis.exposure_generator</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.data_cleaner</span> <span class="kn">import</span> <span class="n">DataCleaner</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+
+
+<div class="viewcode-block" id="ExposureGenerator"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator">[docs]</a><span class="k">class</span> <span class="nc">ExposureGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to generate exposure data based on provided regressors tickers</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        settings of the project</span>
+<span class="sd">    data_provider: DataProvider</span>
+<span class="sd">        DataProvider which provides data both for the tickers and regressors</span>
+<span class="sd">    contract_ticker_mapper: ContractTickerMapper</span>
+<span class="sd">        object mapping contracts to tickers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">,</span> <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_provider</span> <span class="o">=</span> <span class="n">data_provider</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span> <span class="o">=</span> <span class="n">contract_ticker_mapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions_history</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_nav_history</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sector_exposure_tickers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor_exposure_tickers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExposureGenerator.set_positions_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.set_positions_history">[docs]</a>    <span class="k">def</span> <span class="nf">set_positions_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions_history</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the positions history with defined frequency sampling</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        positions_history: QFDataFrame</span>
+<span class="sd">            QFDataFrame containing summary of the positions in the portfolio for each day</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            Data frequency. Default: Frequency.MONTHLY</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MONTHLY</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positions_history</span> <span class="o">=</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> sampling is not implemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frequency</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ExposureGenerator.set_portfolio_nav_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.set_portfolio_nav_history">[docs]</a>    <span class="k">def</span> <span class="nf">set_portfolio_nav_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portfolio_eod_series</span><span class="p">:</span> <span class="n">PricesSeries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the timeseries used to normalize exposure</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        portfolio_eod_series: PricesSeries</span>
+<span class="sd">            timeseries of value of the portfolio expressed in currency units</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_nav_history</span> <span class="o">=</span> <span class="n">portfolio_eod_series</span></div>
+
+<div class="viewcode-block" id="ExposureGenerator.set_sector_exposure_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.set_sector_exposure_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector_exposure_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector_exposure_tickers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets sector exposure tickers</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sector_exposure_tickers: List[Ticker]</span>
+<span class="sd">            List of sector exposure tickers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sector_exposure_tickers</span> <span class="o">=</span> <span class="n">sector_exposure_tickers</span></div>
+
+<div class="viewcode-block" id="ExposureGenerator.set_factor_exposure_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.set_factor_exposure_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">set_factor_exposure_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_exposure_tickers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets factor exposure tickers</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        factor_exposure_tickers: List[Ticker]</span>
+<span class="sd">            List of factor exposure tickers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor_exposure_tickers</span> <span class="o">=</span> <span class="n">factor_exposure_tickers</span></div>
+
+<div class="viewcode-block" id="ExposureGenerator.get_sector_exposure"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.get_sector_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">get_sector_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regression_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method used to generate sector-related coefficients of regressors defined in BacktestTradingSession</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        regression_len: int</span>
+<span class="sd">            Length of history taken for each regression in months. It is used to determine the coefficients</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame</span>
+<span class="sd">            Contains computed coefficients for all available sector regressors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions_history</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_nav_history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;History data not provided&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sector_exposure_tickers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sector exposure tickers not provided&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">sector_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_exposure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sector_exposure_tickers</span><span class="p">,</span> <span class="n">regression_len</span><span class="p">)</span>
+        <span class="n">sector_df</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Sector exposure&quot;</span>
+        <span class="k">return</span> <span class="n">sector_df</span></div>
+
+<div class="viewcode-block" id="ExposureGenerator.get_factor_exposure"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.get_factor_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">get_factor_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regression_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method used to generate factor-related coefficients of regressors defined in BacktestTradingSession</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        regression_len: int</span>
+<span class="sd">            Length of history taken for each regression in months. It is used to determine the coefficients</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame</span>
+<span class="sd">            Contains computed coefficients for all available factor regressors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions_history</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_nav_history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;History data not provided&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor_exposure_tickers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Factor exposure tickers not provided&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">factor_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_exposure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_factor_exposure_tickers</span><span class="p">,</span> <span class="n">regression_len</span><span class="p">)</span>
+        <span class="n">factor_df</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Factor exposure&quot;</span>
+        <span class="k">return</span> <span class="n">factor_df</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regressors_tickers</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">regression_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">portfolio_date</span><span class="p">,</span> <span class="n">positions</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions_history</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="n">positions_tickers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">positions</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">exposure</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">total_exposure</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">])</span>
+            <span class="n">portfolio_net_liquidation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_nav_history</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">portfolio_date</span><span class="p">)</span>
+            <span class="n">positions_allocation</span> <span class="o">=</span> <span class="n">exposure</span> <span class="o">/</span> <span class="n">portfolio_net_liquidation</span>
+            <span class="n">from_date</span> <span class="o">=</span> <span class="n">portfolio_date</span> <span class="o">-</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">months</span><span class="o">=</span><span class="n">regression_len</span><span class="p">)</span>
+            <span class="n">coefficients</span><span class="p">,</span> <span class="n">current_regressors_tickers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coefficients_and_current_regressors_tickers</span><span class="p">(</span>
+                <span class="n">regressors_tickers</span><span class="p">,</span> <span class="n">positions_tickers</span><span class="p">,</span> <span class="n">positions_allocation</span><span class="p">,</span> <span class="n">from_date</span><span class="p">,</span>
+                <span class="n">portfolio_date</span><span class="p">)</span>
+
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QFDataFrame</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">current_regressors_tickers</span><span class="p">)},</span>
+                                       <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">portfolio_date</span><span class="p">]))</span>
+
+        <span class="c1"># remove missing regressors</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_get_coefficients_and_current_regressors_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regressors_tickers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span> <span class="n">positions_tickers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span>
+                                                         <span class="n">positions_allocation</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">from_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+                                                         <span class="n">to_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">positions_tickers</span><span class="p">,</span> <span class="o">*</span><span class="n">regressors_tickers</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_provider</span><span class="o">.</span><span class="n">get_price</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">,</span> <span class="n">from_date</span><span class="p">,</span> <span class="n">to_date</span><span class="p">)</span><span class="o">.</span><span class="n">to_simple_returns</span><span class="p">()</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">DataCleaner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">clean_data</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">proxy_using_value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">positions_returns</span> <span class="o">=</span> <span class="n">clean_data</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">positions_tickers</span><span class="p">,</span>
+                                               <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># we expect the same dim as positions_allocation series</span>
+        <span class="n">regressors_returns</span> <span class="o">=</span> <span class="n">clean_data</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">regressors_tickers</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                                                   <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># missing regressors should be removed</span>
+        <span class="n">portfolio_returns</span> <span class="o">=</span> <span class="n">positions_returns</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">positions_allocation</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coefficients</span><span class="p">(</span><span class="n">regressors_returns</span><span class="p">,</span> <span class="n">portfolio_returns</span><span class="p">),</span> <span class="n">regressors_returns</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="k">def</span> <span class="nf">_get_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

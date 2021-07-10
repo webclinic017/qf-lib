@@ -1,0 +1,9 @@
+DataProvider
+================================================
+
+.. currentmodule:: qf_lib.data_providers.data_provider
+
+.. autoclass:: DataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

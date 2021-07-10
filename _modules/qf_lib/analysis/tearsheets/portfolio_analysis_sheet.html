@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.analysis.tearsheets.portfolio_analysis_sheet &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.analysis.tearsheets.portfolio_analysis_sheet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.analysis.tearsheets.portfolio_analysis_sheet</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">Timedelta</span>
+<span class="kn">from</span> <span class="nn">pandas.tseries.frequencies</span> <span class="kn">import</span> <span class="n">to_offset</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.common.abstract_document</span> <span class="kn">import</span> <span class="n">AbstractDocument</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.error_handling</span> <span class="kn">import</span> <span class="n">ErrorHandling</span>
+<span class="kn">from</span> <span class="nn">qf_lib.analysis.trade_analysis.trades_generator</span> <span class="kn">import</span> <span class="n">TradesGenerator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract</span> <span class="kn">import</span> <span class="n">Contract</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.monitoring.backtest_result</span> <span class="kn">import</span> <span class="n">BacktestResult</span>
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.portfolio.backtest_position</span> <span class="kn">import</span> <span class="n">BacktestPositionSummary</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.chart</span> <span class="kn">import</span> <span class="n">ChartElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.df_table</span> <span class="kn">import</span> <span class="n">DFTable</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.heading</span> <span class="kn">import</span> <span class="n">HeadingElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.new_page</span> <span class="kn">import</span> <span class="n">NewPageElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.element.paragraph</span> <span class="kn">import</span> <span class="n">ParagraphElement</span>
+<span class="kn">from</span> <span class="nn">qf_lib.documents_utils.document_exporting.pdf_exporter</span> <span class="kn">import</span> <span class="n">PDFExporter</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_label_decorator</span> <span class="kn">import</span> <span class="n">AxesLabelDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.axes_position_decorator</span> <span class="kn">import</span> <span class="n">AxesPositionDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+
+
+<div class="viewcode-block" id="PortfolioAnalysisSheet"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet.html#qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet">[docs]</a><span class="nd">@ErrorHandling</span><span class="o">.</span><span class="n">class_error_logging</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">PortfolioAnalysisSheet</span><span class="p">(</span><span class="n">AbstractDocument</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a PDF containing a visual representation of portfolio changes over time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    settings: Settings</span>
+<span class="sd">        necessary settings</span>
+<span class="sd">    pdf_exporter: PDFExporter</span>
+<span class="sd">        used to export the document to PDF</span>
+<span class="sd">    backtest_result: BacktestResult</span>
+<span class="sd">        used to access all trading records</span>
+<span class="sd">    title: str</span>
+<span class="sd">        title of the document, will be a part of the filename. Do not use special characters.</span>
+<span class="sd">    generate_pnl_chart_per_ticker: bool</span>
+<span class="sd">        If true, adds pnl chart for each asset traded in the portfolio</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">:</span> <span class="n">PDFExporter</span><span class="p">,</span> <span class="n">backtest_result</span><span class="p">:</span> <span class="n">BacktestResult</span><span class="p">,</span>
+                 <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Portfolio Analysis Sheet&quot;</span><span class="p">,</span> <span class="n">generate_pnl_chart_per_ticker</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">pdf_exporter</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span> <span class="o">=</span> <span class="n">backtest_result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.915</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">)</span>  <span class="c1"># (left, bottom, width, height)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trades_generator</span> <span class="o">=</span> <span class="n">TradesGenerator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_pnl_chart_per_ticker</span> <span class="o">=</span> <span class="n">generate_pnl_chart_per_ticker</span>
+
+    <span class="k">def</span> <span class="nf">build_document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_header</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ParagraphElement</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_leverage_chart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_assets_number_in_portfolio_chart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_concentration_of_portfolio_chart</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_gini_coefficient_chart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_number_of_transactions_chart</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of transactions per day&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_number_of_transactions_chart</span><span class="p">(</span><span class="s1">&#39;30D&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of transactions per month&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_number_of_transactions_chart</span><span class="p">(</span><span class="s1">&#39;365D&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of transactions per year&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_volume_traded</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_avg_time_in_the_market_per_ticker</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_performance_statistics</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_add_leverage_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lev_chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_leverage_chart</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">leverage_series</span><span class="p">())</span>
+
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span><span class="p">)</span>
+        <span class="n">lev_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Add y label</span>
+        <span class="n">label_decorator</span> <span class="o">=</span> <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Leverage&quot;</span><span class="p">)</span>
+        <span class="n">lev_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">label_decorator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">lev_chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_assets_number_in_portfolio_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">rotate_x_axis</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;legend_decorator&quot;</span><span class="p">)</span>
+
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+        <span class="n">positions_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">positions_history</span><span class="p">()</span>
+
+        <span class="c1"># Find all not NaN values (not NaN values indicate that the position was open for this contract at that time)</span>
+        <span class="c1"># and count their number for each row (for each of the dates)</span>
+        <span class="n">number_of_contracts</span> <span class="o">=</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">number_of_contracts_decorator</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">number_of_contracts</span><span class="p">)</span>
+
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">number_of_contracts_decorator</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">number_of_contracts_decorator</span><span class="p">,</span> <span class="s2">&quot;Contracts&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Count number of assets in the portfolio (if on two contracts from same future family exist in the same time,</span>
+        <span class="c1"># e.g. during rolling day, in the portfolio, they are counted as one asset)</span>
+        <span class="k">def</span> <span class="nf">contract_to_ticker</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Contract</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">contract_ticker_mapper</span><span class="o">.</span> \
+                <span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">strictly_to_specific_ticker</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">contract_to_ticker</span><span class="p">)</span>
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="p">(</span>
+            <span class="c1"># For each asset, group all of the corresponding columns (each of which corresponds to one contract),</span>
+            <span class="c1"># and check if at any given timestamp the &quot;value&quot; of any of the contracts was different than None - this</span>
+            <span class="c1"># indicates that at this point of time a position concerning the given asset was open in the portfolio</span>
+            <span class="c1"># (which in the resulting series will be denoted as 1, otherwise - 0, so that it will be possible to</span>
+            <span class="c1"># sum positions of all open assets at any given point of time)</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="p">))</span>
+
+        <span class="n">number_of_assets</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">number_of_assets_decorator</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">number_of_assets</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">number_of_assets_decorator</span><span class="p">)</span>
+        <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">number_of_assets_decorator</span><span class="p">,</span> <span class="s2">&quot;Assets&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add title</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Number of assets in the portfolio&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Add legend</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+
+        <span class="c1"># Add y label</span>
+        <span class="n">label_decorator</span> <span class="o">=</span> <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Number of contracts / assets&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">label_decorator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_line_chart_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_line_chart</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_concentration_of_portfolio_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_assets_numbers</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">rotate_x_axis</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Define a legend</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;legend_decorator&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add y label</span>
+        <span class="n">label_decorator</span> <span class="o">=</span> <span class="n">AxesLabelDecorator</span><span class="p">(</span><span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Mean total exposure of top assets&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">label_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Add top asset contribution</span>
+        <span class="n">positions_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">positions_history</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No positions found in positions history&quot;</span><span class="p">)</span>
+
+        <span class="n">positions_history</span> <span class="o">=</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">total_exposure</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">BacktestPositionSummary</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Map all the single contracts onto tickers (including future tickers) and take the maximal total exposure for</span>
+        <span class="c1"># each of the groups - in case if two contracts for a single asset will be included in the open positions in</span>
+        <span class="c1"># the portfolio at any point of time, only one (with higher total exposure) will be considered while generating</span>
+        <span class="c1"># the top assets plot</span>
+        <span class="k">def</span> <span class="nf">contract_to_ticker</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Contract</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">contract_ticker_mapper</span><span class="o">.</span> \
+                <span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">strictly_to_specific_ticker</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">positions_history</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">contract_to_ticker</span><span class="p">)</span>
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">assets_number</span> <span class="ow">in</span> <span class="n">top_assets_numbers</span><span class="p">:</span>
+            <span class="c1"># For each date (row), find the top_assets largest assets and compute the mean value of their market value</span>
+            <span class="n">top_assets_mean_values</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">group</span><span class="p">:</span> <span class="n">group</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">assets_number</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+            <span class="c1"># Divide the computed mean values by the portfolio value, for each of the dates</span>
+            <span class="n">top_assets_percentage_value</span> <span class="o">=</span> <span class="n">top_assets_mean_values</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">portfolio_eod_series</span><span class="p">()</span>
+
+            <span class="n">concentration_top_asset</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">top_assets_percentage_value</span><span class="p">)</span>
+            <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">concentration_top_asset</span><span class="p">)</span>
+
+            <span class="c1"># Add to legend</span>
+            <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">concentration_top_asset</span><span class="p">,</span> <span class="s2">&quot;TOP </span><span class="si">{}</span><span class="s2"> assets&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">assets_number</span><span class="p">))</span>
+
+        <span class="c1"># Add title</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Concentration of assets&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Add legend</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_number_of_transactions_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pandas_freq</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">transactions</span>
+        <span class="n">transactions_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">transactions</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">time</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transactions series is empty&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Compute the number of transactions per day</span>
+        <span class="n">transactions_series</span> <span class="o">=</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="o">.</span><span class="n">to_pandas_freq</span><span class="p">())</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+        <span class="c1"># Aggregate the transactions using the given frequency</span>
+        <span class="k">if</span> <span class="n">to_offset</span><span class="p">(</span><span class="n">pandas_freq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">to_offset</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">):</span>
+            <span class="n">transactions_series</span> <span class="o">=</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">pandas_freq</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="c1"># Cut the non complete beginning of the outputs (e.g. in case of 30 days window, cut the first 30 days)</span>
+            <span class="n">start_date</span> <span class="o">=</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">transactions_series</span> <span class="o">=</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span> <span class="o">+</span> <span class="n">Timedelta</span><span class="p">(</span><span class="n">pandas_freq</span><span class="p">):]</span>
+            <span class="k">if</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="c1"># The available time period is too short to compute the statistics with the provided frequency</span>
+                <span class="k">return</span>
+
+        <span class="k">elif</span> <span class="n">to_offset</span><span class="p">(</span><span class="n">pandas_freq</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">to_offset</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The provided pandas frequency can not be higher than the daily frequency&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_line_chart_element</span><span class="p">(</span><span class="n">transactions_series</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_volume_traded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">transactions</span>
+        <span class="n">transactions_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">transactions</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">time</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">transactions_series</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transactions series is empty&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add the chart containing the volume traded in terms of quantity</span>
+        <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transactions_series</span><span class="p">]</span>
+        <span class="n">quantities_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">quantities</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">transactions_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># Aggregate the quantities for each day</span>
+        <span class="n">quantities_series</span> <span class="o">=</span> <span class="n">quantities_series</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="o">.</span><span class="n">to_pandas_freq</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="c1"># Generate chart and add it to the document</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_line_chart_element</span><span class="p">(</span><span class="n">quantities_series</span><span class="p">,</span> <span class="s2">&quot;Volume traded per day [in contracts]&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add the chart containing the exposure of the traded assets</span>
+        <span class="n">total_exposures</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="n">t</span><span class="o">.</span><span class="n">contract</span><span class="o">.</span><span class="n">contract_size</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transactions_series</span><span class="p">]</span>
+        <span class="n">total_exposures_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">total_exposures</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">transactions_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">total_exposures_series</span> <span class="o">=</span> <span class="n">total_exposures_series</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="o">.</span><span class="n">to_pandas_freq</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="c1"># Generate chart and add it to the document</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_line_chart_element</span><span class="p">(</span><span class="n">total_exposures_series</span><span class="p">,</span> <span class="s2">&quot;Volume traded per day [notional in currency units]&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_gini_coefficient_chart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">(</span><span class="n">rotate_x_axis</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">position_decorator</span> <span class="o">=</span> <span class="n">AxesPositionDecorator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_axis_position</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">position_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Get the assets history</span>
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">positions_history</span><span class="p">()</span>
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">total_exposure</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">BacktestPositionSummary</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">gini</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+            <span class="c1"># Function computing the Gini coefficients for each row</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+            <span class="n">ranks</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">mean_value</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">group</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ranks</span> <span class="o">-</span> <span class="n">samples</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">group</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">samples</span> <span class="o">*</span> <span class="n">mean_value</span><span class="p">)</span>
+
+        <span class="n">assets_history</span> <span class="o">=</span> <span class="n">assets_history</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">gini</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Gini &quot;</span>
+                                                                                                       <span class="s2">&quot;coefficient&quot;</span><span class="p">)</span>
+
+        <span class="n">assets_history_decorator</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">assets_history</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">assets_history_decorator</span><span class="p">)</span>
+
+        <span class="c1"># Add title</span>
+        <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="s2">&quot;Concentration of assets - Gini coefficient&quot;</span><span class="p">)</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_ticker_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contract</span><span class="p">:</span> <span class="n">Contract</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">ticker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">contract_ticker_mapper</span><span class="o">.</span><span class="n">contract_to_ticker</span><span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ticker</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">_add_avg_time_in_the_market_per_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the total time in the market per ticker (separately for long and short positions) in minutes</span>
+<span class="sd">        and divide it by the total duration of the backtest in minutes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Average time in the market per asset&quot;</span><span class="p">))</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">start_date</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">backtest_duration</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># backtest duration in min</span>
+
+        <span class="n">closed_positions_time</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ticker_name</span><span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">contract</span><span class="p">()),</span> <span class="n">position</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">direction</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">closed_positions</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="n">open_positions_time</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ticker_name</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">position</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">direction</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">open_positions_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">]</span>
+
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">closed_positions_time</span> <span class="o">+</span> <span class="n">open_positions_time</span><span class="p">,</span>
+                                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">,</span> <span class="s2">&quot;Start time&quot;</span><span class="p">,</span> <span class="s2">&quot;End time&quot;</span><span class="p">,</span> <span class="s2">&quot;Position direction&quot;</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">compute_duration</span><span class="p">(</span><span class="n">grouped_rows</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">([])</span><span class="o">.</span><span class="n">union_many</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Start time&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;End time&quot;</span><span class="p">],</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grouped_rows</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()])</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">,</span> <span class="s2">&quot;Position direction&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">compute_duration</span><span class="p">)</span> \
+            <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;Duration (minutes)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">positions</span><span class="p">[</span><span class="s2">&quot;Duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="s2">&quot;Duration (minutes)&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">backtest_duration</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Position direction&quot;</span><span class="p">,</span>
+                                          <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Duration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;Short&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;Long&quot;</span><span class="p">})</span>
+
+        <span class="c1"># Add default 0 column in case if only short / long positions occurred in the backtest</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Short&quot;</span><span class="p">,</span> <span class="s2">&quot;Long&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">positions</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">positions</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">positions</span><span class="p">[</span><span class="s2">&quot;Out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">positions</span><span class="p">[</span><span class="s2">&quot;Long&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">positions</span><span class="p">[</span><span class="s2">&quot;Short&quot;</span><span class="p">]</span>
+        <span class="n">positions</span><span class="p">[[</span><span class="s2">&quot;Long&quot;</span><span class="p">,</span> <span class="s2">&quot;Short&quot;</span><span class="p">,</span> <span class="s2">&quot;Out&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[[</span><span class="s2">&quot;Long&quot;</span><span class="p">,</span> <span class="s2">&quot;Short&quot;</span><span class="p">,</span> <span class="s2">&quot;Out&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:.2%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">DFTable</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">css_classes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="s1">&#39;left-align&#39;</span><span class="p">])</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_columns_classes</span><span class="p">([</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">],</span> <span class="s1">&#39;wide-column&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_performance_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each ticker computes its overall performance (PnL of short positions, PnL of long positions, total PnL).</span>
+<span class="sd">        It generates a table containing final PnL values for each of the ticker nad optionally plots the performance</span>
+<span class="sd">        throughout the backtest.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">closed_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">closed_positions</span><span class="p">()</span>
+        <span class="n">closed_positions_pnl</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ticker_name</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">contract</span><span class="p">()),</span> <span class="n">p</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">direction</span><span class="p">(),</span> <span class="n">p</span><span class="o">.</span><span class="n">total_pnl</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">closed_positions</span><span class="p">],</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">,</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Direction&quot;</span><span class="p">,</span> <span class="s2">&quot;Realised PnL&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">closed_positions_pnl</span> <span class="o">=</span> <span class="n">closed_positions_pnl</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get all open positions history</span>
+        <span class="n">open_positions_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtest_result</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">positions_history</span><span class="p">()</span>
+        <span class="n">open_positions_history</span> <span class="o">=</span> <span class="n">open_positions_history</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+            <span class="n">id_vars</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">value_vars</span><span class="o">=</span><span class="n">open_positions_history</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;Contract&#39;</span><span class="p">,</span>
+            <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Position summary&#39;</span><span class="p">)</span>
+        <span class="n">open_positions_pnl</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;Tickers name&quot;</span><span class="p">:</span> <span class="n">open_positions_history</span><span class="p">[</span><span class="s2">&quot;Contract&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">contract</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_name</span><span class="p">(</span><span class="n">contract</span><span class="p">)),</span>
+            <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="n">open_positions_history</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;Direction&quot;</span><span class="p">:</span> <span class="n">open_positions_history</span><span class="p">[</span><span class="s2">&quot;Position summary&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">direction</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">BacktestPositionSummary</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;Total PnL of open position&quot;</span><span class="p">:</span> <span class="n">open_positions_history</span><span class="p">[</span><span class="s2">&quot;Position summary&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">total_pnl</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">BacktestPositionSummary</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">})</span>
+
+        <span class="n">all_positions_pnl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">closed_positions_pnl</span><span class="p">,</span> <span class="n">open_positions_pnl</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">performance_dicts_series</span> <span class="o">=</span> <span class="n">all_positions_pnl</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_performance_series_for_ticker</span><span class="p">)</span>
+        <span class="n">performance_df</span> <span class="o">=</span> <span class="n">QFDataFrame</span><span class="p">(</span><span class="n">performance_dicts_series</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">performance_dicts_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Performance of each asset&quot;</span><span class="p">))</span>
+        <span class="n">final_performance</span> <span class="o">=</span> <span class="n">performance_df</span><span class="o">.</span> \
+            <span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">pnl_series</span><span class="p">:</span> <span class="n">pnl_series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pnl_series</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Overall performance&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span> \
+            <span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:,.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="o">.</span> \
+            <span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">DFTable</span><span class="p">(</span><span class="n">final_performance</span><span class="p">,</span> <span class="n">css_classes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="s1">&#39;left-align&#39;</span><span class="p">])</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_columns_classes</span><span class="p">([</span><span class="s2">&quot;Tickers name&quot;</span><span class="p">],</span> <span class="s1">&#39;wide-column&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+        <span class="c1"># Add performance plots</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_pnl_chart_per_ticker</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">NewPageElement</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span>
+                <span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Performance of each asset during the whole backtest&quot;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">ticker_name</span><span class="p">,</span> <span class="n">performance</span> <span class="ow">in</span> <span class="n">performance_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_plot_ticker_performance</span><span class="p">(</span><span class="n">ticker_name</span><span class="p">,</span> <span class="n">performance</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_performance_series_for_ticker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+        <span class="n">time_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Total PnL of open position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()][</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">())</span>
+
+        <span class="n">plot_lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;Long positions&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="p">(</span><span class="s2">&quot;Short positions&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="p">(</span><span class="s2">&quot;Overall performance&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="n">return_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">directions</span> <span class="ow">in</span> <span class="n">plot_lines</span><span class="p">:</span>
+            <span class="n">open_positions_pnl</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;Total PnL of open position&quot;</span><span class="p">,</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Direction&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="n">open_positions_pnl</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">open_positions_pnl</span><span class="p">[</span><span class="s2">&quot;Direction&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">directions</span><span class="p">),</span> <span class="s1">&#39;Total PnL of open position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">open_positions_pnl</span> <span class="o">=</span> <span class="n">open_positions_pnl</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Total PnL of open position&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span>
+
+            <span class="n">closed_positions_pnl</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;Realised PnL&quot;</span><span class="p">,</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Direction&quot;</span><span class="p">]]</span>
+            <span class="n">closed_positions_pnl</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">closed_positions_pnl</span><span class="p">[</span><span class="s2">&quot;Direction&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">directions</span><span class="p">),</span> <span class="s1">&#39;Realised PnL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">closed_positions_pnl</span> <span class="o">=</span> <span class="n">closed_positions_pnl</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Realised PnL&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span>
+            <span class="n">closed_positions_pnl</span><span class="p">[</span><span class="s2">&quot;Realised PnL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">closed_positions_pnl</span><span class="p">[</span><span class="s2">&quot;Realised PnL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+            <span class="n">pnl_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">closed_positions_pnl</span><span class="p">[</span><span class="s2">&quot;Realised PnL&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">open_positions_pnl</span><span class="p">[</span><span class="s1">&#39;Total PnL of open position&#39;</span><span class="p">],</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">time_index</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">return_data</span><span class="p">[</span><span class="n">title</span><span class="p">]</span> <span class="o">=</span> <span class="n">pnl_series</span>
+
+        <span class="k">return</span> <span class="n">return_data</span>
+
+    <span class="k">def</span> <span class="nf">_plot_ticker_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">performance</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">HeadingElement</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;PnL of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ticker_name</span><span class="p">)))</span>
+
+        <span class="n">chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+        <span class="n">legend</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;legend_decorator&quot;</span><span class="p">)</span>
+        <span class="n">line_colors</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">((</span><span class="s2">&quot;#add8e6&quot;</span><span class="p">,</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#fa8072&quot;</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">pnl_series</span> <span class="ow">in</span> <span class="n">performance</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="c1"># Plot series only in case if it consist anything else then 0</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pnl_series</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">data_series</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">pnl_series</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="nb">next</span><span class="p">(</span><span class="n">line_colors</span><span class="p">)})</span>
+                <span class="n">legend</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data_series</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+                <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data_series</span><span class="p">)</span>
+
+        <span class="n">chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">ChartElement</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_image_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="c1"># Set the style for the report</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">([</span><span class="s1">&#39;tearsheet&#39;</span><span class="p">])</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">-%H%M Portfolio Analysis Sheet.pdf&quot;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdf_exporter</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="p">],</span> <span class="n">report_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

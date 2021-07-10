@@ -1,0 +1,9 @@
+QFDataFrame
+====================================================
+
+.. currentmodule:: qf_lib.containers.dataframe.qf_dataframe
+
+.. autoclass:: QFDataFrame
+	:show-inheritance:
+	:autosummary:
+	:members:

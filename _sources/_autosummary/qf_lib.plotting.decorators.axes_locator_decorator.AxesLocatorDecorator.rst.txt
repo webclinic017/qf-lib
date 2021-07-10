@@ -1,0 +1,9 @@
+AxesLocatorDecorator
+======================================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.axes_locator_decorator
+
+.. autoclass:: AxesLocatorDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

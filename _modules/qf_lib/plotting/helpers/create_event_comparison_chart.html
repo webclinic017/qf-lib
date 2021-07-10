@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.plotting.helpers.create_event_comparison_chart &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.plotting.helpers.create_event_comparison_chart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.plotting.helpers.create_event_comparison_chart</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.rebase_method</span> <span class="kn">import</span> <span class="n">RebaseMethod</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.charts.line_chart</span> <span class="kn">import</span> <span class="n">LineChart</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.data_element_decorator</span> <span class="kn">import</span> <span class="n">DataElementDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.legend_decorator</span> <span class="kn">import</span> <span class="n">LegendDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.line_decorators</span> <span class="kn">import</span> <span class="n">VerticalLineDecorator</span>
+<span class="kn">from</span> <span class="nn">qf_lib.plotting.decorators.title_decorator</span> <span class="kn">import</span> <span class="n">TitleDecorator</span>
+
+
+<div class="viewcode-block" id="create_event_comparison_chart"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart.html#qf_lib.plotting.helpers.create_event_comparison_chart.create_event_comparison_chart">[docs]</a><span class="k">def</span> <span class="nf">create_event_comparison_chart</span><span class="p">(</span>
+        <span class="n">series</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">event_dates_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">datetime</span><span class="p">],</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">samples_before</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">samples_after</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">rebase_method</span><span class="p">:</span> <span class="n">RebaseMethod</span> <span class="o">=</span> <span class="n">RebaseMethod</span><span class="o">.</span><span class="n">divide</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LineChart</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a new chart based on a line chart. The chart puts all events at date = 0 and than compares the evolution</span>
+<span class="sd">    of the series after the event date.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    series: QFSeries</span>
+<span class="sd">        Series usually with values of an index or level of interest rates</span>
+<span class="sd">    event_dates_list: Iterable[datetime]</span>
+<span class="sd">        A list specifying the dates of the events that we would like to compare. Each date will create</span>
+<span class="sd">        a new series in the chart</span>
+<span class="sd">    title: str</span>
+<span class="sd">        The title of the graph, specify ``None`` if you don&#39;t want the chart to show a title.</span>
+<span class="sd">    samples_before: int</span>
+<span class="sd">        Number of samples shown on the chart that are before the event date</span>
+<span class="sd">    samples_after: int</span>
+<span class="sd">        Number of samples after the event date that are plotted on the chart</span>
+<span class="sd">    rebase_method: RebaseMethod</span>
+<span class="sd">        Specifies the way in which the data is normalised at the date of the event.</span>
+
+<span class="sd">        - &#39;divide&#39; - will divide all the values by the value at the date of the event</span>
+<span class="sd">        - &#39;subtract&#39; - will subtract the value at the event from the whole sample</span>
+<span class="sd">        - &#39;none - will show the value as is (no rebasing).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    LineChart</span>
+<span class="sd">        The constructed ``LineChart``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create a chart</span>
+    <span class="n">line_chart</span> <span class="o">=</span> <span class="n">LineChart</span><span class="p">()</span>
+    <span class="n">legend_decorator</span> <span class="o">=</span> <span class="n">LegendDecorator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;legend&#39;</span><span class="p">)</span>
+
+    <span class="c1"># For each date create a rebased series with event date index = 0</span>
+    <span class="k">for</span> <span class="n">event_date</span> <span class="ow">in</span> <span class="n">event_dates_list</span><span class="p">:</span>
+        <span class="c1"># calculate the integer index of the beginning and end of the sample</span>
+        <span class="n">event_closest_date</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">event_date</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event_closest_date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="n">event_date_int_index</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">event_closest_date</span><span class="p">)</span>
+            <span class="n">start_index</span> <span class="o">=</span> <span class="n">event_date_int_index</span> <span class="o">-</span> <span class="n">samples_before</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="n">event_date_int_index</span> <span class="o">+</span> <span class="n">samples_after</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">end_index</span><span class="p">,</span> <span class="n">series</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+
+            <span class="c1"># to simplify the algorithm accept only samples that are within the series</span>
+            <span class="k">if</span> <span class="n">start_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">end_index</span> <span class="o">&lt;=</span> <span class="n">series</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
+                <span class="n">series_sample</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">start_index</span><span class="p">:</span><span class="n">end_index</span><span class="p">]</span>
+                <span class="n">value_at_event</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">asof</span><span class="p">(</span><span class="n">event_date</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">rebase_method</span> <span class="o">==</span> <span class="n">RebaseMethod</span><span class="o">.</span><span class="n">divide</span><span class="p">:</span>
+                    <span class="n">series_sample</span> <span class="o">=</span> <span class="n">series_sample</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">value_at_event</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">rebase_method</span> <span class="o">==</span> <span class="n">RebaseMethod</span><span class="o">.</span><span class="n">subtract</span><span class="p">:</span>
+                    <span class="n">series_sample</span> <span class="o">=</span> <span class="n">series_sample</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value_at_event</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">rebase_method</span> <span class="o">==</span> <span class="n">RebaseMethod</span><span class="o">.</span><span class="n">norebase</span><span class="p">:</span>
+                    <span class="n">series_sample</span> <span class="o">=</span> <span class="n">series_sample</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Incorrect rebase_method. Use &#39;divide&#39;, &#39;subtract&#39; or &#39;norebase&#39; &quot;</span><span class="p">)</span>
+
+                <span class="n">new_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">series_sample</span><span class="o">.</span><span class="n">count</span><span class="p">()))</span> <span class="o">-</span> <span class="n">samples_before</span>
+                <span class="n">reindexed_series</span> <span class="o">=</span> <span class="n">QFSeries</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">series_sample</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">new_index</span><span class="p">)</span>
+
+                <span class="n">data_element</span> <span class="o">=</span> <span class="n">DataElementDecorator</span><span class="p">(</span><span class="n">reindexed_series</span><span class="p">)</span>
+                <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">data_element</span><span class="p">)</span>
+
+                <span class="n">legend_decorator</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">data_element</span><span class="p">,</span> <span class="n">event_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Put vertical line at x = 0</span>
+    <span class="n">line_decorator</span> <span class="o">=</span> <span class="n">VerticalLineDecorator</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;vline&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">line_decorator</span><span class="p">)</span>
+
+    <span class="c1"># Create a title</span>
+    <span class="n">title_decorator</span> <span class="o">=</span> <span class="n">TitleDecorator</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">title_decorator</span><span class="p">)</span>
+
+    <span class="c1"># Add a legend.</span>
+    <span class="n">line_chart</span><span class="o">.</span><span class="n">add_decorator</span><span class="p">(</span><span class="n">legend_decorator</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">line_chart</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

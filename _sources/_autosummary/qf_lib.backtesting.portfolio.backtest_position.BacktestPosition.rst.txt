@@ -1,0 +1,9 @@
+BacktestPosition
+===============================================================
+
+.. currentmodule:: qf_lib.backtesting.portfolio.backtest_position
+
+.. autoclass:: BacktestPosition
+	:show-inheritance:
+	:autosummary:
+	:members:

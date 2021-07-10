@@ -1,0 +1,6 @@
+annualise_total_return
+=========================================================================
+
+.. currentmodule:: qf_lib.common.utils.returns.annualise_total_return
+
+.. autofunction:: annualise_total_return

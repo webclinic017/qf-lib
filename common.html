@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>common &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ExpirationDateField" href="_autosummary/qf_lib.common.enums.expiration_date_field.ExpirationDateField.html" />
+    <link rel="prev" title="BacktestTradingSessionBuilder" href="_autosummary/qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">common</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#enums">enums</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.enums.expiration_date_field.ExpirationDateField.html">ExpirationDateField</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.enums.frequency.Frequency.html">Frequency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.enums.price_field.PriceField.html">PriceField</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.broker_exceptions.BrokerException.html">BrokerException</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.broker_exceptions.OrderCancellingException.html">OrderCancellingException</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.future_contracts_exceptions.NoValidTickerException.html">NoValidTickerException</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#risk-parity-boxes">risk_parity_boxes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection.html">ChangeDirection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.html">RiskParityBoxes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory.html">RiskParityBoxesFactory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tickers">tickers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.Ticker.html">Ticker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.BloombergTicker.html">BloombergTicker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.HaverTicker.html">HaverTicker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.QuandlTicker.html">QuandlTicker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.CcyTicker.html">CcyTicker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#timeseries-analysis">timeseries_analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis.html">ReturnAttributionAnalysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html">RiskContributionAnalysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utils">utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html">AnalyticalConeBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html">AnalyticalCone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS.html">AnalyticalConeOOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.date_format.DateFormat.html">DateFormat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.Timer.html">Timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.RealTimer.html">RealTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.SettableTimer.html">SettableTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.data_model.DataModel.html">DataModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput.html">DataModelInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html">RollingWindowsEstimator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter.html">DataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html">RollingDataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html">ElasticNetFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified.html">ElasticNetFactorsIdentifierSimplified</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html">StepwiseFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.manager.FactorizationManager.html">FactorizationManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html">Method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats.html">InSampleReturnStats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html">DriftIndependentVolatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.html">VolatilityForecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html">VolatilityManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.data_cleaner.DataCleaner.html">DataCleaner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.close_open_gap.close_open_gap.close_open_gap.html">close_open_gap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.common_start_and_end.get_common_start_and_end.html">get_common_start_and_end</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.date_to_string.date_to_str.html">date_to_str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.get_quarter.get_quarter.html">get_quarter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.get_values_common_dates.get_values_for_common_dates.html">get_values_for_common_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.iso_to_gregorian.iso_to_gregorian.html">iso_to_gregorian</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.string_to_date.str_to_date.html">str_to_date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.to_days.to_days.html">to_days</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt.html">annualise_with_sqrt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.average_true_range.average_true_range.html">average_true_range</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.consecutive_duplicates.drop_consecutive_duplicates.html">drop_consecutive_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.function_name.get_function_name.html">get_function_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.kelly.kelly.html">kelly</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.kelly.kelly_binary.html">kelly_binary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.periods_list.periods_list_from_bool_series.html">periods_list_from_bool_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.to_list_conversion.convert_to_list.html">convert_to_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.volume_weighted_average_price.volume_weighted_average_price.html">volume_weighted_average_price</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.numberutils.is_finite_number.is_finite_number.html">is_finite_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.calmar_ratio.calmar_ratio.html">calmar_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.gain_to_pain_ratio.gain_to_pain_ratio.html">gain_to_pain_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.information_ratio.information_ratio.html">information_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.omega_ratio.omega_ratio.html">omega_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.sharpe_ratio.sharpe_ratio.html">sharpe_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.sorino_ratio.sorino_ratio.html">sorino_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.annualise_total_return.annualise_total_return.html">annualise_total_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.avg_drawdown.avg_drawdown.html">avg_drawdown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.avg_drawdown_duration.avg_drawdown_duration.html">avg_drawdown_duration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.beta_and_alpha.beta_and_alpha_full_stats.html">beta_and_alpha_full_stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.cagr.cagr.html">cagr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.convert_dataframe_frequency.convert_dataframe_frequency.html">convert_dataframe_frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.custom_returns_aggregating.aggregate_returns.html">aggregate_returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.cvar.cvar.html">cvar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.drawdown_tms.drawdown_tms.html">drawdown_tms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.get_aggregate_returns.get_aggregate_returns.html">get_aggregate_returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.index_grouping.get_grouping_for_frequency.html">get_grouping_for_frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.list_longest_drawdowns.list_longest_drawdowns.html">list_longest_drawdowns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.list_of_max_drawdowns.list_of_max_drawdowns.html">list_of_max_drawdowns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.log_to_simple_return.log_to_simple_return.html">log_to_simple_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.max_drawdown.max_drawdown.html">max_drawdown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.get_cone_chart.html">get_cone_chart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.generate_random_paths.html">generate_random_paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.generate_random_log_paths.html">generate_random_log_paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.simple_to_log_return.simple_to_log_return.html">simple_to_log_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.sqn.html">sqn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.sqn_for100trades.html">sqn_for100trades</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.avg_nr_of_trades_per1y.html">avg_nr_of_trades_per1y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.tail_events.tail_events.html">tail_events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.technical_analysis.utils.ta_series.html">ta_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.get_volatility.get_volatility.html">get_volatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.intraday_volatility.intraday_volatility.html">intraday_volatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility.html">rolling_volatility</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>common</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="common">
+<h1>common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h1>
+<section id="enums">
+<h2>enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.enums.expiration_date_field.ExpirationDateField.html#qf_lib.common.enums.expiration_date_field.ExpirationDateField" title="qf_lib.common.enums.expiration_date_field.ExpirationDateField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expiration_date_field.ExpirationDateField</span></code></a></p></td>
+<td><p>Enumeration representing different expiration dates for futures contracts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frequency.Frequency</span></code></a></p></td>
+<td><p>Frequency enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">price_field.PriceField</span></code></a></p></td>
+<td><p>Represents one of the data fields that corresponds to OHLC and Volume.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="exceptions">
+<h2>exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.broker_exceptions.BrokerException.html#qf_lib.common.exceptions.broker_exceptions.BrokerException" title="qf_lib.common.exceptions.broker_exceptions.BrokerException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">broker_exceptions.BrokerException</span></code></a></p></td>
+<td><p>Exception thrown when a Broker’s operation fails.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.broker_exceptions.OrderCancellingException.html#qf_lib.common.exceptions.broker_exceptions.OrderCancellingException" title="qf_lib.common.exceptions.broker_exceptions.OrderCancellingException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">broker_exceptions.OrderCancellingException</span></code></a></p></td>
+<td><p>Order couldn’t be cancelled (e.g.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.exceptions.future_contracts_exceptions.NoValidTickerException.html#qf_lib.common.exceptions.future_contracts_exceptions.NoValidTickerException" title="qf_lib.common.exceptions.future_contracts_exceptions.NoValidTickerException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">future_contracts_exceptions.NoValidTickerException</span></code></a></p></td>
+<td><p>Exception raised when there is no valid specific Ticker for a certain FutureTicker at a given point in time.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="risk-parity-boxes">
+<h2>risk_parity_boxes<a class="headerlink" href="#risk-parity-boxes" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection" title="qf_lib.common.risk_parity_boxes.risk_parity_boxes.ChangeDirection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChangeDirection</span></code></a></p></td>
+<td><p>An enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes" title="qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RiskParityBoxes</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory.html#qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory" title="qf_lib.common.risk_parity_boxes.risk_parity_boxes.RiskParityBoxesFactory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RiskParityBoxesFactory</span></code></a></p></td>
+<td><p>Makes timeseries for risk parity boxes.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tickers">
+<h2>tickers<a class="headerlink" href="#tickers" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ticker</span></code></a></p></td>
+<td><p>Representation of a security.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker" title="qf_lib.common.tickers.tickers.BloombergTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BloombergTicker</span></code></a></p></td>
+<td><p>Representation of bloomberg tickers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.HaverTicker.html#qf_lib.common.tickers.tickers.HaverTicker" title="qf_lib.common.tickers.tickers.HaverTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HaverTicker</span></code></a></p></td>
+<td><p>Haver tickers representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.QuandlTicker.html#qf_lib.common.tickers.tickers.QuandlTicker" title="qf_lib.common.tickers.tickers.QuandlTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuandlTicker</span></code></a></p></td>
+<td><p>Representation of Quandl tickers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.CcyTicker.html#qf_lib.common.tickers.tickers.CcyTicker" title="qf_lib.common.tickers.tickers.CcyTicker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CcyTicker</span></code></a></p></td>
+<td><p>Representation of Cryptocurrency tickers.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="timeseries-analysis">
+<h2>timeseries_analysis<a class="headerlink" href="#timeseries-analysis" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis.html#qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis" title="qf_lib.common.timeseries_analysis.return_attribution_analysis.ReturnAttributionAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_attribution_analysis.ReturnAttributionAnalysis</span></code></a></p></td>
+<td><p>Class used for calculating metrics of performance attribution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis" title="qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">risk_contribution_analysis.RiskContributionAnalysis</span></code></a></p></td>
+<td><p>Calculates risk contribution metrics.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="utils">
+<h2>utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html#qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase" title="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confidence_interval.analytical_cone_base.AnalyticalConeBase</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html#qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone" title="qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confidence_interval.analytical_cone.AnalyticalCone</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS.html#qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS" title="qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confidence_interval.analytical_cone_oos.AnalyticalConeOOS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.date_format.DateFormat.html#qf_lib.common.utils.dateutils.date_format.DateFormat" title="qf_lib.common.utils.dateutils.date_format.DateFormat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.date_format.DateFormat</span></code></a></p></td>
+<td><p>Class defining date formats (as strings).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.Timer.html#qf_lib.common.utils.dateutils.timer.Timer" title="qf_lib.common.utils.dateutils.timer.Timer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.timer.Timer</span></code></a></p></td>
+<td><p>Timer object which is a component in IOC.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.RealTimer.html#qf_lib.common.utils.dateutils.timer.RealTimer" title="qf_lib.common.utils.dateutils.timer.RealTimer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.timer.RealTimer</span></code></a></p></td>
+<td><p>Timer which gives the real current time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.timer.SettableTimer.html#qf_lib.common.utils.dateutils.timer.SettableTimer" title="qf_lib.common.utils.dateutils.timer.SettableTimer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.timer.SettableTimer</span></code></a></p></td>
+<td><p>Timer object which doesn’t give the real current time, but is “faking” it (current time can be set).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.data_model.DataModel.html#qf_lib.common.utils.factorization.data_models.data_model.DataModel" title="qf_lib.common.utils.factorization.data_models.data_model.DataModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.data_models.data_model.DataModel</span></code></a></p></td>
+<td><p>Class grouping the results of factorization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput.html#qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput" title="qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.data_models.data_model_input.DataModelInput</span></code></a></p></td>
+<td><p>Class storing an input data from which FactorizationDataModel is built.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html#qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator" title="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.data_models.rolling_window_estimation.RollingWindowsEstimator</span></code></a></p></td>
+<td><p>Class for estimating parameters of rolling windows.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter.html#qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter" title="qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.data_presenters.data_presenter.DataPresenter</span></code></a></p></td>
+<td><p>Class used for presenting the data stored in the FactorizationDataModel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html#qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter" title="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.data_presenters.rolling_data_presenter.RollingDataPresenter</span></code></a></p></td>
+<td><p>Class used for presenting the data stored in the RollingFactorizationDataModel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html#qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier" title="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier</span></code></a></p></td>
+<td><p>Class used for identifying factors in the model with Elastic Net method (with Cross-validation).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified.html#qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified" title="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified</span></code></a></p></td>
+<td><p>Class used for identifying factors in the model with Elastic Net method (with Cross-validation).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html#qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier" title="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier</span></code></a></p></td>
+<td><p>Class used for identifying factors in the model with Stepwise Regression (with Forward Feature Selection).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.factorization.manager.FactorizationManager.html#qf_lib.common.utils.factorization.manager.FactorizationManager" title="qf_lib.common.utils.factorization.manager.FactorizationManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">factorization.manager.FactorizationManager</span></code></a></p></td>
+<td><p>Facade class for factorization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html#qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method" title="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.consecutive_duplicates.Method</span></code></a></p></td>
+<td><p>An enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats.html#qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats" title="qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.is_return_stats.InSampleReturnStats</span></code></a></p></td>
+<td><p>Stores values of stats used to build confidence interval (Cone Chart)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html#qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility" title="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.drift_independent_volatility.DriftIndependentVolatility</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.html#qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast" title="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.volatility_forecast.VolatilityForecast</span></code></a></p></td>
+<td><p>Creates class used for vol forecasting: describes the volatility forecast configuration as well as the input and output data (output is created and assigned by calling one of the class methods).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html#qf_lib.common.utils.volatility.volatility_manager.VolatilityManager" title="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.volatility_manager.VolatilityManager</span></code></a></p></td>
+<td><p>VolatilityManager uses rolling window to asses the historical volatility of a series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.data_cleaner.DataCleaner.html#qf_lib.common.utils.data_cleaner.DataCleaner" title="qf_lib.common.utils.data_cleaner.DataCleaner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_cleaner.DataCleaner</span></code></a></p></td>
+<td><p>Cleans data which is partially incomplete, e.g.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.close_open_gap.close_open_gap.close_open_gap.html#qf_lib.common.utils.close_open_gap.close_open_gap.close_open_gap" title="qf_lib.common.utils.close_open_gap.close_open_gap.close_open_gap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close_open_gap.close_open_gap.close_open_gap</span></code></a></p></td>
+<td><p>Calculates price changes during the night gap (opening price compared to closing price from the previous day).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.common_start_and_end.get_common_start_and_end.html#qf_lib.common.utils.dateutils.common_start_and_end.get_common_start_and_end" title="qf_lib.common.utils.dateutils.common_start_and_end.get_common_start_and_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.common_start_and_end.get_common_start_and_end</span></code></a></p></td>
+<td><p>Finds the first and last valid dates (with a value different than NaN) for each column and then returns the latest of starting dates and the soonest ending date.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.date_to_string.date_to_str.html#qf_lib.common.utils.dateutils.date_to_string.date_to_str" title="qf_lib.common.utils.dateutils.date_to_string.date_to_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.date_to_string.date_to_str</span></code></a></p></td>
+<td><p>Converts date object into string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.get_quarter.get_quarter.html#qf_lib.common.utils.dateutils.get_quarter.get_quarter" title="qf_lib.common.utils.dateutils.get_quarter.get_quarter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.get_quarter.get_quarter</span></code></a></p></td>
+<td><p>Retrieves the quarter that the specified <code class="docutils literal notranslate"><span class="pre">date</span></code> is in.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.get_values_common_dates.get_values_for_common_dates.html#qf_lib.common.utils.dateutils.get_values_common_dates.get_values_for_common_dates" title="qf_lib.common.utils.dateutils.get_values_common_dates.get_values_for_common_dates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.get_values_common_dates.get_values_for_common_dates</span></code></a></p></td>
+<td><p>Gets list/tuple of series/dataframes (possibly mixed) and finds the common dates for all of them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.iso_to_gregorian.iso_to_gregorian.html#qf_lib.common.utils.dateutils.iso_to_gregorian.iso_to_gregorian" title="qf_lib.common.utils.dateutils.iso_to_gregorian.iso_to_gregorian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.iso_to_gregorian.iso_to_gregorian</span></code></a></p></td>
+<td><p>Gregorian calendar date for the given ISO year, week and day.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.string_to_date.str_to_date.html#qf_lib.common.utils.dateutils.string_to_date.str_to_date" title="qf_lib.common.utils.dateutils.string_to_date.str_to_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.string_to_date.str_to_date</span></code></a></p></td>
+<td><p>Converts string into date object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.dateutils.to_days.to_days.html#qf_lib.common.utils.dateutils.to_days.to_days" title="qf_lib.common.utils.dateutils.to_days.to_days"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dateutils.to_days.to_days</span></code></a></p></td>
+<td><p>Converts Timedelta variable into number of days (expressed as float).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt.html#qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt" title="qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.annualise_with_sqrt.annualise_with_sqrt</span></code></a></p></td>
+<td><p>Annualises samples of given frequency by multiplying each value by the square-rooted number of samples in a year for a given frequency.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.average_true_range.average_true_range.html#qf_lib.common.utils.miscellaneous.average_true_range.average_true_range" title="qf_lib.common.utils.miscellaneous.average_true_range.average_true_range"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.average_true_range.average_true_range</span></code></a></p></td>
+<td><p>Calculates the average true range.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.consecutive_duplicates.drop_consecutive_duplicates.html#qf_lib.common.utils.miscellaneous.consecutive_duplicates.drop_consecutive_duplicates" title="qf_lib.common.utils.miscellaneous.consecutive_duplicates.drop_consecutive_duplicates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.consecutive_duplicates.drop_consecutive_duplicates</span></code></a></p></td>
+<td><p>Removes consecutive duplicates (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.function_name.get_function_name.html#qf_lib.common.utils.miscellaneous.function_name.get_function_name" title="qf_lib.common.utils.miscellaneous.function_name.get_function_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.function_name.get_function_name</span></code></a></p></td>
+<td><p>While called inside a function or a class method it returns the name of the function/method that called it as a string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.kelly.kelly.html#qf_lib.common.utils.miscellaneous.kelly.kelly" title="qf_lib.common.utils.miscellaneous.kelly.kelly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.kelly.kelly</span></code></a></p></td>
+<td><p>Calculates the value of the Kelly Criterion (the fraction of money that should be invested) for the series of returns/prices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.kelly.kelly_binary.html#qf_lib.common.utils.miscellaneous.kelly.kelly_binary" title="qf_lib.common.utils.miscellaneous.kelly.kelly_binary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.kelly.kelly_binary</span></code></a></p></td>
+<td><p>Calculates the value of the Kelly Criterion (the fraction of money that should be invested) for a bet that has two possible outcomes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.periods_list.periods_list_from_bool_series.html#qf_lib.common.utils.miscellaneous.periods_list.periods_list_from_bool_series" title="qf_lib.common.utils.miscellaneous.periods_list.periods_list_from_bool_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.periods_list.periods_list_from_bool_series</span></code></a></p></td>
+<td><p>Uses a timeseries containing boolean values to create periods of True values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.to_list_conversion.convert_to_list.html#qf_lib.common.utils.miscellaneous.to_list_conversion.convert_to_list" title="qf_lib.common.utils.miscellaneous.to_list_conversion.convert_to_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.to_list_conversion.convert_to_list</span></code></a></p></td>
+<td><p>Converts a given value to list if necessary and returns information if the conversion was necessary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.miscellaneous.volume_weighted_average_price.volume_weighted_average_price.html#qf_lib.common.utils.miscellaneous.volume_weighted_average_price.volume_weighted_average_price" title="qf_lib.common.utils.miscellaneous.volume_weighted_average_price.volume_weighted_average_price"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miscellaneous.volume_weighted_average_price.volume_weighted_average_price</span></code></a></p></td>
+<td><p>Aggregates prices in the prices_tms by calculating the average weighted price for each period.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.numberutils.is_finite_number.is_finite_number.html#qf_lib.common.utils.numberutils.is_finite_number.is_finite_number" title="qf_lib.common.utils.numberutils.is_finite_number.is_finite_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numberutils.is_finite_number.is_finite_number</span></code></a></p></td>
+<td><p>Checks if the given variable is number and if it is finite.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.calmar_ratio.calmar_ratio.html#qf_lib.common.utils.ratios.calmar_ratio.calmar_ratio" title="qf_lib.common.utils.ratios.calmar_ratio.calmar_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.calmar_ratio.calmar_ratio</span></code></a></p></td>
+<td><p>Calculates the Calmar ratio for a given timeseries of returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.gain_to_pain_ratio.gain_to_pain_ratio.html#qf_lib.common.utils.ratios.gain_to_pain_ratio.gain_to_pain_ratio" title="qf_lib.common.utils.ratios.gain_to_pain_ratio.gain_to_pain_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.gain_to_pain_ratio.gain_to_pain_ratio</span></code></a></p></td>
+<td><p>Calculates the gain to pain ratio for a given timeseries of returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.information_ratio.information_ratio.html#qf_lib.common.utils.ratios.information_ratio.information_ratio" title="qf_lib.common.utils.ratios.information_ratio.information_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.information_ratio.information_ratio</span></code></a></p></td>
+<td><p>The function calculates information ratio based on monthly returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.omega_ratio.omega_ratio.html#qf_lib.common.utils.ratios.omega_ratio.omega_ratio" title="qf_lib.common.utils.ratios.omega_ratio.omega_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.omega_ratio.omega_ratio</span></code></a></p></td>
+<td><p>Omega Ratio - The Omega Ratio is a measure of performance that doesn’t assume a normal distribution of returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.sharpe_ratio.sharpe_ratio.html#qf_lib.common.utils.ratios.sharpe_ratio.sharpe_ratio" title="qf_lib.common.utils.ratios.sharpe_ratio.sharpe_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.sharpe_ratio.sharpe_ratio</span></code></a></p></td>
+<td><p>Calculates the Sharpe Ratio for a given timeseries of returns and given frequency.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.ratios.sorino_ratio.sorino_ratio.html#qf_lib.common.utils.ratios.sorino_ratio.sorino_ratio" title="qf_lib.common.utils.ratios.sorino_ratio.sorino_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ratios.sorino_ratio.sorino_ratio</span></code></a></p></td>
+<td><p>Calculates the Sorino ratio for a given timeseries of returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.annualise_total_return.annualise_total_return.html#qf_lib.common.utils.returns.annualise_total_return.annualise_total_return" title="qf_lib.common.utils.returns.annualise_total_return.annualise_total_return"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.annualise_total_return.annualise_total_return</span></code></a></p></td>
+<td><p>Calculates Annualised Rate of Return.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.avg_drawdown.avg_drawdown.html#qf_lib.common.utils.returns.avg_drawdown.avg_drawdown" title="qf_lib.common.utils.returns.avg_drawdown.avg_drawdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.avg_drawdown.avg_drawdown</span></code></a></p></td>
+<td><p>Finds the average drawdown for the given timeseries of prices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.avg_drawdown_duration.avg_drawdown_duration.html#qf_lib.common.utils.returns.avg_drawdown_duration.avg_drawdown_duration" title="qf_lib.common.utils.returns.avg_drawdown_duration.avg_drawdown_duration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.avg_drawdown_duration.avg_drawdown_duration</span></code></a></p></td>
+<td><p>Finds the average duration of a drawdown for the given timeseries of prices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.beta_and_alpha.beta_and_alpha_full_stats.html#qf_lib.common.utils.returns.beta_and_alpha.beta_and_alpha_full_stats" title="qf_lib.common.utils.returns.beta_and_alpha.beta_and_alpha_full_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.beta_and_alpha.beta_and_alpha_full_stats</span></code></a></p></td>
+<td><p>Calculates alpha and beta of the series versus the benchmark series.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.cagr.cagr.html#qf_lib.common.utils.returns.cagr.cagr" title="qf_lib.common.utils.returns.cagr.cagr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.cagr.cagr</span></code></a></p></td>
+<td><p>Returns the Compound Annual Growth Rate (CAGR) calculated for the given series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.convert_dataframe_frequency.convert_dataframe_frequency.html#qf_lib.common.utils.returns.convert_dataframe_frequency.convert_dataframe_frequency" title="qf_lib.common.utils.returns.convert_dataframe_frequency.convert_dataframe_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.convert_dataframe_frequency.convert_dataframe_frequency</span></code></a></p></td>
+<td><p>Converts each column in the dataframe to the specified frequency.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.custom_returns_aggregating.aggregate_returns.html#qf_lib.common.utils.returns.custom_returns_aggregating.aggregate_returns" title="qf_lib.common.utils.returns.custom_returns_aggregating.aggregate_returns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.custom_returns_aggregating.aggregate_returns</span></code></a></p></td>
+<td><p>Aggregates returns using custom start dates and end dates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.cvar.cvar.html#qf_lib.common.utils.returns.cvar.cvar" title="qf_lib.common.utils.returns.cvar.cvar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.cvar.cvar</span></code></a></p></td>
+<td><p>Calculates Conditional Value at Risk for a given percentage.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.drawdown_tms.drawdown_tms.html#qf_lib.common.utils.returns.drawdown_tms.drawdown_tms" title="qf_lib.common.utils.returns.drawdown_tms.drawdown_tms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.drawdown_tms.drawdown_tms</span></code></a></p></td>
+<td><p>Calculates the timeseries of the same dates as prices_tms, which contains the drawdown value for each date.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.get_aggregate_returns.get_aggregate_returns.html#qf_lib.common.utils.returns.get_aggregate_returns.get_aggregate_returns" title="qf_lib.common.utils.returns.get_aggregate_returns.get_aggregate_returns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.get_aggregate_returns.get_aggregate_returns</span></code></a></p></td>
+<td><p>Aggregates returns by week, month, or year.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.index_grouping.get_grouping_for_frequency.html#qf_lib.common.utils.returns.index_grouping.get_grouping_for_frequency" title="qf_lib.common.utils.returns.index_grouping.get_grouping_for_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.index_grouping.get_grouping_for_frequency</span></code></a></p></td>
+<td><p>Returns a proper grouping function which can then be applied in the series.groupby() or dataframe.groupby().</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.list_longest_drawdowns.list_longest_drawdowns.html#qf_lib.common.utils.returns.list_longest_drawdowns.list_longest_drawdowns" title="qf_lib.common.utils.returns.list_longest_drawdowns.list_longest_drawdowns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.list_longest_drawdowns.list_longest_drawdowns</span></code></a></p></td>
+<td><p>Analyses the specified series and finds the top <code class="docutils literal notranslate"><span class="pre">count</span></code> longest drawdowns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.list_of_max_drawdowns.list_of_max_drawdowns.html#qf_lib.common.utils.returns.list_of_max_drawdowns.list_of_max_drawdowns" title="qf_lib.common.utils.returns.list_of_max_drawdowns.list_of_max_drawdowns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.list_of_max_drawdowns.list_of_max_drawdowns</span></code></a></p></td>
+<td><p>Finds the values of individual maximum drawdowns and the duration of each drawdown.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.log_to_simple_return.log_to_simple_return.html#qf_lib.common.utils.returns.log_to_simple_return.log_to_simple_return" title="qf_lib.common.utils.returns.log_to_simple_return.log_to_simple_return"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.log_to_simple_return.log_to_simple_return</span></code></a></p></td>
+<td><p>Converts logarithmic return to corresponding simple return.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.max_drawdown.max_drawdown.html#qf_lib.common.utils.returns.max_drawdown.max_drawdown" title="qf_lib.common.utils.returns.max_drawdown.max_drawdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.max_drawdown.max_drawdown</span></code></a></p></td>
+<td><p>Finds maximal drawdown for the given timeseries of prices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.get_cone_chart.html#qf_lib.common.utils.returns.return_distribution_helpers.get_cone_chart" title="qf_lib.common.utils.returns.return_distribution_helpers.get_cone_chart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.return_distribution_helpers.get_cone_chart</span></code></a></p></td>
+<td><p>Helper function to plot simulated paths together with significant lines (like expectation)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.generate_random_paths.html#qf_lib.common.utils.returns.return_distribution_helpers.generate_random_paths" title="qf_lib.common.utils.returns.return_distribution_helpers.generate_random_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.return_distribution_helpers.generate_random_paths</span></code></a></p></td>
+<td><p>Generates random paths.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.return_distribution_helpers.generate_random_log_paths.html#qf_lib.common.utils.returns.return_distribution_helpers.generate_random_log_paths" title="qf_lib.common.utils.returns.return_distribution_helpers.generate_random_log_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.return_distribution_helpers.generate_random_log_paths</span></code></a></p></td>
+<td><p>Equivalent of generate_random_paths, but uses log Returns instead</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.simple_to_log_return.simple_to_log_return.html#qf_lib.common.utils.returns.simple_to_log_return.simple_to_log_return" title="qf_lib.common.utils.returns.simple_to_log_return.simple_to_log_return"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.simple_to_log_return.simple_to_log_return</span></code></a></p></td>
+<td><p>Converts simple return to the corresponding logarithmic return.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.sqn.html#qf_lib.common.utils.returns.sqn.sqn" title="qf_lib.common.utils.returns.sqn.sqn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.sqn.sqn</span></code></a></p></td>
+<td><p>Calculates the SQN = mean return of trade / std(returns of trades).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.sqn_for100trades.html#qf_lib.common.utils.returns.sqn.sqn_for100trades" title="qf_lib.common.utils.returns.sqn.sqn_for100trades"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.sqn.sqn_for100trades</span></code></a></p></td>
+<td><p>Calculates the SQN = mean return of trade / std(returns of trades) * sqrt(100)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.sqn.avg_nr_of_trades_per1y.html#qf_lib.common.utils.returns.sqn.avg_nr_of_trades_per1y" title="qf_lib.common.utils.returns.sqn.avg_nr_of_trades_per1y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.sqn.avg_nr_of_trades_per1y</span></code></a></p></td>
+<td><p>Calculates average number of trades per year for a given data-frame of trades.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.returns.tail_events.tail_events.html#qf_lib.common.utils.returns.tail_events.tail_events" title="qf_lib.common.utils.returns.tail_events.tail_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">returns.tail_events.tail_events</span></code></a></p></td>
+<td><p>Gets tail events of the benchmark and corresponding events in the examined timeseries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.technical_analysis.utils.ta_series.html#qf_lib.common.utils.technical_analysis.utils.ta_series" title="qf_lib.common.utils.technical_analysis.utils.ta_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">technical_analysis.utils.ta_series</span></code></a></p></td>
+<td><p>Function created to allow using TA-Lib functions with QFSeries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.get_volatility.get_volatility.html#qf_lib.common.utils.volatility.get_volatility.get_volatility" title="qf_lib.common.utils.volatility.get_volatility.get_volatility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.get_volatility.get_volatility</span></code></a></p></td>
+<td><p>Calculates a volatility for the given series of returns or prices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.intraday_volatility.intraday_volatility.html#qf_lib.common.utils.volatility.intraday_volatility.intraday_volatility" title="qf_lib.common.utils.volatility.intraday_volatility.intraday_volatility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.intraday_volatility.intraday_volatility</span></code></a></p></td>
+<td><p>Calculates annualised volatility from intraday samples of given interval.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility.html#qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility" title="qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volatility.rolling_volatility.rolling_volatility</span></code></a></p></td>
+<td><p>Calculates the rolling volatility for the given series of returns.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.common.enums.expiration_date_field.ExpirationDateField.html" class="btn btn-neutral float-right" title="ExpirationDateField" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="_autosummary/qf_lib.backtesting.trading_session.backtest_trading_session_builder.BacktestTradingSessionBuilder.html" class="btn btn-neutral float-left" title="BacktestTradingSessionBuilder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

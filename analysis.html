@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>analysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AbstractDocument" href="_autosummary/qf_lib.analysis.common.abstract_document.AbstractDocument.html" />
+    <link rel="prev" title="Welcome to QF Lib’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.common.abstract_document.AbstractDocument.html">AbstractDocument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html">BacktestOverfittingSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html">OverfittingAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html">TrendStrengthSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet.html">AbstractTearsheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.current_positions_sheet.CurrentPositionsSheet.html">CurrentPositionsSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet.html">PortfolioAnalysisSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.strategy_monitoring_document.StrategyMonitoringDocument.html">StrategyMonitoringDocument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark.html">TearsheetWithBenchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark.html">TearsheetWithoutBenchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html">TimeseriesAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html">TradesGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.trade_analysis.trade_analysis_sheet.TradeAnalysisSheet.html">TradeAnalysisSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.signals_analysis.signals_plotter.SignalsPlotter.html">SignalsPlotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html">ExposureGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet.html">ExposureSheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_settings.ExposureSettings.html">ExposureSettings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="analysis">
+<h1>analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h1>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.common.abstract_document.AbstractDocument.html#qf_lib.analysis.common.abstract_document.AbstractDocument" title="qf_lib.analysis.common.abstract_document.AbstractDocument"><code class="xref py py-obj docutils literal notranslate"><span class="pre">common.abstract_document.AbstractDocument</span></code></a></p></td>
+<td><p>Base class for most PDF documents with charts and tables.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet.html#qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet" title="qf_lib.analysis.backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backtests_overfitting.backtest_overfitting_sheet.BacktestOverfittingSheet</span></code></a></p></td>
+<td><p>Creates a document summarising all the statistics related to the probability of backtest overfitting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis.html#qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis" title="qf_lib.analysis.backtests_overfitting.overfitting_analysis.OverfittingAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backtests_overfitting.overfitting_analysis.OverfittingAnalysis</span></code></a></p></td>
+<td><p>Class providing statistics and analysis for checking if backtest is overfitted.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet.html#qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet" title="qf_lib.analysis.breakout_strength.trend_strength_sheet.TrendStrengthSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">breakout_strength.trend_strength_sheet.TrendStrengthSheet</span></code></a></p></td>
+<td><p>Creates a PDF containing main statistics of strength of a day trend.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet.html#qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet" title="qf_lib.analysis.tearsheets.abstract_tearsheet.AbstractTearsheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.abstract_tearsheet.AbstractTearsheet</span></code></a></p></td>
+<td><p>Creates a PDF ‘one-pager’ as often found in institutional strategy performance reports.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.current_positions_sheet.CurrentPositionsSheet.html#qf_lib.analysis.tearsheets.current_positions_sheet.CurrentPositionsSheet" title="qf_lib.analysis.tearsheets.current_positions_sheet.CurrentPositionsSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.current_positions_sheet.CurrentPositionsSheet</span></code></a></p></td>
+<td><p>Provides information about currently open positions in the portfolio.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet.html#qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet" title="qf_lib.analysis.tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.portfolio_analysis_sheet.PortfolioAnalysisSheet</span></code></a></p></td>
+<td><p>Creates a PDF containing a visual representation of portfolio changes over time.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.strategy_monitoring_document.StrategyMonitoringDocument.html#qf_lib.analysis.tearsheets.strategy_monitoring_document.StrategyMonitoringDocument" title="qf_lib.analysis.tearsheets.strategy_monitoring_document.StrategyMonitoringDocument"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.strategy_monitoring_document.StrategyMonitoringDocument</span></code></a></p></td>
+<td><p>Creates PDF with strategy monitoring analysis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark.html#qf_lib.analysis.tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark" title="qf_lib.analysis.tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.tearsheet_with_benchmark.TearsheetWithBenchmark</span></code></a></p></td>
+<td><p>Creates a PDF report, which additionally contains a benchmark.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark.html#qf_lib.analysis.tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark" title="qf_lib.analysis.tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tearsheets.tearsheet_without_benchmark.TearsheetWithoutBenchmark</span></code></a></p></td>
+<td><p>Creates a PDF report without a benchamrk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis.html#qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis" title="qf_lib.analysis.timeseries_analysis.timeseries_analysis.TimeseriesAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">timeseries_analysis.timeseries_analysis.TimeseriesAnalysis</span></code></a></p></td>
+<td><p>Used for analysing a timeseries of returns.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator.html#qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator" title="qf_lib.analysis.trade_analysis.trades_generator.TradesGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trade_analysis.trades_generator.TradesGenerator</span></code></a></p></td>
+<td><p>Class responsible for generating Trade objects from information provided in the form of Transactions or BacktestPositions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.trade_analysis.trade_analysis_sheet.TradeAnalysisSheet.html#qf_lib.analysis.trade_analysis.trade_analysis_sheet.TradeAnalysisSheet" title="qf_lib.analysis.trade_analysis.trade_analysis_sheet.TradeAnalysisSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trade_analysis.trade_analysis_sheet.TradeAnalysisSheet</span></code></a></p></td>
+<td><p>Creates a PDF containing main statistics of the trades.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.signals_analysis.signals_plotter.SignalsPlotter.html#qf_lib.analysis.signals_analysis.signals_plotter.SignalsPlotter" title="qf_lib.analysis.signals_analysis.signals_plotter.SignalsPlotter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signals_analysis.signals_plotter.SignalsPlotter</span></code></a></p></td>
+<td><p>Generates a document with candlestick charts for each given ticker and highlights the background to indicate at which time a position has been opened.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator.html#qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator" title="qf_lib.analysis.exposure_analysis.exposure_generator.ExposureGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exposure_analysis.exposure_generator.ExposureGenerator</span></code></a></p></td>
+<td><p>Class to generate exposure data based on provided regressors tickers</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet.html#qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet" title="qf_lib.analysis.exposure_analysis.exposure_sheet.ExposureSheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exposure_analysis.exposure_sheet.ExposureSheet</span></code></a></p></td>
+<td><p>Creates an Exposure Sheet in PDF format</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.analysis.exposure_analysis.exposure_settings.ExposureSettings.html#qf_lib.analysis.exposure_analysis.exposure_settings.ExposureSettings" title="qf_lib.analysis.exposure_analysis.exposure_settings.ExposureSettings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exposure_analysis.exposure_settings.ExposureSettings</span></code></a></p></td>
+<td><p>Class to combine data provider with exposure related functionality.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.analysis.common.abstract_document.AbstractDocument.html" class="btn btn-neutral float-right" title="AbstractDocument" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to QF Lib’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

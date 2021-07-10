@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.utils.data_cleaner &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.utils.data_cleaner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.utils.data_cleaner</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.get_values_common_dates</span> <span class="kn">import</span> <span class="n">get_values_for_common_dates</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.returns.beta_and_alpha</span> <span class="kn">import</span> <span class="n">beta_and_alpha</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.cast_series</span> <span class="kn">import</span> <span class="n">cast_series</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="DataCleaner"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.utils.data_cleaner.DataCleaner.html#qf_lib.common.utils.data_cleaner.DataCleaner">[docs]</a><span class="k">class</span> <span class="nc">DataCleaner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cleans data which is partially incomplete, e.g. has gaps</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataframe: SimpleReturnsDataFrame</span>
+<span class="sd">        DataFrame of simple returns. If one column has more missing values than the threshold, it is removed</span>
+<span class="sd">        from the result.</span>
+<span class="sd">    threshold: float</span>
+<span class="sd">        top limit of missing data. If the amount of missing data in a series exceeds this limit, the series will be</span>
+<span class="sd">        removed. It is a relative value (e.g. 0.02, which corresponds to 2% of the data from the series).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">incorrect_columns</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Columns which contain only NaN values.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_late_columns</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Columns which start late together with their start date.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns_with_holes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Columns which have one or more NaN values in them.</span>
+
+<div class="viewcode-block" id="DataCleaner.proxy_using_value"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.utils.data_cleaner.DataCleaner.html#qf_lib.common.utils.data_cleaner.DataCleaner.proxy_using_value">[docs]</a>    <span class="k">def</span> <span class="nf">proxy_using_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxy_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes columns from the DataFrame which have too many missing values. Then, the missing data in the remaining</span>
+<span class="sd">        columns is completed using a given proxy_value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        proxy_value: float</span>
+<span class="sd">            value with which all the missing data should be filled</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleReturnsDataFrame</span>
+<span class="sd">            completed dataframe without missing data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result_dataframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">empty_values_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drop_underfilled_columns</span><span class="p">(</span><span class="n">result_dataframe</span><span class="p">,</span> <span class="n">empty_values_idx</span><span class="p">)</span>
+        <span class="n">result_dataframe</span><span class="p">[</span><span class="n">empty_values_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">proxy_value</span>
+
+        <span class="k">return</span> <span class="n">result_dataframe</span></div>
+
+<div class="viewcode-block" id="DataCleaner.proxy_using_regression"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.utils.data_cleaner.DataCleaner.html#qf_lib.common.utils.data_cleaner.DataCleaner.proxy_using_regression">[docs]</a>    <span class="k">def</span> <span class="nf">proxy_using_regression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">benchmark_tms</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes columns from the DataFrame which have too many missing values. Then, the missing data in the remaining</span>
+<span class="sd">        columns is completed using regression with the benchmark.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        benchmark_tms: QFSeries</span>
+<span class="sd">            benchmark used indirectly to proxy the missing data in the Dataframe.</span>
+<span class="sd">        columns_type: type</span>
+<span class="sd">            type of each column (e.g. PricesSeries, LogReturnsSeries)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleReturnsDataFrame</span>
+<span class="sd">            completed dataframe. However it can still contain missing data, because sometimes it is not possible to</span>
+<span class="sd">            complete all data using regression (e.g. for data that is missing in the original series there is</span>
+<span class="sd">            no corresponding benchmark value).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result_dataframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">empty_values_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drop_underfilled_columns</span><span class="p">(</span><span class="n">result_dataframe</span><span class="p">,</span> <span class="n">empty_values_idx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_regression_to_fill_missing_data</span><span class="p">(</span>
+            <span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">,</span> <span class="n">result_dataframe</span><span class="p">,</span> <span class="n">empty_values_idx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result_dataframe</span></div>
+
+    <span class="k">def</span> <span class="nf">_drop_underfilled_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_dataframe</span><span class="p">,</span> <span class="n">empty_values_idx</span><span class="p">):</span>
+        <span class="n">columns_to_delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">is_empty_values</span> <span class="ow">in</span> <span class="n">empty_values_idx</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">empty_values_ratio</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">is_empty_values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">is_empty_values</span><span class="p">)</span>  <span class="c1"># #empty_values / #all_values</span>
+
+            <span class="k">if</span> <span class="n">empty_values_ratio</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+                <span class="n">columns_to_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+
+                <span class="n">first_valid_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">first_valid_index</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">empty_values_ratio</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">incorrect_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column_name</span><span class="p">][</span><span class="n">first_valid_index</span><span class="p">:]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">columns_with_holes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">first_valid_index</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">start_late_columns</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_valid_index</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Unknown reason for dropping column &quot;</span> <span class="o">+</span> <span class="n">column_name</span>
+
+        <span class="n">empty_values_idx</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns_to_delete</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">result_dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns_to_delete</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_use_regression_to_fill_missing_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">,</span> <span class="n">result_dataframe</span><span class="p">,</span> <span class="n">empty_values_idx</span><span class="p">):</span>
+        <span class="n">num_of_columns</span> <span class="o">=</span> <span class="n">result_dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_of_columns</span><span class="p">):</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="n">result_dataframe</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">nans_in_column_idx</span> <span class="o">=</span> <span class="n">empty_values_idx</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_beta_and_alpha</span><span class="p">(</span>
+                <span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">,</span> <span class="n">nans_in_column_idx</span><span class="p">)</span>
+
+            <span class="n">benchmark_common_tms</span><span class="p">,</span> <span class="n">nans_common_idx</span> <span class="o">=</span> <span class="n">get_values_for_common_dates</span><span class="p">(</span>
+                <span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">nans_in_column_idx</span><span class="p">)</span>
+            <span class="n">benchmark_values_for_missing_dates</span> <span class="o">=</span> <span class="n">benchmark_common_tms</span><span class="p">[</span><span class="n">nans_common_idx</span><span class="p">]</span>
+            <span class="n">missing_values</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">benchmark_values_for_missing_dates</span> <span class="o">+</span> <span class="n">alpha</span>
+            <span class="n">column</span><span class="p">[</span><span class="n">nans_in_column_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">missing_values</span>
+
+        <span class="k">return</span> <span class="n">result_dataframe</span>
+
+    <span class="k">def</span> <span class="nf">_get_beta_and_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">benchmark_tms</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">,</span> <span class="n">nans_in_column_idx</span><span class="p">):</span>
+        <span class="n">column_without_nans</span> <span class="o">=</span> <span class="n">column</span><span class="p">[</span><span class="o">~</span><span class="n">nans_in_column_idx</span><span class="p">]</span>
+        <span class="n">column_without_nans</span> <span class="o">=</span> <span class="n">cast_series</span><span class="p">(</span><span class="n">column_without_nans</span><span class="p">,</span> <span class="n">columns_type</span><span class="p">)</span>
+        <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">beta_and_alpha</span><span class="p">(</span><span class="n">column_without_nans</span><span class="p">,</span> <span class="n">benchmark_tms</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

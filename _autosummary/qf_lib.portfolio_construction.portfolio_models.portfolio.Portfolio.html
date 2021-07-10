@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Portfolio &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EfficientFrontierPortfolio" href="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html" />
+    <link rel="prev" title="QuadraticOptimizer" href="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.black_litterman.black_litterman.BlackLitterman.html">BlackLitterman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.covariance_estimation.robust_covariance.RobustCovariance.html">RobustCovariance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.nonlinear_function_optimizer.NonlinearFunctionOptimizer.html">NonlinearFunctionOptimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html">QuadraticOptimizer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Portfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html">EfficientFrontierPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.equal_risk_contribution_portfolio.EqualRiskContributionPortfolio.html">EqualRiskContributionPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.kelly_portfolio.KellyPortfolio.html">KellyPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_diversification_portfolio.MaxDiversificationPortfolio.html">MaxDiversificationPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_excess_return_portfolio.MaxExcessReturnPortfolio.html">MaxExcessReturnPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.max_sharpe_ratio_portfolio.MaxSharpeRatioPortfolio.html">MaxSharpeRatioPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.min_variance_portfolio.MinVariancePortfolio.html">MinVariancePortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.multifactor_portfolio.MultiFactorPortfolio.html">MultiFactorPortfolio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.portfolio_construction.portfolio_models.risk_parity_portfolio.RiskParityPortfolio.html">RiskParityPortfolio</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../portfolio_construction.html">portfolio_construction</a> &raquo;</li>
+        
+      <li>Portfolio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="portfolio">
+<h1>Portfolio<a class="headerlink" href="#portfolio" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.portfolio_construction.portfolio_models.portfolio.</code><code class="sig-name descname">Portfolio</code><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><strong>Methods</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.constant_weights" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.constant_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constant_weights</span></code></a>(assets_rets_df, weights)</p></td>
+<td><p>Calculates the time series of portfolio returns (given the weights of portfolio’s assets).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.different_allocations_tms" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.different_allocations_tms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">different_allocations_tms</span></code></a>(assets_rets_df, …)</p></td>
+<td><p>Calculates the time series of portfolio returns given the allocations on each date.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.drifting_weights" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.drifting_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drifting_weights</span></code></a>(assets_rets_df, weights)</p></td>
+<td><p>Calculates the time series of portfolio returns (given the initial weights of portfolio’s assets).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.get_weights" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.get_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weights</span></code></a>()</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.one_over_n_weights" title="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.one_over_n_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">one_over_n_weights</span></code></a>(tickers)</p></td>
+<td><p>Calculates the one-over-n weights for given tickers.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.constant_weights">
+<em class="property">classmethod </em><code class="sig-name descname">constant_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assets_rets_df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio.constant_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.constant_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the time series of portfolio returns (given the weights of portfolio’s assets). Weights of assets
+are assumed to be the same all the time (there is a rebalancing on each time tick, e.g. every day if the series
+has a daily frequency).</p>
+<p>The method also calculates the allocation matrix. However since the weights are constant, so are
+the allocations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assets_rets_df</strong> – simple returns of assets which create the portfolio</p></li>
+<li><p><strong>weights</strong> – weights of assets creating the portfolio</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>timeseries of portfolio’s returns, dataframe indexed with dates and showing allocations in time (one column per asset)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">SimpleReturnsSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.different_allocations_tms">
+<em class="property">classmethod </em><code class="sig-name descname">different_allocations_tms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assets_rets_df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">allocations_df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries</a><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio.different_allocations_tms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.different_allocations_tms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the time series of portfolio returns given the allocations on each date. The portfolio returns
+are calculated by multiplying returns of assets by corresponding allocations’ values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assets_rets_df</strong> – simple returns of assets which create the portfolio</p></li>
+<li><p><strong>allocations_df</strong> – dataframe indexed with dates, showing allocations in time (one column per asset)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>timeseries of portfolio’s returns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">SimpleReturnsSeries</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.drifting_weights">
+<em class="property">classmethod </em><code class="sig-name descname">drifting_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">assets_rets_df</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame.html#qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame" title="qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame">qf_lib.containers.dataframe.simple_returns_dataframe.SimpleReturnsDataFrame</a></span></em>, <em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio.drifting_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.drifting_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the time series of portfolio returns (given the initial weights of portfolio’s assets).
+Weights of assets change over time because there is no rebalancing.</p>
+<p>The method also calculates the allocation matrix which shows what portfolio consists of on each date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assets_rets_df</strong> – simple returns of assets which create the portfolio</p></li>
+<li><p><strong>weights</strong> – weights of assets which create the portfolio</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>timeseries of portfolio’s returns, dataframe indexed with dates and showing allocations in time (one column per asset)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries.html#qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries" title="qf_lib.containers.series.simple_returns_series.SimpleReturnsSeries">SimpleReturnsSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.get_weights">
+<em class="property">abstract </em><code class="sig-name descname">get_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>a series indexed with names of assets containing weights (one for each asset)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.one_over_n_weights">
+<em class="property">classmethod </em><code class="sig-name descname">one_over_n_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><a class="reference internal" href="../_modules/qf_lib/portfolio_construction/portfolio_models/portfolio.html#Portfolio.one_over_n_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.portfolio_construction.portfolio_models.portfolio.Portfolio.one_over_n_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the one-over-n weights for given tickers.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.portfolio_construction.portfolio_models.efficient_frontier_portfolio.EfficientFrontierPortfolio.html" class="btn btn-neutral float-right" title="EfficientFrontierPortfolio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.portfolio_construction.optimizers.quadratic_optimizer.QuadraticOptimizer.html" class="btn btn-neutral float-left" title="QuadraticOptimizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

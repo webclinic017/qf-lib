@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.common.timeseries_analysis.risk_contribution_analysis &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.common.timeseries_analysis.risk_contribution_analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.common.timeseries_analysis.risk_contribution_analysis</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.simple_returns_dataframe</span> <span class="kn">import</span> <span class="n">SimpleReturnsDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.simple_returns_series</span> <span class="kn">import</span> <span class="n">SimpleReturnsSeries</span>
+
+
+<div class="viewcode-block" id="RiskContributionAnalysis"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis">[docs]</a><span class="k">class</span> <span class="nc">RiskContributionAnalysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates risk contribution metrics. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RiskContributionAnalysis.get_risk_contribution"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_risk_contribution</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">factors_rets</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">weigths_of_assets</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">,</span>
+                              <span class="n">portfolio_rets</span><span class="p">:</span> <span class="n">SimpleReturnsSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates risk contribution of different factors to the portfolio. Risk is defined as volatility.</span>
+<span class="sd">        Uses x-sigma-rho formula (MSCI Bara paper).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        factors_rets</span>
+<span class="sd">            dataframe consisted of returns for different assets</span>
+<span class="sd">        weigths_of_assets</span>
+<span class="sd">            series of weights of each asset. It&#39;s indexed with names of assets.</span>
+<span class="sd">        portfolio_rets</span>
+<span class="sd">            return of the whole portfolio</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.Series</span>
+<span class="sd">            Series of risk contributions (one for each asset) to the portfolio. It&#39;s indexed with names of assets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">volatility_of_returns</span> <span class="o">=</span> <span class="n">factors_rets</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">correlation_asset_portfolio</span> <span class="o">=</span> <span class="n">factors_rets</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">series</span><span class="p">:</span> <span class="n">series</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">portfolio_rets</span><span class="p">))</span>
+
+        <span class="n">risk_contribution</span> <span class="o">=</span> <span class="n">weigths_of_assets</span> <span class="o">*</span> <span class="n">volatility_of_returns</span> <span class="o">*</span> <span class="n">correlation_asset_portfolio</span>
+
+        <span class="n">normalized_risk_contribution_msci</span> <span class="o">=</span> <span class="n">risk_contribution</span> <span class="o">/</span> <span class="n">risk_contribution</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">normalized_risk_contribution_msci</span></div>
+
+<div class="viewcode-block" id="RiskContributionAnalysis.get_risk_contribution_optimised"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_risk_contribution_optimised">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_risk_contribution_optimised</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">assets_rets</span><span class="p">:</span> <span class="n">SimpleReturnsDataFrame</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates risk contribution of each asset of the portfolio.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        assets_rets</span>
+<span class="sd">            returns of assets building the portfolio (each assets in a separate column)</span>
+<span class="sd">        weights_of_assets</span>
+<span class="sd">            Series of weights (one for each asset).  It&#39;s indexed with names of assets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Series of risk contributions (one for each asset). It&#39;s indexed with names of assets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">assets_covariance</span> <span class="o">=</span> <span class="n">assets_rets</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span>
+        <span class="n">risk_contribution</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_normalized_risk_contribution</span><span class="p">(</span><span class="n">assets_covariance</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">risk_contribution</span></div>
+
+<div class="viewcode-block" id="RiskContributionAnalysis.get_distance_to_equal_risk_contrib"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.get_distance_to_equal_risk_contrib">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_distance_to_equal_risk_contrib</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">assets_returns_covariance</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        By minimising this function it is possible to calculate Equal Risk Contribution Portfolio. It has better</span>
+<span class="sd">        numerical properties than simple approach  ( riskContribution - mean(riskContribution) )</span>
+<span class="sd">        Details: http://www.thierry-roncalli.com/download/erc-slides.pdf</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        assets_returns_covariance</span>
+<span class="sd">            covariance matrix for assets returns data frame</span>
+<span class="sd">        weights_of_assets</span>
+<span class="sd">            weight of each asset in the portfolio. It&#39;s indexed with names of assets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        L2 (euclidean) distance from equal risk distribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">risk_contributions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_normalized_risk_contribution</span><span class="p">(</span><span class="n">assets_returns_covariance</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">)</span>
+        <span class="n">num_of_assets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights_of_assets</span><span class="p">)</span>
+
+        <span class="c1"># sum up all the squared differences</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_of_assets</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_of_assets</span><span class="p">):</span>
+                <span class="n">partial_diff</span> <span class="o">=</span> <span class="n">risk_contributions</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">risk_contributions</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">distance</span> <span class="o">+=</span> <span class="n">partial_diff</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RiskContributionAnalysis.is_equal_risk_contribution"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.html#qf_lib.common.timeseries_analysis.risk_contribution_analysis.RiskContributionAnalysis.is_equal_risk_contribution">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">is_equal_risk_contribution</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">returns_covariance</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tells whether each asset has an equal risk contribution to the portfolio.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        returns_covariance</span>
+<span class="sd">            DataFrame which is a covariance matrix. Columns and rows are both indexed with names of assets.</span>
+<span class="sd">        weights_of_assets</span>
+<span class="sd">            Series of weights (one weight for each asset). It&#39;s indexed with names of assets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        True if each asset has and equal risk contribution. False -- otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_distance_to_equal_risk_contrib</span><span class="p">(</span><span class="n">returns_covariance</span><span class="p">,</span> <span class="n">weights_of_assets</span><span class="p">)</span>
+
+        <span class="n">num_of_assets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights_of_assets</span><span class="p">)</span>
+        <span class="n">distances_number</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">num_of_assets</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_of_assets</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># number of pairs between different risk contribs</span>
+
+        <span class="c1"># &quot;reverse operation&quot; to distance_to_equal_risk_contrib</span>
+        <span class="n">mean_risk_contribution_distance</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">distances_number</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mean_risk_contribution_distance</span> <span class="o">&lt;</span> <span class="mf">0.005</span>  <span class="c1"># max distance: 0.5%</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_normalized_risk_contribution</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span> <span class="n">assets_returns_covariance</span><span class="p">:</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">weights_of_factors</span><span class="p">:</span> <span class="n">QFSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFSeries</span><span class="p">:</span>
+        <span class="n">raw_risk_contribution</span> <span class="o">=</span> <span class="n">weights_of_factors</span> <span class="o">*</span> <span class="p">(</span><span class="n">assets_returns_covariance</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights_of_factors</span><span class="p">))</span>
+        <span class="n">normalized_risk_contrib</span> <span class="o">=</span> <span class="n">raw_risk_contribution</span> <span class="o">/</span> <span class="n">raw_risk_contribution</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">normalized_risk_contrib</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

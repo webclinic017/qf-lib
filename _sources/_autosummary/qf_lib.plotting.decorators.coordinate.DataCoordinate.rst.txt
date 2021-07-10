@@ -1,0 +1,9 @@
+DataCoordinate
+====================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.coordinate
+
+.. autoclass:: DataCoordinate
+	:show-inheritance:
+	:autosummary:
+	:members:

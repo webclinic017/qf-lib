@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+
+
+<div class="viewcode-block" id="DataProvider"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider">[docs]</a><span class="k">class</span> <span class="nc">DataProvider</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An interface for data providers (for example AbstractPriceDataProvider or GeneralPriceProvider).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">frequency</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DataProvider.get_price"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider.get_price">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+                  <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets adjusted historical Prices (Open, High, Low, Close) and Volume</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: PriceField, Sequence[PriceField]</span>
+<span class="sd">            fields of securities which should be retrieved</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            date representing the beginning of historical period from which data should be retrieved</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            date representing the end of historical period from which data should be retrieved;</span>
+<span class="sd">            if no end_date was provided, by default the current date will be used</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None, PricesSeries, PricesDataFrame, QFDataArray</span>
+<span class="sd">            If possible the result will be squeezed so that instead of returning QFDataArray (3-D structure),</span>
+<span class="sd">            data of lower dimensionality will be returned. The results will be either an QFDataArray (with 3 dimensions:</span>
+<span class="sd">            dates, tickers, fields), PricesDataFrame (with 2 dimensions: dates, tickers or fields.</span>
+<span class="sd">            It is also possible to get 2 dimensions ticker and field if single date was provided), or PricesSeries</span>
+<span class="sd">            with 1 dimension: dates. All the containers will be indexed with PriceField whenever possible</span>
+<span class="sd">            (for example: instead of &#39;Close&#39; column in the PricesDataFrame there will be PriceField.Close)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataProvider.get_history"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider.get_history">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets historical attributes (fields) of different securities (tickers).</span>
+
+<span class="sd">        All the duplicate fields and tickers will be removed (the first occurrence will remain). This is crucial</span>
+<span class="sd">        for having the expected behavior with using label-based indices. E.g. let&#39;s assume there is a duplicate ticker</span>
+<span class="sd">        &#39;SPX Index&#39; in tickers list and the result data frame has two columns &#39;SPX Index&#39;. Then when someone</span>
+<span class="sd">        runs result.loc[:, &#39;SPX Index&#39;], he expects to get a series of &#39;SPX Index&#39; values. However</span>
+<span class="sd">        he&#39;ll get a data frame with two columns, both named &#39;SPX Index&#39;.</span>
+<span class="sd">        If someone insists on keeping duplicate values in index/columns, then it&#39;s possible to reindex the result</span>
+<span class="sd">        (e.g. result.reindex(columns=tickers)).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: None, str, Sequence[str]</span>
+<span class="sd">            fields of securities which should be retrieved. If None, all available fields will be returned</span>
+<span class="sd">            (only supported by few DataProviders)</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            date representing the beginning of historical period from which data should be retrieved</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            date representing the end of historical period from which data should be retrieved;</span>
+<span class="sd">            if no end_date was provided, by default the current date will be used</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+<span class="sd">        kwargs</span>
+<span class="sd">            kwargs should not be used on the level of AbstractDataProvider. They are here to provide a common interface</span>
+<span class="sd">            for all data providers since some of the specific data providers accept additional arguments</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries, QFDataFrame, QFDataArray</span>
+<span class="sd">            If possible the result will be squeezed, so that instead of returning QFDataArray, data of lower</span>
+<span class="sd">            dimensionality will be returned. The results will be either an QFDataArray (with 3 dimensions: date, ticker,</span>
+<span class="sd">            field), a QFDataFrame (with 2 dimensions: date, ticker or field; it is also possible to get 2 dimensions</span>
+<span class="sd">            ticker and field if single date was provided) or QFSeries (with 1 dimensions: date).</span>
+<span class="sd">            If no data is available in the database or an non existing ticker was provided an empty structure</span>
+<span class="sd">            (QFSeries, QFDataFrame or QFDataArray) will be returned returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider.supported_ticker_types">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns classes of tickers which are supported by this DataProvider.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider.get_futures_chain_tickers">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns tickers of futures contracts, which belong to the same futures contract chain as the provided ticker</span>
+<span class="sd">        (tickers), along with their expiration dates in form of a QFSeries.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: FutureTicker, Sequence[FutureTicker]</span>
+<span class="sd">            tickers for which should the future chain tickers be retrieved</span>
+<span class="sd">        expiration_date_fields: ExpirationDateField, Sequence[ExpirationDateField]</span>
+<span class="sd">            field that should be downloaded as the expiration date field, by default last tradeable date</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[FutureTicker, Union[QFSeries, QFDataFrame]]</span>
+<span class="sd">            Returns a dictionary, which maps Tickers to QFSeries, consisting of the expiration dates of Future</span>
+<span class="sd">            Contracts: Dict[FutureTicker, QFSeries]. The QFSeries contain the specific Tickers, which belong to the</span>
+<span class="sd">            corresponding futures family, same as the FutureTicker, and are indexed by the expiration dates of</span>
+<span class="sd">            the specific future contracts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

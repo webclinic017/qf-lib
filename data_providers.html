@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_providers &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DataProvider" href="_autosummary/qf_lib.data_providers.data_provider.DataProvider.html" />
+    <link rel="prev" title="FuturesRollingOrdersGenerator" href="_autosummary/qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers.html">containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">data_providers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.data_provider.DataProvider.html">DataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html">AbstractPriceDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html">BloombergDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html">PresetDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider.html">PrefetchingDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.general_price_provider.GeneralPriceProvider.html">GeneralPriceProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html">QuandlDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html">HaverDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/qf_lib.data_providers.cryptocurrency.cryptocurrency_data_provider.CryptoCurrencyDataProvider.html">CryptoCurrencyDataProvider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>data_providers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="data-providers">
+<h1>data_providers<a class="headerlink" href="#data-providers" title="Permalink to this headline">¶</a></h1>
+<p><strong>Data Provider classes</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_provider.DataProvider</span></code></a></p></td>
+<td><p>An interface for data providers (for example AbstractPriceDataProvider or GeneralPriceProvider).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html#qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider" title="qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstract_price_data_provider.AbstractPriceDataProvider</span></code></a></p></td>
+<td><p>An interface for data providers containing historical data of stocks, indices, futures and other asset classes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider" title="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bloomberg.bloomberg_data_provider.BloombergDataProvider</span></code></a></p></td>
+<td><p>Data Provider which provides financial data from Bloomberg.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider" title="qf_lib.data_providers.preset_data_provider.PresetDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preset_data_provider.PresetDataProvider</span></code></a></p></td>
+<td><p>Wrapper on QFDataArray which makes it a DataProvider.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider.html#qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider" title="qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefetching_data_provider.PrefetchingDataProvider</span></code></a></p></td>
+<td><p>Optimises running of the DataProvider by pre-fetching all the data at startup and then using the cached data instead of sending over-the-network requests every time the data is requested.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.general_price_provider.GeneralPriceProvider.html#qf_lib.data_providers.general_price_provider.GeneralPriceProvider" title="qf_lib.data_providers.general_price_provider.GeneralPriceProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">general_price_provider.GeneralPriceProvider</span></code></a></p></td>
+<td><p>The main class that should be used in order to access prices of financial instruments.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider.html#qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider" title="qf_lib.data_providers.quandl.quandl_data_provider.QuandlDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quandl.quandl_data_provider.QuandlDataProvider</span></code></a></p></td>
+<td><p>Class providing the Quandl data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider.html#qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider" title="qf_lib.data_providers.haver.haver_data_provider.HaverDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">haver.haver_data_provider.HaverDataProvider</span></code></a></p></td>
+<td><p>Constructs a new <code class="docutils literal notranslate"><span class="pre">HaverDataProvider</span></code> instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.data_providers.cryptocurrency.cryptocurrency_data_provider.CryptoCurrencyDataProvider.html#qf_lib.data_providers.cryptocurrency.cryptocurrency_data_provider.CryptoCurrencyDataProvider" title="qf_lib.data_providers.cryptocurrency.cryptocurrency_data_provider.CryptoCurrencyDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cryptocurrency.cryptocurrency_data_provider.CryptoCurrencyDataProvider</span></code></a></p></td>
+<td><p>Constructs a new <code class="docutils literal notranslate"><span class="pre">CryptoCurrencyDataProvider</span></code> instance</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-qf_lib.data_providers.helpers"></span><p><strong>Functions</strong></p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.helpers.normalize_data_array" title="qf_lib.data_providers.helpers.normalize_data_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_data_array</span></code></a>(data_array, tickers, …)</p></td>
+<td><p>Post-processes the result of some DataProviders so that it satisfies the format of a result expected from DataProviders.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.helpers.tickers_dict_to_data_array" title="qf_lib.data_providers.helpers.tickers_dict_to_data_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tickers_dict_to_data_array</span></code></a>(…)</p></td>
+<td><p>Converts a dictionary mapping tickers to DateFrame onto a QFDataArray.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt id="qf_lib.data_providers.helpers.normalize_data_array">
+<code class="sig-prename descclassname">qf_lib.data_providers.helpers.</code><code class="sig-name descname">normalize_data_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_array</span></em>, <em class="sig-param"><span class="n">tickers</span></em>, <em class="sig-param"><span class="n">fields</span></em>, <em class="sig-param"><span class="n">got_single_date</span></em>, <em class="sig-param"><span class="n">got_single_ticker</span></em>, <em class="sig-param"><span class="n">got_single_field</span></em>, <em class="sig-param"><span class="n">use_prices_types</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference internal" href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><span class="p">, </span><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">, </span><a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">qf_lib.containers.qf_data_array.QFDataArray</a><span class="p">, </span><a class="reference internal" href="_autosummary/qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">qf_lib.containers.series.prices_series.PricesSeries</a><span class="p">, </span><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame">qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame</a><span class="p">]</span><a class="reference internal" href="_modules/qf_lib/data_providers/helpers.html#normalize_data_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.helpers.normalize_data_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post-processes the result of some DataProviders so that it satisfies the format of a result expected
+from DataProviders. Expected format rules should cover the following:
+- proper return type (QFSeries/PricesSeries, QFDataFrame/PricesDataFrame, QFDataArray),
+- proper shape of the result (squeezed dimensions for which a single non-list value was provided, e.g. “OPEN”),
+- dimensions: “tickers” and “fields” contain all required labels and the labels are in required order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_array</strong> – data_array to be normalized</p></li>
+<li><p><strong>tickers</strong> – list of tickers requested by the caller</p></li>
+<li><p><strong>fields</strong> – list of fields requested by the caller</p></li>
+<li><p><strong>got_single_date</strong> – True if a single (scalar value) date was requested (start_date==end_date); False otherwise</p></li>
+<li><p><strong>got_single_ticker</strong> – True if a single (scalar value) ticker was requested (e.g. “MSFT US Equity”); False otherwise</p></li>
+<li><p><strong>got_single_field</strong> – True if a single (scalar value) field was requested (e.g. “OPEN”); False otherwise</p></li>
+<li><p><strong>use_prices_types</strong> – if True then proper return types are: PricesSeries, PricesDataFrame or QFDataArray;
+otherwise return types are: QFSeries, QFDataFrame or QFDataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="_autosummary/qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">QFSeries</a>, <a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">QFDataFrame</a>, <a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">QFDataArray</a>, <a class="reference internal" href="_autosummary/qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">PricesSeries</a>, <a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame">PricesDataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="qf_lib.data_providers.helpers.tickers_dict_to_data_array">
+<code class="sig-prename descclassname">qf_lib.data_providers.helpers.</code><code class="sig-name descname">tickers_dict_to_data_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tickers_data_dict</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">, </span><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame">qf_lib.containers.dataframe.qf_dataframe.QFDataFrame</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">requested_tickers</span></em>, <em class="sig-param"><span class="n">requested_fields</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">qf_lib.containers.qf_data_array.QFDataArray</a><a class="reference internal" href="_modules/qf_lib/data_providers/helpers.html#tickers_dict_to_data_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.helpers.tickers_dict_to_data_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary mapping tickers to DateFrame onto a QFDataArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tickers_data_dict</strong> (<em>Dict</em><em>[</em><a class="reference internal" href="_autosummary/qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a><em>, </em><a class="reference internal" href="_autosummary/qf_lib.containers.dataframe.qf_dataframe.QFDataFrame.html#qf_lib.containers.dataframe.qf_dataframe.QFDataFrame" title="qf_lib.containers.dataframe.qf_dataframe.QFDataFrame"><em>QFDataFrame</em></a><em>]</em>) – Ticker -&gt; QFDataFrame[dates, fields]</p></li>
+<li><p><strong>requested_tickers</strong> – </p></li>
+<li><p><strong>requested_fields</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="_autosummary/qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">QFDataArray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="_autosummary/qf_lib.data_providers.data_provider.DataProvider.html" class="btn btn-neutral float-right" title="DataProvider" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="_autosummary/qf_lib.containers.futures.futures_rolling_orders_generator.FuturesRollingOrdersGenerator.html" class="btn btn-neutral float-left" title="FuturesRollingOrdersGenerator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

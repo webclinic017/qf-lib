@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>annualise_with_sqrt &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="average_true_range" href="qf_lib.common.utils.miscellaneous.average_true_range.average_true_range.html" />
+    <link rel="prev" title="to_days" href="qf_lib.common.utils.dateutils.to_days.to_days.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../common.html">common</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../common.html#enums">enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#exceptions">exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#risk-parity-boxes">risk_parity_boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#tickers">tickers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#timeseries-analysis">timeseries_analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../common.html#utils">utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../common.html#classes">Classes</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../common.html#functions">Functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.close_open_gap.close_open_gap.close_open_gap.html">close_open_gap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.common_start_and_end.get_common_start_and_end.html">get_common_start_and_end</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.date_to_string.date_to_str.html">date_to_str</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.get_quarter.get_quarter.html">get_quarter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.get_values_common_dates.get_values_for_common_dates.html">get_values_for_common_dates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.iso_to_gregorian.iso_to_gregorian.html">iso_to_gregorian</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.string_to_date.str_to_date.html">str_to_date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.to_days.to_days.html">to_days</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">annualise_with_sqrt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.average_true_range.average_true_range.html">average_true_range</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.drop_consecutive_duplicates.html">drop_consecutive_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.function_name.get_function_name.html">get_function_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.kelly.kelly.html">kelly</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.kelly.kelly_binary.html">kelly_binary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.periods_list.periods_list_from_bool_series.html">periods_list_from_bool_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.to_list_conversion.convert_to_list.html">convert_to_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.volume_weighted_average_price.volume_weighted_average_price.html">volume_weighted_average_price</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.numberutils.is_finite_number.is_finite_number.html">is_finite_number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.calmar_ratio.calmar_ratio.html">calmar_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.gain_to_pain_ratio.gain_to_pain_ratio.html">gain_to_pain_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.information_ratio.information_ratio.html">information_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.omega_ratio.omega_ratio.html">omega_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.sharpe_ratio.sharpe_ratio.html">sharpe_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.ratios.sorino_ratio.sorino_ratio.html">sorino_ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.annualise_total_return.annualise_total_return.html">annualise_total_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.avg_drawdown.avg_drawdown.html">avg_drawdown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.avg_drawdown_duration.avg_drawdown_duration.html">avg_drawdown_duration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.beta_and_alpha.beta_and_alpha_full_stats.html">beta_and_alpha_full_stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.cagr.cagr.html">cagr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.convert_dataframe_frequency.convert_dataframe_frequency.html">convert_dataframe_frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.custom_returns_aggregating.aggregate_returns.html">aggregate_returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.cvar.cvar.html">cvar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.drawdown_tms.drawdown_tms.html">drawdown_tms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.get_aggregate_returns.get_aggregate_returns.html">get_aggregate_returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.index_grouping.get_grouping_for_frequency.html">get_grouping_for_frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.list_longest_drawdowns.list_longest_drawdowns.html">list_longest_drawdowns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.list_of_max_drawdowns.list_of_max_drawdowns.html">list_of_max_drawdowns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.log_to_simple_return.log_to_simple_return.html">log_to_simple_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.max_drawdown.max_drawdown.html">max_drawdown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.return_distribution_helpers.get_cone_chart.html">get_cone_chart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.return_distribution_helpers.generate_random_paths.html">generate_random_paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.return_distribution_helpers.generate_random_log_paths.html">generate_random_log_paths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.simple_to_log_return.simple_to_log_return.html">simple_to_log_return</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.sqn.sqn.html">sqn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.sqn.sqn_for100trades.html">sqn_for100trades</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.sqn.avg_nr_of_trades_per1y.html">avg_nr_of_trades_per1y</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.tail_events.tail_events.html">tail_events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.technical_analysis.utils.ta_series.html">ta_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.get_volatility.get_volatility.html">get_volatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.intraday_volatility.intraday_volatility.html">intraday_volatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.rolling_volatility.rolling_volatility.html">rolling_volatility</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../common.html">common</a> &raquo;</li>
+        
+      <li>annualise_with_sqrt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="annualise-with-sqrt">
+<h1>annualise_with_sqrt<a class="headerlink" href="#annualise-with-sqrt" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt">
+<code class="sig-prename descclassname">qf_lib.common.utils.miscellaneous.annualise_with_sqrt.</code><code class="sig-name descname">annualise_with_sqrt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>pandas.core.series.Series<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency">qf_lib.common.enums.frequency.Frequency</a></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>float<span class="p">, </span>pandas.core.series.Series<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/common/utils/miscellaneous/annualise_with_sqrt.html#annualise_with_sqrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.miscellaneous.annualise_with_sqrt.annualise_with_sqrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annualises samples of given frequency by multiplying each value by the square-rooted number of samples in a year
+for a given frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>float</em><em>, </em><em>Series</em><em>, </em><em>List</em><em>[</em><em>float</em><em>]</em>) – value(s) to annualise</p></li>
+<li><p><strong>frequency</strong> (<a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><em>Frequency</em></a>) – original sampling frequency for the given value(s)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annualised values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>loat, Series, List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.common.utils.miscellaneous.average_true_range.average_true_range.html" class="btn btn-neutral float-right" title="average_true_range" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.common.utils.dateutils.to_days.to_days.html" class="btn btn-neutral float-left" title="to_days" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

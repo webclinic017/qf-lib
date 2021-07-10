@@ -1,0 +1,9 @@
+HeatMapChartDecorator
+============================================================================
+
+.. currentmodule:: qf_lib.plotting.charts.heatmap.heatmap_chart_decorator
+
+.. autoclass:: HeatMapChartDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:

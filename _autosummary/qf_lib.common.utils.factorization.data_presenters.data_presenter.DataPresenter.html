@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DataPresenter &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RollingDataPresenter" href="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html" />
+    <link rel="prev" title="RollingWindowsEstimator" href="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backtesting.html">backtesting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../common.html">common</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../common.html#enums">enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#exceptions">exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#risk-parity-boxes">risk_parity_boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#tickers">tickers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common.html#timeseries-analysis">timeseries_analysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../common.html#utils">utils</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../common.html#classes">Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_base.AnalyticalConeBase.html">AnalyticalConeBase</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone.AnalyticalCone.html">AnalyticalCone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.confidence_interval.analytical_cone_oos.AnalyticalConeOOS.html">AnalyticalConeOOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.date_format.DateFormat.html">DateFormat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.Timer.html">Timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.RealTimer.html">RealTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.dateutils.timer.SettableTimer.html">SettableTimer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model.DataModel.html">DataModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model_input.DataModelInput.html">DataModelInput</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html">RollingWindowsEstimator</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">DataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html">RollingDataPresenter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html">ElasticNetFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier_simplified.ElasticNetFactorsIdentifierSimplified.html">ElasticNetFactorsIdentifierSimplified</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.stepwise_factor_identifier.StepwiseFactorsIdentifier.html">StepwiseFactorsIdentifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.factorization.manager.FactorizationManager.html">FactorizationManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.miscellaneous.consecutive_duplicates.Method.html">Method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.returns.is_return_stats.InSampleReturnStats.html">InSampleReturnStats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.drift_independent_volatility.DriftIndependentVolatility.html">DriftIndependentVolatility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.volatility_forecast.VolatilityForecast.html">VolatilityForecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.volatility.volatility_manager.VolatilityManager.html">VolatilityManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qf_lib.common.utils.data_cleaner.DataCleaner.html">DataCleaner</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../common.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../common.html">common</a> &raquo;</li>
+        
+      <li>DataPresenter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="datapresenter">
+<h1>DataPresenter<a class="headerlink" href="#datapresenter" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter">
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.common.utils.factorization.data_presenters.data_presenter.</code><code class="sig-name descname">DataPresenter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.utils.factorization.data_models.data_model.DataModel.html#qf_lib.common.utils.factorization.data_models.data_model.DataModel" title="qf_lib.common.utils.factorization.data_models.data_model.DataModel">qf_lib.common.utils.factorization.data_models.data_model.DataModel</a></span></em>, <em class="sig-param"><span class="n">ticker_to_security_name_dict</span><span class="p">:</span> <span class="n">Mapping<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">enet_factors_identifier</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier.html#qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier" title="qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier">qf_lib.common.utils.factorization.factors_identification.elastic_net_factors_identifier.ElasticNetFactorsIdentifier</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/common/utils/factorization/data_presenters/data_presenter.html#DataPresenter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.common.utils.factorization.data_presenters.data_presenter.DataPresenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class used for presenting the data stored in the FactorizationDataModel.
+:param model: model for the data, which should be presented
+:param ticker_to_security_name_dict: dictionary mapping tickers to security names</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qf_lib.common.utils.factorization.data_presenters.rolling_data_presenter.RollingDataPresenter.html" class="btn btn-neutral float-right" title="RollingDataPresenter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qf_lib.common.utils.factorization.data_models.rolling_window_estimation.RollingWindowsEstimator.html" class="btn btn-neutral float-left" title="RollingWindowsEstimator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

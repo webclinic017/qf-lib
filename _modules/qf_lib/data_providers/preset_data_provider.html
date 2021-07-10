@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.preset_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.preset_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.preset_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="c1">#     Copyright 2016-present CERN – European Organization for Nuclear Research</span>
+<span class="c1">#</span>
+<span class="c1">#     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#     you may not use this file except in compliance with the License.</span>
+<span class="c1">#     You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#         http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#     Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#     See the License for the specific language governing permissions and</span>
+<span class="c1">#     limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">FrozenSet</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.backtesting.events.time_event.regular_time_event.market_open_event</span> <span class="kn">import</span> <span class="n">MarketOpenEvent</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.dateutils.relative_delta</span> <span class="kn">import</span> <span class="n">RelativeDelta</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dimension_names</span> <span class="kn">import</span> <span class="n">DATES</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.future_ticker</span> <span class="kn">import</span> <span class="n">FutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.prices_series</span> <span class="kn">import</span> <span class="n">PricesSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.helpers</span> <span class="kn">import</span> <span class="n">normalize_data_array</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
+
+
+<div class="viewcode-block" id="PresetDataProvider"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider">[docs]</a><span class="k">class</span> <span class="nc">PresetDataProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper on QFDataArray which makes it a DataProvider.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data</span>
+<span class="sd">        data to be wrapped, indexed by date, (specific) tickers and fields</span>
+<span class="sd">    start_date</span>
+<span class="sd">        beginning of the cached period (not necessarily the first date in the `data`)</span>
+<span class="sd">    end_date</span>
+<span class="sd">        end of the cached period (not necessarily the last date in the `data`)</span>
+<span class="sd">    frequency</span>
+<span class="sd">        frequency of the data</span>
+<span class="sd">    exp_dates</span>
+<span class="sd">        dictionary mapping FutureTickers to QFDataFrame of contracts expiration dates, belonging to the certain</span>
+<span class="sd">        future ticker family</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">QFDataArray</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span><span class="p">,</span>
+            <span class="n">exp_dates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_bundle</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span> <span class="o">=</span> <span class="n">frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tickers_cached_set</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_future_tickers_cached_set</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">exp_dates</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">if</span> <span class="n">exp_dates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fields_cached_set</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span> <span class="o">=</span> <span class="n">start_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span> <span class="o">=</span> <span class="n">end_date</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_types</span> <span class="o">=</span> <span class="p">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span> <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_bundle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataArray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_bundle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Frequency</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exp_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exp_dates</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cached_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tickers_cached_set</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cached_future_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_future_tickers_cached_set</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cached_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields_cached_set</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start_date</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_date</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span>
+
+<div class="viewcode-block" id="PresetDataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ticker_types</span></div>
+
+<div class="viewcode-block" id="PresetDataProvider.get_price"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider.get_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]],</span>
+                  <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> \
+            <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="c1"># Frequency adjustment - Verify whether the passed frequency parameter is correct and can be used with the</span>
+        <span class="c1"># preset data</span>
+
+        <span class="c1"># The passed desired data frequency should be at most equal to the frequency of the initially loaded data</span>
+        <span class="c1"># (in case of downsampling the data may be aggregated, but no data upsampling is supported).</span>
+        <span class="k">assert</span> <span class="n">frequency</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span><span class="p">,</span> <span class="s2">&quot;The passed data frequency should be at most equal to the frequency of &quot;</span> \
+            <span class="s2">&quot;the initially loaded data&quot;</span>
+        <span class="c1"># The PresetDataProvider does not support data aggregation for frequency lower than daily frequency</span>
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span> <span class="ow">and</span> <span class="n">frequency</span> <span class="o">&lt;=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Data aggregation for lower than daily frequency is not supported yet&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">&gt;</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span>
+            <span class="c1"># In case of high, intraday frequency - the data array should not include the end_date. The data range is</span>
+            <span class="c1"># labeled with the beginning index time and excludes the end of the time range, therefore a new</span>
+            <span class="c1"># end date is computed.</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="o">.</span><span class="n">time_delta</span><span class="p">()</span>
+
+        <span class="c1"># Prearrange all the necessary parameters</span>
+
+        <span class="c1"># In order to be able to return data for FutureTickers create a mapping between tickers and corresponding</span>
+        <span class="c1"># specific tickers (in case of non FutureTickers it will be an identity mapping)</span>
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+        <span class="n">tickers_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">get_current_specific_ticker</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span><span class="p">):</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+        <span class="n">specific_tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tickers_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">PriceField</span><span class="p">)</span>
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">&gt;</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="p">(</span>
+            <span class="nb">bool</span><span class="p">(</span><span class="n">start_date</span> <span class="ow">and</span> <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_cached_data_available</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_bundle</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">end_date</span><span class="p">,</span> <span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">]</span>
+
+        <span class="c1"># Data aggregation (allowed only for the Intraday Data and in case if more then 1 data point is found)</span>
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_array</span><span class="p">[</span><span class="n">DATES</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aggregate_intraday_data</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span>
+                                                       <span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalize_data_array</span><span class="p">(</span>
+            <span class="n">data_array</span><span class="p">,</span> <span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_date</span><span class="p">,</span> <span class="n">got_single_ticker</span><span class="p">,</span> <span class="n">got_single_field</span><span class="p">,</span>
+            <span class="n">use_prices_types</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Map the specific tickers onto the tickers given by the tickers_mapping array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">):</span>
+            <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span>
+                <span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">tickers_mapping</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">):</span>
+            <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">tickers_mapping</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">):</span>
+            <span class="c1"># Name of the PricesSeries can only contain strings</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">tickers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">ticker</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">normalized_result</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_if_cached_data_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+
+        <span class="n">uncached_tickers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tickers_cached_set</span>
+        <span class="k">if</span> <span class="n">uncached_tickers</span><span class="p">:</span>
+            <span class="n">tickers_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">uncached_tickers</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tickers: </span><span class="si">{}</span><span class="s2"> are not available in the Data Bundle&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">))</span>
+
+        <span class="c1"># fields which are not cached but were requested</span>
+        <span class="n">uncached_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields_cached_set</span>
+        <span class="k">if</span> <span class="n">uncached_fields</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Fields: </span><span class="si">{}</span><span class="s2"> are not available in the Data Bundle&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">start_date</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Requested start date </span><span class="si">{}</span><span class="s2"> is before data bundle start date </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span>
+                             <span class="nb">format</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_date</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">end_date</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Requested end date </span><span class="si">{}</span><span class="s2"> is after data bundle end date </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span>
+                             <span class="nb">format</span><span class="p">(</span><span class="n">end_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_date</span><span class="p">))</span>
+
+<div class="viewcode-block" id="PresetDataProvider.get_history"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span>
+                    <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                    <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+
+        <span class="c1"># Verify whether the passed frequency parameter is correct and can be used with the preset data</span>
+        <span class="k">assert</span> <span class="n">frequency</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span><span class="p">,</span> <span class="s2">&quot;Currently, for the get history does not support data sampling&quot;</span>
+
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">frequency</span> <span class="o">&gt;</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">:</span>
+            <span class="c1"># In case of high frequency - the data array should not include the end_date. The data range is</span>
+            <span class="c1"># labeled with the beginning index time and excludes the end of the time range, therefore a new</span>
+            <span class="c1"># end date is computed.</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">MIN_1</span><span class="o">.</span><span class="n">time_delta</span><span class="p">()</span>
+
+        <span class="c1"># In order to be able to return data for FutureTickers create a mapping between tickers and corresponding</span>
+        <span class="c1"># specific tickers (in case of non FutureTickers it will be an identity mapping)</span>
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+        <span class="n">tickers_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">get_current_specific_ticker</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">FutureTicker</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span><span class="p">):</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+        <span class="n">specific_tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tickers_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">)</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span>
+            <span class="p">(</span><span class="n">start_date</span> <span class="o">+</span> <span class="n">frequency</span><span class="o">.</span><span class="n">time_delta</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">end_date</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_cached_data_available</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_bundle</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">end_date</span><span class="p">,</span> <span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">]</span>
+
+        <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalize_data_array</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">specific_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_date</span><span class="p">,</span>
+                                                 <span class="n">got_single_ticker</span><span class="p">,</span>
+                                                 <span class="n">got_single_field</span><span class="p">,</span> <span class="n">use_prices_types</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Map the specific tickers onto the tickers given by the tickers_mapping array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">):</span>
+            <span class="n">normalized_result</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">tickers_mapping</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">PricesDataFrame</span><span class="p">):</span>
+            <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">tickers_mapping</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">normalized_result</span><span class="p">,</span> <span class="n">PricesSeries</span><span class="p">):</span>
+            <span class="c1"># Name of the PricesSeries can only contain strings</span>
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">tickers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalized_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">normalized_result</span></div>
+
+<div class="viewcode-block" id="PresetDataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../_autosummary/qf_lib.data_providers.preset_data_provider.PresetDataProvider.html#qf_lib.data_providers.preset_data_provider.PresetDataProvider.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">FutureTicker</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]]:</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+
+        <span class="c1"># Check if the futures tickers are in the exp_dates keys</span>
+        <span class="n">uncached_future_tickers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exp_dates</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">uncached_future_tickers</span><span class="p">:</span>
+            <span class="n">tickers_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tickers: </span><span class="si">{}</span><span class="s2"> are not available in the Data Bundle&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">))</span>
+
+        <span class="n">future_chain_tickers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ticker</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exp_dates</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">future_chain_tickers</span></div>
+
+    <span class="k">def</span> <span class="nf">_aggregate_intraday_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_array</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+                                 <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span> <span class="n">fields</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function, which aggregates the intraday data array for various dates and returns a new data array with data</span>
+<span class="sd">        sampled with the given frequency.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If the data is of intraday data type, which spans over multiple days, the base parameter of resample()</span>
+        <span class="c1"># function should be adjusted differently for the first day.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Therefore, the data array is divided into two separate arrays data_array_1, data_array_2 - first containing</span>
+        <span class="c1"># only the first day, and the second one - containing all other dates.</span>
+
+        <span class="n">end_of_day</span> <span class="o">=</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">RelativeDelta</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">59</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">59</span><span class="p">)</span>
+        <span class="n">_end_date</span> <span class="o">=</span> <span class="n">end_of_day</span> <span class="k">if</span> <span class="p">(</span><span class="n">end_of_day</span> <span class="o">&lt;</span> <span class="n">end_date</span><span class="p">)</span> <span class="k">else</span> <span class="n">end_date</span>
+
+        <span class="c1"># Get both parts of the data array</span>
+        <span class="n">data_array_1</span> <span class="o">=</span> <span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:</span><span class="n">_end_date</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">data_array_2</span> <span class="o">=</span> <span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">end_of_day</span><span class="p">:</span><span class="n">end_date</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_array_1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">base_data_array_1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data_array_1</span><span class="p">[</span><span class="n">DATES</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">minute</span>
+            <span class="n">data_array_1</span> <span class="o">=</span> <span class="n">data_array_1</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span>
+                <span class="n">dates</span><span class="o">=</span><span class="n">frequency</span><span class="o">.</span><span class="n">to_pandas_freq</span><span class="p">(),</span>
+                <span class="n">base</span><span class="o">=</span><span class="n">base_data_array_1</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aggregate_data_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_array_2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">base_data_array_2</span> <span class="o">=</span> <span class="n">MarketOpenEvent</span><span class="o">.</span><span class="n">trigger_time</span><span class="p">()</span><span class="o">.</span><span class="n">minute</span>
+            <span class="n">data_array_2</span> <span class="o">=</span> <span class="n">data_array_2</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span>
+                <span class="n">dates</span><span class="o">=</span><span class="n">frequency</span><span class="o">.</span><span class="n">to_pandas_freq</span><span class="p">(),</span>
+                <span class="n">base</span><span class="o">=</span><span class="n">base_data_array_2</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                <span class="n">skipna</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_aggregate_data_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">))</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_array_1</span><span class="p">,</span> <span class="n">data_array_2</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="n">DATES</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_array</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_aggregate_data_array</span><span class="p">(</span><span class="n">data_array</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PriceField</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function, which aggregates the data arrays for various dates and returns a data array consisting of</span>
+<span class="sd">        tickers and fields.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">returned_frame</span> <span class="o">=</span> <span class="n">data_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">price_field_to_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">DATES</span><span class="p">),</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">DATES</span><span class="p">),</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">DATES</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">price_field_to_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">returned_frame</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">price_field_to_data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">field</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">):</span>
+                <span class="c1"># Get the first / last bar field value, which is not a Nan</span>
+                <span class="n">date_index</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># Look for the first date with non-Nan field value</span>
+                    <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Look for the last date with non-Nan field value</span>
+                <span class="p">}</span>
+
+                <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">:</span>
+                    <span class="n">not_nan_fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data_array</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_nan_fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">not_nan_fields</span><span class="p">[</span><span class="n">date_index</span><span class="p">[</span><span class="n">field</span><span class="p">]]</span>
+                        <span class="n">returned_frame</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># This ticker does not contain any value different than Nan for this field</span>
+                        <span class="n">returned_frame</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">return</span> <span class="n">returned_frame</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

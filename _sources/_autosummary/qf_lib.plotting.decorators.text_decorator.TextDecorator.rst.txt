@@ -1,0 +1,9 @@
+TextDecorator
+=======================================================
+
+.. currentmodule:: qf_lib.plotting.decorators.text_decorator
+
+.. autoclass:: TextDecorator
+	:show-inheritance:
+	:autosummary:
+	:members:
