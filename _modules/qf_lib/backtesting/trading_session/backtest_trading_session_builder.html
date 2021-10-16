@@ -221,7 +221,6 @@
 
 <span class="sd">    - backtest name is set to &quot;Backtest Results&quot;</span>
 <span class="sd">    - initial cash is set to 10000000</span>
-<span class="sd">    - montior type is set to LightBacktestMonitor</span>
 <span class="sd">    - SimulatedBloombergContractTickerMapper is used to map contracts to tickers</span>
 <span class="sd">    - no commissions are introduced (FixedCommissionModel(0.0))</span>
 <span class="sd">    - no slippage is introduced (PriceBasedSlippage(0.0))</span>
@@ -576,6 +575,7 @@
                 <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Contract - Ticker Mapper: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_contract_ticker_mapper</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
                 <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Start Date: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start_date</span><span class="p">),</span>
                 <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">End Date: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end_date</span><span class="p">),</span>
+                <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Trading frequency:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frequency</span><span class="p">),</span>
                 <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Initial Cash: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_cash</span><span class="p">)</span>
             <span class="p">])</span>
         <span class="p">)</span>

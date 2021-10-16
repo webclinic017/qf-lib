@@ -1,0 +1,9 @@
+AbstractStrategy
+================================================================
+
+.. currentmodule:: qf_lib.backtesting.strategies.abstract_strategy
+
+.. autoclass:: AbstractStrategy
+	:show-inheritance:
+	:autosummary:
+	:members:

@@ -1,9 +1,0 @@
-AlphaModelStrategy
-======================================================================
-
-.. currentmodule:: qf_lib.backtesting.alpha_model.alpha_model_strategy
-
-.. autoclass:: AlphaModelStrategy
-	:show-inheritance:
-	:autosummary:
-	:members:

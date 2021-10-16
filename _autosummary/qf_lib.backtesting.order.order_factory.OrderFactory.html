@@ -101,9 +101,11 @@
 <li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.order.time_in_force.TimeInForce.html">TimeInForce</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#orders-filter">orders_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#strategies">strategies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
 </ul>
 </li>
@@ -183,14 +185,14 @@
 <h1>OrderFactory<a class="headerlink" href="#orderfactory" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="qf_lib.backtesting.order.order_factory.OrderFactory">
-<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.order.order_factory.</code><code class="sig-name descname">OrderFactory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">broker</span><span class="p">:</span> <span class="n">qf_lib.backtesting.broker.broker.Broker</span></em>, <em class="sig-param"><span class="n">data_handler</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler" title="qf_lib.backtesting.data_handler.data_handler.DataHandler">qf_lib.backtesting.data_handler.data_handler.DataHandler</a></span></em>, <em class="sig-param"><span class="n">contract_to_ticker_mapper</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper.html#qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper" title="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper">qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/order/order_factory.html#OrderFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.order.order_factory.OrderFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.order.order_factory.</code><code class="sig-name descname">OrderFactory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">broker</span><span class="p">:</span> <span class="n">qf_lib.backtesting.broker.broker.Broker</span></em>, <em class="sig-param"><span class="n">data_provider</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider">qf_lib.data_providers.data_provider.DataProvider</a></span></em>, <em class="sig-param"><span class="n">contract_to_ticker_mapper</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper.html#qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper" title="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper">qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/order/order_factory.html#OrderFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.order.order_factory.OrderFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Creates Orders.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>broker</strong> (<em>Broker</em>) – broker used to access the portfolio</p></li>
-<li><p><strong>data_handler</strong> (<a class="reference internal" href="qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler" title="qf_lib.backtesting.data_handler.data_handler.DataHandler"><em>DataHandler</em></a>) – data handler used to download prices</p></li>
+<li><p><strong>data_provider</strong> (<a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><em>DataProvider</em></a>) – data provider used to download prices. In case of backtesting, the DataHandler wrapper should be used.</p></li>
 <li><p><strong>contract_to_ticker_mapper</strong> (<a class="reference internal" href="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper.html#qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper" title="qf_lib.backtesting.contract.contract_to_ticker_conversion.base.ContractTickerMapper"><em>ContractTickerMapper</em></a>) – object mapping contracts to tickers</p></li>
 </ul>
 </dd>

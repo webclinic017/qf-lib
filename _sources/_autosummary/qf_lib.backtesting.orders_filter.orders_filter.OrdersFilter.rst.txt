@@ -1,0 +1,9 @@
+OrdersFilter
+===========================================================
+
+.. currentmodule:: qf_lib.backtesting.orders_filter.orders_filter
+
+.. autoclass:: OrdersFilter
+	:show-inheritance:
+	:autosummary:
+	:members:

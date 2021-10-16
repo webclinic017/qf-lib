@@ -173,7 +173,7 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
@@ -199,6 +199,7 @@
     <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.tabular_data_provider</span> <span class="kn">import</span> <span class="n">TabularDataProvider</span>
     <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.exceptions</span> <span class="kn">import</span> <span class="n">BloombergError</span>
     <span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.bloomberg_names</span> <span class="kn">import</span> <span class="n">REF_DATA_SERVICE_URI</span>
+
     <span class="n">is_blpapi_installed</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">is_blpapi_installed</span> <span class="o">=</span> <span class="kc">False</span>
@@ -247,15 +248,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_blpapi_installed</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t import the Bloomberg API. Check if the necessary dependencies are installed.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t import the Bloomberg API. Check if the necessary dependencies are installed.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to start session with host: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; on port: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to start session with host: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; on port: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">openService</span><span class="p">(</span><span class="n">REF_DATA_SERVICE_URI</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to open service: &quot;</span> <span class="o">+</span> <span class="n">REF_DATA_SERVICE_URI</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to open service: &quot;</span> <span class="o">+</span> <span class="n">REF_DATA_SERVICE_URI</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span></div>
@@ -319,7 +320,8 @@
             <span class="c1"># Download the expiration dates for each of the future contracts</span>
             <span class="n">mapping_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration_date_field_str_map</span><span class="p">()</span>
             <span class="n">expiration_date_fields_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapping_dict</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">expiration_date_fields</span><span class="p">]</span>
-            <span class="n">exp_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_values</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span> <span class="n">expiration_date_fields_str</span><span class="p">)</span>  <span class="c1"># type: Union[QFSeries, QFDataFrame]</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_values</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span>
+                                                <span class="n">expiration_date_fields_str</span><span class="p">)</span>  <span class="c1"># type: Union[QFSeries, QFDataFrame]</span>
 
             <span class="c1"># Drop these futures, for which no expiration date was found and cast all string dates into datetime</span>
             <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
@@ -347,9 +349,8 @@
 
         <span class="k">return</span> <span class="n">ticker_to_future_expiration_dates</span></div>
 
-<div class="viewcode-block" id="BloombergDataProvider.get_current_values"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_current_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_values</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> \
-            <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+<div class="viewcode-block" id="BloombergDataProvider.get_current_values"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_current_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span>
+                           <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the current values of fields for given tickers.</span>
 
@@ -378,7 +379,6 @@
         <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
 
         <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
-
         <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
 
         <span class="c1"># to keep the order of tickers and fields we reindex the data frame</span>
@@ -393,11 +393,9 @@
 
         <span class="k">return</span> <span class="n">casted_result</span></div>
 
-<div class="viewcode-block" id="BloombergDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-            <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
-            <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">override_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">override_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+<div class="viewcode-block" id="BloombergDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                    <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+                    <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">override_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">override_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
             <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets historical data from Bloomberg from the (start_date - end_date) time range. In case of frequency, which is</span>
@@ -442,7 +440,7 @@
             <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
         <span class="n">got_single_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">start_date</span> <span class="o">==</span> <span class="n">end_date</span><span class="p">)</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="kc">False</span>
+            <span class="p">(</span><span class="n">start_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">end_date</span><span class="o">.</span><span class="n">date</span><span class="p">())</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="kc">False</span>
         <span class="p">)</span>
 
         <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
@@ -499,7 +497,9 @@
 <div class="viewcode-block" id="BloombergDataProvider.get_unique_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_unique_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_unique_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">universe_ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;BloombergDataProvider does not provide historical tickers_universe data&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BloombergDataProvider.get_tabular_data"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_tabular_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<div class="viewcode-block" id="BloombergDataProvider.get_tabular_data"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_tabular_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">override_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="n">override_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provides current tabular data from Bloomberg.</span>
 
@@ -512,6 +512,9 @@
 <span class="sd">            ticker for security that should be retrieved</span>
 <span class="sd">        field: str</span>
 <span class="sd">            field of security that should be retrieved</span>
+<span class="sd">        override_names: str</span>
+<span class="sd">        override_values: str</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List</span>
@@ -523,11 +526,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_connect_if_needed</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_is_connected</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="n">override_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">override_names</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">override_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">override_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">override_values</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">override_values</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
         <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
         <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
 
         <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tabular_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tabular_data_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tickers_str</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">override_names</span><span class="p">,</span> <span class="n">override_values</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 

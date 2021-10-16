@@ -174,14 +174,15 @@
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.broker.broker</span> <span class="kn">import</span> <span class="n">Broker</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.contract.contract_to_ticker_conversion.base</span> <span class="kn">import</span> <span class="n">ContractTickerMapper</span>
-<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signals_register</span> <span class="kn">import</span> <span class="n">SignalsRegister</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.execution_style</span> <span class="kn">import</span> <span class="n">MarketOrder</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order_factory</span> <span class="kn">import</span> <span class="n">OrderFactory</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.time_in_force</span> <span class="kn">import</span> <span class="n">TimeInForce</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.position_sizer.position_sizer</span> <span class="kn">import</span> <span class="n">PositionSizer</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.utils.numberutils.is_finite_number</span> <span class="kn">import</span> <span class="n">is_finite_number</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
 
 
 <div class="viewcode-block" id="InitialRiskPositionSizer"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.position_sizer.initial_risk_position_sizer.InitialRiskPositionSizer.html#qf_lib.backtesting.position_sizer.initial_risk_position_sizer.InitialRiskPositionSizer">[docs]</a><span class="k">class</span> <span class="nc">InitialRiskPositionSizer</span><span class="p">(</span><span class="n">PositionSizer</span><span class="p">):</span>
@@ -193,7 +194,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    broker: Broker</span>
-<span class="sd">    data_handler: DataHandler</span>
+<span class="sd">    data_provider: DataProvider</span>
 <span class="sd">    order_factory: OrderFactory</span>
 <span class="sd">    contract_ticker_mapper: ContractTickerMapper</span>
 <span class="sd">    initial_risk: float</span>
@@ -208,10 +209,10 @@
 <span class="sd">        target percentages</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker</span><span class="p">:</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">:</span> <span class="n">OrderFactory</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker</span><span class="p">:</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">:</span> <span class="n">OrderFactory</span><span class="p">,</span>
                  <span class="n">contract_ticker_mapper</span><span class="p">:</span> <span class="n">ContractTickerMapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">:</span> <span class="n">SignalsRegister</span><span class="p">,</span> <span class="n">initial_risk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                  <span class="n">max_target_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tolerance_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">broker</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">,</span> <span class="n">contract_ticker_mapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">broker</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">,</span> <span class="n">order_factory</span><span class="p">,</span> <span class="n">contract_ticker_mapper</span><span class="p">,</span> <span class="n">signals_register</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">is_finite_number</span><span class="p">(</span><span class="n">initial_risk</span><span class="p">),</span> <span class="s2">&quot;Initial risk has to be a finite number&quot;</span>
         <span class="k">assert</span> <span class="n">initial_risk</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Initial risk has to be positive&quot;</span>
@@ -224,13 +225,14 @@
     <span class="k">def</span> <span class="nf">initial_risk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_risk</span>
 
-    <span class="k">def</span> <span class="nf">_generate_market_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Order</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">_generate_market_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Signal</span><span class="p">],</span> <span class="n">time_in_force</span><span class="p">:</span> <span class="n">TimeInForce</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Order</span><span class="p">]]:</span>
         <span class="n">target_percentages</span> <span class="o">=</span> <span class="p">{</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signal_to_contract</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_target_percentage</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="k">for</span> <span class="n">signal</span> <span class="ow">in</span> <span class="n">signals</span>
         <span class="p">}</span>
 
         <span class="n">market_order_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_factory</span><span class="o">.</span><span class="n">target_percent_orders</span><span class="p">(</span>
-            <span class="n">target_percentages</span><span class="p">,</span> <span class="n">MarketOrder</span><span class="p">(),</span> <span class="n">TimeInForce</span><span class="o">.</span><span class="n">OPG</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance_percentage</span>
+            <span class="n">target_percentages</span><span class="p">,</span> <span class="n">MarketOrder</span><span class="p">(),</span> <span class="n">time_in_force</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance_percentage</span><span class="p">,</span> <span class="n">frequency</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">market_order_list</span>

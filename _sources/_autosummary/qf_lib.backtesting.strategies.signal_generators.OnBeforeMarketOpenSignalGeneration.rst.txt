@@ -1,0 +1,9 @@
+OnBeforeMarketOpenSignalGeneration
+==================================================================================
+
+.. currentmodule:: qf_lib.backtesting.strategies.signal_generators
+
+.. autoclass:: OnBeforeMarketOpenSignalGeneration
+	:show-inheritance:
+	:autosummary:
+	:members:

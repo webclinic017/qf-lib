@@ -171,7 +171,6 @@
 <span class="c1">#     limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.execution_handler.commission_models.commission_model</span> <span class="kn">import</span> <span class="n">CommissionModel</span>
-<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
 
 
 <div class="viewcode-block" id="IBCommissionModel"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.backtesting.execution_handler.commission_models.ib_commission_model.IBCommissionModel.html#qf_lib.backtesting.execution_handler.commission_models.ib_commission_model.IBCommissionModel">[docs]</a><span class="k">class</span> <span class="nc">IBCommissionModel</span><span class="p">(</span><span class="n">CommissionModel</span><span class="p">):</span>
@@ -182,10 +181,9 @@
 <span class="sd">    https://www.interactivebrokers.co.uk/en/index.php?f=1590&amp;p=stocks1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">Order</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="n">quantity</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span>
-
-        <span class="n">commission</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">quantity</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">fill_price</span> <span class="o">*</span> <span class="n">quantity</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fill_quantity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">fill_quantity</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fill_quantity</span><span class="p">)</span>
+        <span class="n">commission</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">fill_quantity</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">fill_price</span> <span class="o">*</span> <span class="n">fill_quantity</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">commission</span></div>
 </pre></div>

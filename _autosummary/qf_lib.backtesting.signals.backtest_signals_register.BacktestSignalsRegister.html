@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="TradingSession" href="qf_lib.backtesting.trading_session.trading_session.TradingSession.html" />
+    <link rel="next" title="AbstractStrategy" href="qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy.html" />
     <link rel="prev" title="SignalsRegister" href="qf_lib.backtesting.signals.signals_register.SignalsRegister.html" /> 
 </head>
 
@@ -96,6 +96,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#orders-filter">orders_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#signals">signals</a><ul class="current">
@@ -104,6 +105,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">BacktestSignalsRegister</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#strategies">strategies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
 </ul>
 </li>
@@ -199,7 +201,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.get_signals_for_ticker" title="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.get_signals_for_ticker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_signals_for_ticker</span></code></a>(ticker[, alpha_model])</p></td>
 <td><p>Returns a QFSeries with all generated signals for the given ticker.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals" title="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_signals</span></code></a>(signals, date)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals" title="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_signals</span></code></a>(signals)</p></td>
 <td><p>Add the provided signals to the list of all cached signals.</p></td>
 </tr>
 </tbody>
@@ -244,7 +246,7 @@ alpha model matches the one in the signals using the str function)</p></li>
 
 <dl class="py method">
 <dt id="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals">
-<code class="sig-name descname">save_signals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">signals</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">qf_lib.backtesting.signals.signal.Signal</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/signals/backtest_signals_register.html#BacktestSignalsRegister.save_signals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_signals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">signals</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">qf_lib.backtesting.signals.signal.Signal</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/signals/backtest_signals_register.html#BacktestSignalsRegister.save_signals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.save_signals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add the provided signals to the list of all cached signals.</p>
 </dd></dl>
 
@@ -260,7 +262,7 @@ alpha model matches the one in the signals using the str function)</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="qf_lib.backtesting.trading_session.trading_session.TradingSession.html" class="btn btn-neutral float-right" title="TradingSession" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy.html" class="btn btn-neutral float-right" title="AbstractStrategy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="qf_lib.backtesting.signals.signals_register.SignalsRegister.html" class="btn btn-neutral float-left" title="SignalsRegister" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

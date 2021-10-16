@@ -169,13 +169,14 @@
 <span class="c1">#     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1">#     See the License for the specific language governing permissions and</span>
 <span class="c1">#     limitations under the License.</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
 
 
-<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Objects of this class are used in the portfolio construction process. They are returned by AlphaModels to</span>
 <span class="sd">    determine the suggested trend direction as well as its strength</span>
@@ -193,6 +194,8 @@
 <span class="sd">        price of the instrument. This value should always be positive</span>
 <span class="sd">    last_available_price: Optional[float]</span>
 <span class="sd">        The last price that was available at the time of generating the signal</span>
+<span class="sd">    creation_time: datetime</span>
+<span class="sd">        time when the signal was created</span>
 <span class="sd">    confidence: float</span>
 <span class="sd">        A float value in range [0;1] which describes the trust level for the AlphaModel in a current situation.</span>
 <span class="sd">        By default set to 1.0 (maximum)</span>
@@ -211,12 +214,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">suggested_exposure</span><span class="p">:</span> <span class="n">Exposure</span><span class="p">,</span> <span class="n">fraction_at_risk</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                 <span class="n">last_available_price</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">last_available_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">creation_time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
                  <span class="n">expected_move</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">symbol</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">alpha_model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span> <span class="k">if</span> <span class="n">symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ticker</span><span class="o">.</span><span class="n">ticker</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suggested_exposure</span> <span class="o">=</span> <span class="n">suggested_exposure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_available_price</span> <span class="o">=</span> <span class="n">last_available_price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">creation_time</span> <span class="o">=</span> <span class="n">creation_time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expected_move</span> <span class="o">=</span> <span class="n">expected_move</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fraction_at_risk</span> <span class="o">=</span> <span class="n">fraction_at_risk</span>

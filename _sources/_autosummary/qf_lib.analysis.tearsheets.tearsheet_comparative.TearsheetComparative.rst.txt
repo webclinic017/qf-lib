@@ -1,0 +1,9 @@
+TearsheetComparative
+=====================================================================
+
+.. currentmodule:: qf_lib.analysis.tearsheets.tearsheet_comparative
+
+.. autoclass:: TearsheetComparative
+	:show-inheritance:
+	:autosummary:
+	:members:

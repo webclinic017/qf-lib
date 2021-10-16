@@ -172,12 +172,10 @@
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
-<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
-
 
 <div class="viewcode-block" id="CommissionModel"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.backtesting.execution_handler.commission_models.commission_model.CommissionModel.html#qf_lib.backtesting.execution_handler.commission_models.commission_model.CommissionModel">[docs]</a><span class="k">class</span> <span class="nc">CommissionModel</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">Order</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fill_quantity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">pass</span></div>
 </pre></div>
 

@@ -170,11 +170,12 @@
 <span class="c1">#     See the License for the specific language governing permissions and</span>
 <span class="c1">#     limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
 <span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.cast_dataframe</span> <span class="kn">import</span> <span class="n">cast_dataframe</span>
 <span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.prices_dataframe</span> <span class="kn">import</span> <span class="n">PricesDataFrame</span>
 <span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
@@ -285,7 +286,8 @@
     <span class="k">return</span> <span class="n">casted_result</span>
 
 
-<div class="viewcode-block" id="tickers_dict_to_data_array"><a class="viewcode-back" href="../../../data_providers.html#qf_lib.data_providers.helpers.tickers_dict_to_data_array">[docs]</a><span class="k">def</span> <span class="nf">tickers_dict_to_data_array</span><span class="p">(</span><span class="n">tickers_data_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">],</span> <span class="n">requested_tickers</span><span class="p">,</span> <span class="n">requested_fields</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataArray</span><span class="p">:</span>
+<div class="viewcode-block" id="tickers_dict_to_data_array"><a class="viewcode-back" href="../../../data_providers.html#qf_lib.data_providers.helpers.tickers_dict_to_data_array">[docs]</a><span class="k">def</span> <span class="nf">tickers_dict_to_data_array</span><span class="p">(</span><span class="n">tickers_data_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">],</span>
+                               <span class="n">requested_tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ticker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Ticker</span><span class="p">]],</span> <span class="n">requested_fields</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QFDataArray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a dictionary mapping tickers to DateFrame onto a QFDataArray.</span>
 
@@ -293,7 +295,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    tickers_data_dict:  Dict[Ticker, QFDataFrame]</span>
 <span class="sd">        Ticker -&gt; QFDataFrame[dates, fields]</span>
-<span class="sd">    requested_tickers</span>
+<span class="sd">    requested_tickers: Sequence[Ticker]</span>
 <span class="sd">    requested_fields</span>
 
 <span class="sd">    Returns</span>
@@ -301,6 +303,8 @@
 <span class="sd">    QFDataArray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># return empty xr.DataArray if there is no data to be converted</span>
+    <span class="n">requested_tickers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">requested_tickers</span><span class="p">,</span> <span class="n">Ticker</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tickers_data_dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dates</span><span class="o">=</span><span class="p">[],</span> <span class="n">tickers</span><span class="o">=</span><span class="n">requested_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">requested_fields</span><span class="p">)</span>
 
@@ -322,6 +326,9 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">data_arrays</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dates</span><span class="o">=</span><span class="p">[],</span> <span class="n">tickers</span><span class="o">=</span><span class="n">requested_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">requested_fields</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">QFDataArray</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data_arrays</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">tickers_index</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">requested_tickers</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">tickers</span><span class="o">=</span><span class="n">requested_tickers</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">requested_fields</span><span class="p">)</span>
 
     <span class="c1"># the DataArray gets a name after the first ticker in the tickers_data_dict.keys() which is incorrect;</span>
     <span class="c1"># it should have no name</span>

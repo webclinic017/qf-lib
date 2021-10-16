@@ -91,7 +91,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#alpha-model">alpha_model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html">AlphaModel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html">FuturesModel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html">AlphaModelStrategy</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#contract">contract</a><ul>
@@ -156,6 +155,11 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.order.time_in_force.TimeInForce.html">TimeInForce</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#orders-filter">orders_filter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.orders_filter.orders_filter.OrdersFilter.html">OrdersFilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.orders_filter.volume_orders_filter.VolumeOrdersFilter.html">VolumeOrdersFilter</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#portfolio">portfolio</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.portfolio.portfolio.Portfolio.html">Portfolio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.portfolio.backtest_position.BacktestPosition.html">BacktestPosition</a></li>
@@ -175,6 +179,12 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.signals.signal.Signal.html">Signal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.signals.signals_register.SignalsRegister.html">SignalsRegister</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.html">BacktestSignalsRegister</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#strategies">strategies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy.html">AbstractStrategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.alpha_model_strategy.AlphaModelStrategy.html">AlphaModelStrategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.signal_generators.OnBeforeMarketOpenSignalGeneration.html">OnBeforeMarketOpenSignalGeneration</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#trading-session">trading_session</a><ul>
@@ -270,9 +280,6 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.alpha_model.futures_model.FuturesModel.html#qf_lib.backtesting.alpha_model.futures_model.FuturesModel" title="qf_lib.backtesting.alpha_model.futures_model.FuturesModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">futures_model.FuturesModel</span></code></a></p></td>
 <td><p>Type of alpha model, which can be easily integrated with any type of Tickers (plain Ticker objects, as well as FutureTickers).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html#qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy" title="qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alpha_model_strategy.AlphaModelStrategy</span></code></a></p></td>
-<td><p>Puts together models and all settings around it and generates orders on before market open.</p></td>
 </tr>
 </tbody>
 </table>
@@ -473,6 +480,23 @@
 </tbody>
 </table>
 </section>
+<section id="orders-filter">
+<h2>orders_filter<a class="headerlink" href="#orders-filter" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.orders_filter.orders_filter.OrdersFilter.html#qf_lib.backtesting.orders_filter.orders_filter.OrdersFilter" title="qf_lib.backtesting.orders_filter.orders_filter.OrdersFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orders_filter.OrdersFilter</span></code></a></p></td>
+<td><p>Adjusts final orders list to meet various requirements e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.orders_filter.volume_orders_filter.VolumeOrdersFilter.html#qf_lib.backtesting.orders_filter.volume_orders_filter.VolumeOrdersFilter" title="qf_lib.backtesting.orders_filter.volume_orders_filter.VolumeOrdersFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">volume_orders_filter.VolumeOrdersFilter</span></code></a></p></td>
+<td><p>Verifies whether the orders sizes do not exceed the given volume limit.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="portfolio">
 <h2>portfolio<a class="headerlink" href="#portfolio" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
@@ -538,6 +562,26 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister.html#qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister" title="qf_lib.backtesting.signals.backtest_signals_register.BacktestSignalsRegister"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backtest_signals_register.BacktestSignalsRegister</span></code></a></p></td>
 <td><p>In memory implementation of Signals Register.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="strategies">
+<h2>strategies<a class="headerlink" href="#strategies" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy.html#qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy" title="qf_lib.backtesting.strategies.abstract_strategy.AbstractStrategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstract_strategy.AbstractStrategy</span></code></a></p></td>
+<td><p>Basic interface used to create a generic strategy.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.alpha_model_strategy.AlphaModelStrategy.html#qf_lib.backtesting.strategies.alpha_model_strategy.AlphaModelStrategy" title="qf_lib.backtesting.strategies.alpha_model_strategy.AlphaModelStrategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alpha_model_strategy.AlphaModelStrategy</span></code></a></p></td>
+<td><p>Puts together models and all settings around it and generates orders on before market open.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/qf_lib.backtesting.strategies.signal_generators.OnBeforeMarketOpenSignalGeneration.html#qf_lib.backtesting.strategies.signal_generators.OnBeforeMarketOpenSignalGeneration" title="qf_lib.backtesting.strategies.signal_generators.OnBeforeMarketOpenSignalGeneration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_generators.OnBeforeMarketOpenSignalGeneration</span></code></a></p></td>
+<td><p>Wrapper, which facilitates the subscription process of the Strategy to the BeforeMarketOpenEvent.</p></td>
 </tr>
 </tbody>
 </table>

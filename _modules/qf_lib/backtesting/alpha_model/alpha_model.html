@@ -171,16 +171,19 @@
 <span class="c1">#     limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.alpha_model.exposure_enum</span> <span class="kn">import</span> <span class="n">Exposure</span>
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.signals.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
-<span class="kn">from</span> <span class="nn">qf_lib.backtesting.data_handler.data_handler</span> <span class="kn">import</span> <span class="n">DataHandler</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">Ticker</span>
 <span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.average_true_range</span> <span class="kn">import</span> <span class="n">average_true_range</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.data_provider</span> <span class="kn">import</span> <span class="n">DataProvider</span>
 
 
-<div class="viewcode-block" id="AlphaModel"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel">[docs]</a><span class="k">class</span> <span class="nc">AlphaModel</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="viewcode-block" id="AlphaModel"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel">[docs]</a><span class="k">class</span> <span class="nc">AlphaModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all alpha models.</span>
 
@@ -189,15 +192,17 @@
 <span class="sd">    risk_estimation_factor</span>
 <span class="sd">        float value which estimates the risk level of the specific AlphaModel. Corresponds to the level at which</span>
 <span class="sd">        the stop-loss should be placed.</span>
-<span class="sd">    data_handler</span>
-<span class="sd">        DataHandler which provides data for the ticker</span>
+<span class="sd">    data_provider: DataProvider</span>
+<span class="sd">        DataProvider which provides data for the ticker. For the backtesting purposes, in order to avoid looking into</span>
+<span class="sd">        the future, use DataHandler wrapper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">:</span> <span class="n">DataHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">data_provider</span><span class="p">:</span> <span class="n">DataProvider</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">risk_estimation_factor</span> <span class="o">=</span> <span class="n">risk_estimation_factor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span> <span class="o">=</span> <span class="n">data_handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span> <span class="o">=</span> <span class="n">data_provider</span>
 
-<div class="viewcode-block" id="AlphaModel.get_signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal">[docs]</a>    <span class="k">def</span> <span class="nf">get_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">current_exposure</span><span class="p">:</span> <span class="n">Exposure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signal</span><span class="p">:</span>
+<div class="viewcode-block" id="AlphaModel.get_signal"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.get_signal">[docs]</a>    <span class="k">def</span> <span class="nf">get_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span><span class="p">,</span> <span class="n">current_exposure</span><span class="p">:</span> <span class="n">Exposure</span><span class="p">,</span> <span class="n">current_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Signal</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the Signal calculated for a specific AlphaModel and a set of data for a specified Ticker</span>
 
@@ -208,17 +213,25 @@
 <span class="sd">        current_exposure: Exposure</span>
 <span class="sd">            The actual exposure, based on which the AlphaModel should return its Signal. Can be different from previous</span>
 <span class="sd">            Signal suggestions, but it should correspond with the current trading position</span>
+<span class="sd">        current_time: Optional[datetime]</span>
+<span class="sd">            current time, which is afterwards recorded inside each of the Signals. The parameter is optional and if not</span>
+<span class="sd">            provided, defaults to the current user time.</span>
+<span class="sd">        frequency: Optional[Frequency]</span>
+<span class="sd">            frequency of trading. Optional parameter, with the default value being equal to daily frequency. Used to</span>
+<span class="sd">            obtain the last available price.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Signal</span>
 <span class="sd">            Signal being the suggestion for the next trading period</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_time</span> <span class="o">=</span> <span class="n">current_time</span> <span class="ow">or</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">suggested_exposure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_exposure</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">current_exposure</span><span class="p">)</span>
         <span class="n">fraction_at_risk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_fraction_at_risk</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
-        <span class="n">last_available_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+        <span class="n">last_available_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span><span class="o">.</span><span class="n">get_last_available_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">current_time</span><span class="p">)</span>
 
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">suggested_exposure</span><span class="p">,</span> <span class="n">fraction_at_risk</span><span class="p">,</span> <span class="n">last_available_price</span><span class="p">,</span> <span class="n">alpha_model</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">suggested_exposure</span><span class="p">,</span> <span class="n">fraction_at_risk</span><span class="p">,</span> <span class="n">last_available_price</span><span class="p">,</span> <span class="n">current_time</span><span class="p">,</span>
+                        <span class="n">alpha_model</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">signal</span></div>
 
 <div class="viewcode-block" id="AlphaModel.calculate_exposure"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.calculate_exposure">[docs]</a>    <span class="nd">@abstractmethod</span>
@@ -281,7 +294,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_of_bars_needed</span> <span class="o">=</span> <span class="n">time_period</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">,</span> <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">]</span>
-        <span class="n">prices_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="o">.</span><span class="n">historical_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">num_of_bars_needed</span><span class="p">)</span>
+        <span class="n">prices_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_provider</span><span class="o">.</span><span class="n">historical_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">num_of_bars_needed</span><span class="p">)</span>
         <span class="n">fraction_at_risk</span> <span class="o">=</span> <span class="n">average_true_range</span><span class="p">(</span><span class="n">prices_df</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_estimation_factor</span>
         <span class="k">return</span> <span class="n">fraction_at_risk</span>
 

@@ -1,0 +1,695 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider &mdash; QF Lib  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> QF Lib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../analysis.html">analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../backtesting.html">backtesting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common.html">common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../containers.html">containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data_providers.html">data_providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../document_utils.html">document_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plotting.html">plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../indicators.html">indicators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../portfolio_construction.html">portfolio_construction</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">QF Lib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">beap_lib.beap_auth</span> <span class="kn">import</span> <span class="n">Credentials</span><span class="p">,</span> <span class="n">BEAPAdapter</span>
+    <span class="kn">from</span> <span class="nn">beap_lib.sseclient</span> <span class="kn">import</span> <span class="n">SSEClient</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No Bloomberg Beap HAPI installed. If you would like to use BloombergBeapHapiDataProvider first &quot;</span>
+                  <span class="s2">&quot;install modules from files&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg.exceptions</span> <span class="kn">import</span> <span class="n">BloombergError</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.expiration_date_field</span> <span class="kn">import</span> <span class="n">ExpirationDateField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.frequency</span> <span class="kn">import</span> <span class="n">Frequency</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.enums.price_field</span> <span class="kn">import</span> <span class="n">PriceField</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.tickers.tickers</span> <span class="kn">import</span> <span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">tickers_as_strings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.logging.qf_parent_logger</span> <span class="kn">import</span> <span class="n">qf_logger</span>
+<span class="kn">from</span> <span class="nn">qf_lib.common.utils.miscellaneous.to_list_conversion</span> <span class="kn">import</span> <span class="n">convert_to_list</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.dataframe.qf_dataframe</span> <span class="kn">import</span> <span class="n">QFDataFrame</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.futures.future_tickers.bloomberg_future_ticker</span> <span class="kn">import</span> <span class="n">BloombergFutureTicker</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.qf_data_array</span> <span class="kn">import</span> <span class="n">QFDataArray</span>
+<span class="kn">from</span> <span class="nn">qf_lib.containers.series.qf_series</span> <span class="kn">import</span> <span class="n">QFSeries</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.abstract_price_data_provider</span> <span class="kn">import</span> <span class="n">AbstractPriceDataProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_fields_provider</span> <span class="kn">import</span> <span class="n">BloombergBeapHapiFieldsProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_parser</span> <span class="kn">import</span> <span class="n">BloombergBeapHapiParser</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_request_provider</span> <span class="kn">import</span> <span class="n">BloombergBeapHapiRequestsProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_universe_provider</span> <span class="kn">import</span> <span class="n">BloombergBeapHapiUniverseProvider</span>
+<span class="kn">from</span> <span class="nn">qf_lib.data_providers.helpers</span> <span class="kn">import</span> <span class="n">normalize_data_array</span><span class="p">,</span> <span class="n">cast_dataframe_to_proper_type</span>
+<span class="kn">from</span> <span class="nn">qf_lib.settings</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">qf_lib.starting_dir</span> <span class="kn">import</span> <span class="n">get_starting_dir_abs_path</span>
+
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider">[docs]</a><span class="k">class</span> <span class="nc">BloombergBeapHapiDataProvider</span><span class="p">(</span><span class="n">AbstractPriceDataProvider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data Provider which provides financial data from Bloomberg BEAP HAPI.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">reply_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">Credentials</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;client_id&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">hapi_credentials</span><span class="o">.</span><span class="n">client_id</span><span class="p">,</span>
+                                                  <span class="s1">&#39;client_secret&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">hapi_credentials</span><span class="o">.</span><span class="n">client_secret</span><span class="p">,</span>
+                                                  <span class="s1">&#39;expiration_date&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">hapi_credentials</span><span class="o">.</span><span class="n">expiration_date</span><span class="p">})</span>  <span class="c1"># type: Credentials</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;https://api.bloomberg.com&#39;</span>
+
+        <span class="n">adapter</span> <span class="o">=</span> <span class="n">BEAPAdapter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">qf_logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sse_client</span> <span class="o">=</span> <span class="n">SSEClient</span><span class="p">(</span><span class="n">urljoin</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s1">&#39;/eap/notifications/sse&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+        <span class="c1"># Catch an exception to get full error description with the help of the next</span>
+        <span class="c1"># GET request</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="s2">&quot;Something went wrong connecting to the API. Try again later.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_catalog_id</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">account_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s1">&#39;/eap/catalogs/</span><span class="si">{c}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">catalog_id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Scheduled catalog URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">account_url</span><span class="p">)</span>
+        <span class="n">trigger_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s1">&#39;/eap/catalogs/</span><span class="si">{c}</span><span class="s1">/triggers/ctaAdhocTrigger/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">catalog_id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Scheduled trigger URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">trigger_url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">universe_hapi_provider</span> <span class="o">=</span> <span class="n">BloombergBeapHapiUniverseProvider</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">account_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields_hapi_provider</span> <span class="o">=</span> <span class="n">BloombergBeapHapiFieldsProvider</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">account_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_hapi_provider</span> <span class="o">=</span> <span class="n">BloombergBeapHapiRequestsProvider</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">account_url</span><span class="p">,</span> <span class="n">trigger_url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reply_timeout</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">reply_timeout</span><span class="p">)</span>  <span class="c1"># reply_timeout - time in minutes</span>
+
+        <span class="n">output_folder</span> <span class="o">=</span> <span class="s2">&quot;hapi_responses&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">downloads_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">get_starting_dir_abs_path</span><span class="p">())</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">/</span> <span class="n">output_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">downloads_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">BloombergBeapHapiParser</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.get_history"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span> <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                    <span class="n">start_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="n">Frequency</span> <span class="o">=</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span><span class="p">,</span>
+                    <span class="n">universe_creation_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">,</span> <span class="n">QFDataArray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets historical data from Bloomberg HAPI from the (start_date - end_date) time range.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: Ticker, Sequence[Ticker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: str, Sequence[str]</span>
+<span class="sd">            fields of securities which should be retrieved</span>
+<span class="sd">        start_date: datetime</span>
+<span class="sd">            date representing the beginning of historical period from which data should be retrieved</span>
+<span class="sd">        end_date: datetime</span>
+<span class="sd">            date representing the end of historical period from which data should be retrieved;</span>
+<span class="sd">            if no end_date was provided, by default the current date will be used</span>
+<span class="sd">        frequency: Frequency</span>
+<span class="sd">            frequency of the data</span>
+<span class="sd">        universe_creation_time: datetime</span>
+<span class="sd">            Used only if we want to get previously created universe, fields universe or request</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFSeries, QFDataFrame, QFDataArray</span>
+<span class="sd">            If possible the result will be squeezed, so that instead of returning QFDataArray, data of lower</span>
+<span class="sd">            dimensionality will be returned. The results will be either an QFDataArray (with 3 dimensions: date, ticker,</span>
+<span class="sd">            field), a QFDataFrame (with 2 dimensions: date, ticker or field; it is also possible to get 2 dimensions</span>
+<span class="sd">            ticker and field if single date was provided) or QFSeries (with 1 dimensions: date).</span>
+<span class="sd">            If no data is available in the database or an non existing ticker was provided an empty structure</span>
+<span class="sd">            (QFSeries, QFDataFrame or QFDataArray) will be returned returned.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        BloombergError</span>
+<span class="sd">            When unexpected response from Bloomberg HAPI happened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Fields being None is not supported by </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">got_single_date</span> <span class="o">=</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">start_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">end_date</span><span class="o">.</span><span class="n">date</span><span class="p">())</span> <span class="k">if</span> <span class="n">frequency</span> <span class="o">==</span> <span class="n">Frequency</span><span class="o">.</span><span class="n">DAILY</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">universe_creation_time</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">universe_creation_time</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+
+        <span class="n">universe_id</span> <span class="o">=</span> <span class="s1">&#39;historyUniverse&#39;</span> <span class="o">+</span> <span class="n">universe_creation_time</span>
+        <span class="n">universe_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe_hapi_provider</span><span class="o">.</span><span class="n">get_universe_url</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">tickers_str</span><span class="p">,</span> <span class="n">fieldsOverrides</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># in most cases we will use only ohlcv fields - we can reuse fields</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;PX_OPEN&#39;</span><span class="p">,</span> <span class="s1">&#39;PX_HIGH&#39;</span><span class="p">,</span> <span class="s1">&#39;PX_LOW&#39;</span><span class="p">,</span> <span class="s1">&#39;PX_LAST&#39;</span><span class="p">,</span> <span class="s1">&#39;PX_VOLUME&#39;</span><span class="p">]:</span>
+            <span class="n">fieldlist_id</span> <span class="o">=</span> <span class="s1">&#39;ohlcv&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fieldlist_id</span> <span class="o">=</span> <span class="s1">&#39;historyFields&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+
+        <span class="n">fieldlist_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields_hapi_provider</span><span class="o">.</span><span class="n">get_fields_history_url</span><span class="p">(</span><span class="n">fieldlist_id</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># for requests - always create a new request with current time</span>
+        <span class="n">request_id</span> <span class="o">=</span> <span class="s1">&#39;hRequest&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_hapi_provider</span><span class="o">.</span><span class="n">create_request_history</span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span> <span class="n">universe_url</span><span class="p">,</span> <span class="n">fieldlist_url</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;universe_id: </span><span class="si">{}</span><span class="s1"> fieldlist_id: </span><span class="si">{}</span><span class="s1"> request_id: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">fieldlist_id</span><span class="p">,</span> <span class="n">request_id</span><span class="p">))</span>
+
+        <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_response</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get_history</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+
+        <span class="n">tickers_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">as_string</span><span class="p">():</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span><span class="p">}</span>
+
+        <span class="c1"># Map each of the tickers in data array with corresponding ticker from tickers_mapping dictionary (in order</span>
+        <span class="c1"># to support Future Tickers)</span>
+        <span class="k">def</span> <span class="nf">_map_ticker</span><span class="p">(</span><span class="n">ticker</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tickers_mapping</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ticker</span>
+
+        <span class="n">data_array</span> <span class="o">=</span> <span class="n">data_array</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">tickers</span><span class="o">=</span><span class="p">[</span><span class="n">_map_ticker</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data_array</span><span class="o">.</span><span class="n">tickers</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+
+        <span class="n">normalized_result</span> <span class="o">=</span> <span class="n">normalize_data_array</span><span class="p">(</span>
+            <span class="n">data_array</span><span class="p">,</span> <span class="n">tickers</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_date</span><span class="p">,</span> <span class="n">got_single_ticker</span><span class="p">,</span> <span class="n">got_single_field</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">normalized_result</span></div>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.price_field_to_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.price_field_to_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">price_field_to_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">PriceField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">price_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Open</span><span class="p">:</span> <span class="s1">&#39;PX_OPEN&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">High</span><span class="p">:</span> <span class="s1">&#39;PX_HIGH&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Low</span><span class="p">:</span> <span class="s1">&#39;PX_LOW&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Close</span><span class="p">:</span> <span class="s1">&#39;PX_LAST&#39;</span><span class="p">,</span>
+            <span class="n">PriceField</span><span class="o">.</span><span class="n">Volume</span><span class="p">:</span> <span class="s1">&#39;PX_VOLUME&#39;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">price_field_dict</span></div>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.expiration_date_field_str_map"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.expiration_date_field_str_map">[docs]</a>    <span class="k">def</span> <span class="nf">expiration_date_field_str_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticker</span><span class="p">:</span> <span class="n">BloombergTicker</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">expiration_date_field_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ExpirationDateField</span><span class="o">.</span><span class="n">FirstNotice</span><span class="p">:</span> <span class="s2">&quot;FUT_NOTICE_FIRST&quot;</span><span class="p">,</span>
+            <span class="n">ExpirationDateField</span><span class="o">.</span><span class="n">LastTradeableDate</span><span class="p">:</span> <span class="s2">&quot;LAST_TRADEABLE_DT&quot;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">expiration_date_field_dict</span></div>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.supported_ticker_types"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.supported_ticker_types">[docs]</a>    <span class="k">def</span> <span class="nf">supported_ticker_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">BloombergFutureTicker</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.get_futures_chain_tickers"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.get_futures_chain_tickers">[docs]</a>    <span class="k">def</span> <span class="nf">get_futures_chain_tickers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">]],</span>
+                                  <span class="n">expiration_date_fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ExpirationDateField</span><span class="p">]],</span>
+                                  <span class="n">universe_creation_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns tickers of futures contracts, which belong to the same futures contract chain as the provided ticker</span>
+<span class="sd">        (tickers), along with their expiration dates using Bloomberg HAPI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: BloombergFutureTicker, Sequence[BloombergFutureTicker]</span>
+<span class="sd">            future tickers for which future chains should be retrieved</span>
+<span class="sd">        expiration_date_fields: ExpirationDateField, Sequence[ExpirationDateField]</span>
+<span class="sd">            field that should be downloaded as the expiration date field</span>
+<span class="sd">        universe_creation_time: datetime</span>
+<span class="sd">            Used only if we want to get previously created universe, fields universe or request</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[BloombergFutureTicker, Union[QFSeries, QFDataFrame]]</span>
+<span class="sd">            Dictionary mapping each BloombergFutureTicker to a QFSeries or QFDataFrame, containing specific future</span>
+<span class="sd">            contracts tickers (BloombergTickers), indexed by these tickers</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        BloombergError</span>
+<span class="sd">            When unexpected response from Bloomberg HAPI happened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergFutureTicker</span><span class="p">)</span>
+        <span class="n">expiration_date_fields</span><span class="p">,</span> <span class="n">got_single_expiration_date_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">expiration_date_fields</span><span class="p">,</span>
+                                                                                   <span class="n">ExpirationDateField</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">universe_creation_time</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">universe_creation_time</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+
+        <span class="n">future_ticker_to_chain_tickers_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_list_of_tickers_in_the_future_chain</span><span class="p">(</span>
+            <span class="n">tickers</span><span class="p">,</span> <span class="n">universe_creation_time</span><span class="p">)</span>  <span class="c1"># type: Dict[BloombergFutureTicker, List[BloombergTicker]]</span>
+
+        <span class="k">def</span> <span class="nf">get_futures_expiration_dates</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]])</span> <span class="o">-&gt;</span> \
+                <span class="n">Union</span><span class="p">[</span><span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            For a ticker (tickers) it returns a QFSeries or QFDataFrame consisting of the expiration dates fields of</span>
+<span class="sd">            Future Contracts, that are defined by the given tickers.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            specific_tickers</span>
+<span class="sd">                tickers for which the expiration dates of future contracts should be retrieved</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            QFSeries, QFDataFrame</span>
+<span class="sd">                Container containing all the dates, indexed by tickers</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="c1"># Download the expiration dates for each of the future contracts</span>
+            <span class="n">mapping_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration_date_field_str_map</span><span class="p">()</span>
+            <span class="n">expiration_date_fields_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapping_dict</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">expiration_date_fields</span><span class="p">]</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_values</span><span class="p">(</span><span class="n">specific_tickers</span><span class="p">,</span>
+                                                <span class="n">expiration_date_fields_str</span><span class="p">)</span>  <span class="c1"># type: Union[QFSeries, QFDataFrame]</span>
+
+            <span class="c1"># Drop these futures, for which no expiration date was found and cast all string dates into datetime</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">)</span>
+            <span class="n">exp_dates</span> <span class="o">=</span> <span class="n">exp_dates</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">str_to_expiration_date_field_map</span><span class="p">())</span>
+
+            <span class="k">return</span> <span class="n">exp_dates</span>
+
+        <span class="n">all_specific_tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ticker</span> <span class="k">for</span> <span class="n">specific_tickers_list</span> <span class="ow">in</span> <span class="n">future_ticker_to_chain_tickers_list</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                                <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">specific_tickers_list</span><span class="p">]</span>
+
+        <span class="n">futures_expiration_dates</span> <span class="o">=</span> <span class="n">get_futures_expiration_dates</span><span class="p">(</span><span class="n">all_specific_tickers</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">specific_futures_index</span><span class="p">(</span><span class="n">future_ticker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns an Index of specific tickers for the given future ticker, which appeared in the futures</span>
+<span class="sd">            expiration dates dataframe / series.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">specific_tickers_list</span> <span class="o">=</span> <span class="n">future_ticker_to_chain_tickers_list</span><span class="p">[</span><span class="n">future_ticker</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">futures_expiration_dates</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">specific_tickers_list</span><span class="p">)</span>
+
+        <span class="n">ticker_to_future_expiration_dates</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">future_ticker</span><span class="p">:</span> <span class="n">futures_expiration_dates</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">specific_futures_index</span><span class="p">(</span><span class="n">future_ticker</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">future_ticker</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ticker_to_future_expiration_dates</span></div>
+
+<div class="viewcode-block" id="BloombergBeapHapiDataProvider.get_current_values"><a class="viewcode-back" href="../../../../_autosummary/qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html#qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.get_current_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergTicker</span><span class="p">]],</span>
+                           <span class="n">fields</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">universe_creation_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">QFSeries</span><span class="p">,</span> <span class="n">QFDataFrame</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets from the Bloomberg HAPI the current values of fields for given tickers.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tickers: BloombergTicker, Sequence[BloombergTicker]</span>
+<span class="sd">            tickers for securities which should be retrieved</span>
+<span class="sd">        fields: str, Sequence[str]</span>
+<span class="sd">            fields of securities which should be retrieved</span>
+<span class="sd">        universe_creation_time: datetime</span>
+<span class="sd">            Used only if we want to get previously created universe, fields universe or request</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QFDataFrame/QFSeries</span>
+<span class="sd">            Either QFDataFrame with 2 dimensions: ticker, field or QFSeries with 1 dimensions: ticker of field</span>
+<span class="sd">            (depending if many tickers or fields were provided) is returned.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        -------</span>
+<span class="sd">        BloombergError</span>
+<span class="sd">            When unexpected response from Bloomberg HAPI happened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tickers</span><span class="p">,</span> <span class="n">got_single_ticker</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">tickers</span><span class="p">,</span> <span class="n">BloombergTicker</span><span class="p">)</span>
+        <span class="n">fields</span><span class="p">,</span> <span class="n">got_single_field</span> <span class="o">=</span> <span class="n">convert_to_list</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+        <span class="n">tickers_str</span> <span class="o">=</span> <span class="n">tickers_as_strings</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">universe_creation_time</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">universe_creation_time</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">universe_creation_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+
+        <span class="n">universe_id</span> <span class="o">=</span> <span class="s1">&#39;currentUniverse&#39;</span> <span class="o">+</span> <span class="n">universe_creation_time</span>
+        <span class="n">universe_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe_hapi_provider</span><span class="o">.</span><span class="n">get_universe_url</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">tickers_str</span><span class="p">,</span> <span class="n">fieldsOverrides</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># in most cases we will use only two fields: &#39;FUT_NOTICE_FIRST&#39;, &#39;LAST_TRADEABLE_DT&#39; - we can reuse fields</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;FUT_NOTICE_FIRST&#39;</span><span class="p">,</span> <span class="s1">&#39;LAST_TRADEABLE_DT&#39;</span><span class="p">]:</span>
+            <span class="n">fieldlist_id</span> <span class="o">=</span> <span class="s1">&#39;futNoticeFirstLastTradeableDt&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fieldlist_id</span> <span class="o">=</span> <span class="s1">&#39;currentFields&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+
+        <span class="n">fieldlist_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields_hapi_provider</span><span class="o">.</span><span class="n">get_fields_url</span><span class="p">(</span><span class="n">fieldlist_id</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># for requests - always create a new request with current time</span>
+        <span class="n">request_id</span> <span class="o">=</span> <span class="s1">&#39;cRequest&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_hapi_provider</span><span class="o">.</span><span class="n">create_request</span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span> <span class="n">universe_url</span><span class="p">,</span> <span class="n">fieldlist_url</span><span class="p">,</span> <span class="n">bulk_format_type</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># bulk format is ignored, but it gives response without column descirpition - easier to parse</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;universe_id: </span><span class="si">{}</span><span class="s1"> fieldlist_id: </span><span class="si">{}</span><span class="s1"> request_id: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">fieldlist_id</span><span class="p">,</span> <span class="n">request_id</span><span class="p">))</span>
+
+        <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_response</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+
+        <span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get_current_values_dates_fields_format</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+
+        <span class="c1"># to keep the order of tickers and fields we reindex the data frame</span>
+        <span class="n">data_frame</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">BloombergTicker</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">tickers</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># squeeze unused dimensions</span>
+        <span class="n">tickers_indices</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">got_single_ticker</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">fields_indices</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">got_single_field</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">squeezed_result</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">tickers_indices</span><span class="p">,</span> <span class="n">fields_indices</span><span class="p">]</span>
+
+        <span class="n">casted_result</span> <span class="o">=</span> <span class="n">cast_dataframe_to_proper_type</span><span class="p">(</span><span class="n">squeezed_result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">casted_result</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_list_of_tickers_in_the_future_chain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                                 <span class="n">tickers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">BloombergFutureTicker</span><span class="p">]],</span>
+                                                 <span class="n">universe_creation_time</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+        <span class="n">active_ticker_string_to_future_ticker</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">future_ticker</span><span class="o">.</span><span class="n">get_active_ticker</span><span class="p">()</span><span class="o">.</span><span class="n">ticker</span><span class="p">:</span> <span class="n">future_ticker</span> <span class="k">for</span> <span class="n">future_ticker</span> <span class="ow">in</span> <span class="n">tickers</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Define mapping functions from strings into BloombergFutureTickers and BloombergTickers</span>
+        <span class="k">def</span> <span class="nf">future_ticker_from_string</span><span class="p">(</span><span class="n">active_ticker_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BloombergFutureTicker</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">active_ticker_string_to_future_ticker</span><span class="p">[</span><span class="n">active_ticker_string</span><span class="p">]</span>
+
+        <span class="n">universe_id</span> <span class="o">=</span> <span class="s1">&#39;u&#39;</span> <span class="o">+</span> <span class="n">universe_creation_time</span>
+        <span class="n">universe_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe_hapi_provider</span><span class="o">.</span><span class="n">get_universe_url</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">active_ticker_string_to_future_ticker</span><span class="p">,</span>
+                                                                    <span class="n">fieldsOverrides</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">fieldlist_id</span> <span class="o">=</span> <span class="s1">&#39;fieldsFutChain&#39;</span>
+        <span class="n">fieldlist_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields_hapi_provider</span><span class="o">.</span><span class="n">get_fields_url</span><span class="p">(</span><span class="n">fieldlist_id</span><span class="p">,</span> <span class="s2">&quot;FUT_CHAIN&quot;</span><span class="p">)</span>
+
+        <span class="c1"># for requests - always create a new request with current time</span>
+        <span class="n">request_id</span> <span class="o">=</span> <span class="s1">&#39;fc&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_hapi_provider</span><span class="o">.</span><span class="n">create_request</span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span> <span class="n">universe_url</span><span class="p">,</span> <span class="n">fieldlist_url</span><span class="p">,</span> <span class="n">bulk_format_type</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;universe_id: </span><span class="si">{}</span><span class="s1"> fieldlist_id: </span><span class="si">{}</span><span class="s1"> request_id: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">universe_id</span><span class="p">,</span> <span class="n">fieldlist_id</span><span class="p">,</span> <span class="n">request_id</span><span class="p">))</span>
+
+        <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_response</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+
+        <span class="n">future_ticker_str_to_chain_tickers_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get_chain</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+
+        <span class="n">future_ticker_str_to_chain_tickers_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">future_ticker_from_string</span><span class="p">(</span><span class="n">future_ticker_str</span><span class="p">):</span> <span class="n">BloombergTicker</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">specific_tickers_strings_list</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">future_ticker_str</span><span class="p">,</span> <span class="n">specific_tickers_strings_list</span> <span class="ow">in</span> <span class="n">future_ticker_str_to_chain_tickers_list</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Check if for all of the requested tickers the futures chains were returned, and if not - log an error</span>
+        <span class="n">lacking_tickers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tickers</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">future_ticker_str_to_chain_tickers_list</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">lacking_tickers</span><span class="p">:</span>
+            <span class="n">lacking_tickers_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">lacking_tickers</span><span class="p">]</span>
+            <span class="n">error_message</span> <span class="o">=</span> <span class="s2">&quot;The requested futures chains for the BloombergFutureTickers </span><span class="si">{}</span><span class="s2"> could not have been &quot;</span> \
+                            <span class="s2">&quot;downloaded successfully&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lacking_tickers_str</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">lacking_tickers</span><span class="p">:</span>
+                <span class="n">future_ticker_str_to_chain_tickers_list</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">future_ticker_str_to_chain_tickers_list</span>
+
+    <span class="k">def</span> <span class="nf">_download_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">expiration_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">reply_timeout</span>
+        <span class="k">while</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">expiration_timestamp</span><span class="p">:</span>
+            <span class="c1"># Read the next available event</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sse_client</span><span class="o">.</span><span class="n">read_event</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">is_heartbeat</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Received heartbeat event, keep waiting for events&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Received reply delivery notification event: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+            <span class="n">event_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">distribution</span> <span class="o">=</span> <span class="n">event_data</span><span class="p">[</span><span class="s1">&#39;generated&#39;</span><span class="p">]</span>
+                <span class="n">reply_url</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">[</span><span class="s1">&#39;@id&#39;</span><span class="p">]</span>
+
+                <span class="n">distribution_id</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">[</span><span class="s1">&#39;identifier&#39;</span><span class="p">]</span>
+                <span class="n">catalog</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">[</span><span class="s1">&#39;snapshot&#39;</span><span class="p">][</span><span class="s1">&#39;dataset&#39;</span><span class="p">][</span><span class="s1">&#39;catalog&#39;</span><span class="p">]</span>
+                <span class="n">reply_catalog_id</span> <span class="o">=</span> <span class="n">catalog</span><span class="p">[</span><span class="s1">&#39;identifier&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Received other event type, continue waiting&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">is_required_reply</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.bbg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span> <span class="o">==</span> <span class="n">distribution_id</span>
+                <span class="n">is_same_catalog</span> <span class="o">=</span> <span class="n">reply_catalog_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog_id</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">is_required_reply</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_same_catalog</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Some other delivery occurred - continue waiting. &quot;</span>
+                                     <span class="s2">&quot;Reply catalog id: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reply_catalog_id</span><span class="p">))</span>
+                    <span class="k">continue</span>
+
+                <span class="n">output_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">downloads_path</span><span class="p">,</span> <span class="n">distribution_id</span><span class="p">)</span>
+
+                <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_download_distribution</span><span class="p">(</span><span class="n">reply_url</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reply was downloaded, exit now&#39;</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">out_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Reply NOT delivered, try to increase waiter loop timeout&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_download_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2048</span><span class="p">,</span> <span class="n">stream</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                               <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to download the data to an output directory.</span>
+
+<span class="sd">        This function allows user to specify the output location of this download</span>
+<span class="sd">        and works for a single endpoint.</span>
+
+<span class="sd">        Note that &#39;Accept-Encoding: gzip, deflate&#39; header added by default in a</span>
+<span class="sd">        session to speed up downloading.</span>
+
+<span class="sd">        Set &#39;chunk_size&#39; to a larger byte size to speed up download process on</span>
+<span class="sd">        larger downloads.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_path</span> <span class="o">+=</span> <span class="s1">&#39;.gz&#39;</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span> <span class="k">as</span> <span class="n">response_</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response_</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">decode_content</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                    <span class="n">out_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Downloaded </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">out_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">out_path</span>
+
+    <span class="k">def</span> <span class="nf">_get_catalog_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">catalogs_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s1">&#39;/eap/catalogs/&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">catalogs_url</span><span class="p">)</span>
+
+        <span class="c1"># Extract a/the account number from the response</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unexpected response status code: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">BloombergError</span><span class="p">(</span><span class="s1">&#39;Unexpected response&#39;</span><span class="p">)</span>
+
+        <span class="c1"># We got back a good response. Let&#39;s extract our account number</span>
+        <span class="n">catalogs</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;contains&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">catalog</span> <span class="ow">in</span> <span class="n">catalogs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">catalog</span><span class="p">[</span><span class="s1">&#39;subscriptionType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;scheduled&#39;</span><span class="p">:</span>
+                <span class="c1"># Take the catalog having &quot;scheduled&quot; subscription type,</span>
+                <span class="c1"># which corresponds to the Data License account number.f</span>
+                <span class="k">return</span> <span class="n">catalog</span><span class="p">[</span><span class="s1">&#39;identifier&#39;</span><span class="p">]</span>
+
+        <span class="c1"># We exhausted the catalogs, but didn&#39;t find a non-&#39;bbg&#39; catalog.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Scheduled catalog not in </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;contains&#39;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="n">BloombergError</span><span class="p">(</span><span class="s1">&#39;Scheduled catalog not found&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

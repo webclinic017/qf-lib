@@ -171,7 +171,6 @@
 <span class="c1">#     limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">qf_lib.backtesting.execution_handler.commission_models.commission_model</span> <span class="kn">import</span> <span class="n">CommissionModel</span>
-<span class="kn">from</span> <span class="nn">qf_lib.backtesting.order.order</span> <span class="kn">import</span> <span class="n">Order</span>
 
 
 <div class="viewcode-block" id="FixedCommissionModel"><a class="viewcode-back" href="../../../../../_autosummary/qf_lib.backtesting.execution_handler.commission_models.fixed_commission_model.FixedCommissionModel.html#qf_lib.backtesting.execution_handler.commission_models.fixed_commission_model.FixedCommissionModel">[docs]</a><span class="k">class</span> <span class="nc">FixedCommissionModel</span><span class="p">(</span><span class="n">CommissionModel</span><span class="p">):</span>
@@ -188,7 +187,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commission</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commission</span> <span class="o">=</span> <span class="n">commission</span>
 
-    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">Order</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fill_quantity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fill_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">commission</span></div>
 </pre></div>
 

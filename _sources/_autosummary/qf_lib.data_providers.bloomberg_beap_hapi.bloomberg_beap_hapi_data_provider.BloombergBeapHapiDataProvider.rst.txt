@@ -1,0 +1,9 @@
+BloombergBeapHapiDataProvider
+=========================================================================================================
+
+.. currentmodule:: qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider
+
+.. autoclass:: BloombergBeapHapiDataProvider
+	:show-inheritance:
+	:autosummary:
+	:members:

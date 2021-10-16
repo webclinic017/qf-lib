@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="AlphaModelStrategy" href="qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html" />
+    <link rel="next" title="Contract" href="qf_lib.backtesting.contract.contract.Contract.html" />
     <link rel="prev" title="AlphaModel" href="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html" /> 
 </head>
 
@@ -91,7 +91,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../backtesting.html#alpha-model">alpha_model</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html">AlphaModel</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">FuturesModel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html">AlphaModelStrategy</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#contract">contract</a></li>
@@ -101,9 +100,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#fast-alpha-model-tester">fast_alpha_model_tester</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#monitoring">monitoring</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#order">order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#orders-filter">orders_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#portfolio">portfolio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#position-sizer">position_sizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#signals">signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backtesting.html#strategies">strategies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../backtesting.html#trading-session">trading_session</a></li>
 </ul>
 </li>
@@ -183,7 +184,7 @@
 <h1>FuturesModel<a class="headerlink" href="#futuresmodel" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="qf_lib.backtesting.alpha_model.futures_model.FuturesModel">
-<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.alpha_model.futures_model.</code><code class="sig-name descname">FuturesModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_of_bars_needed</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">data_handler</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler" title="qf_lib.backtesting.data_handler.data_handler.DataHandler">qf_lib.backtesting.data_handler.data_handler.DataHandler</a></span></em>, <em class="sig-param"><span class="n">cache_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/futures_model.html#FuturesModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">qf_lib.backtesting.alpha_model.futures_model.</code><code class="sig-name descname">FuturesModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_of_bars_needed</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">risk_estimation_factor</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">data_provider</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider">qf_lib.data_providers.data_provider.DataProvider</a></span></em>, <em class="sig-param"><span class="n">cache_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/futures_model.html#FuturesModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html#qf_lib.backtesting.alpha_model.alpha_model.AlphaModel" title="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">qf_lib.backtesting.alpha_model.alpha_model.AlphaModel</span></code></a></p>
 <p>Type of alpha model, which can be easily integrated with any type of Tickers (plain Ticker objects, as well as
 FutureTickers). It provides the functionality which allows to download the daily OHLCV prices data frame,
@@ -194,7 +195,7 @@ regardless of ticker type (the get_data function).</p>
 <li><p><strong>num_of_bars_needed</strong> (<em>int</em>) – number of bars necessary to compute the exposure</p></li>
 <li><p><strong>risk_estimation_factor</strong> (<em>float</em>) – float value which estimates the risk level of the specific AlphaModel. Corresponds to the level at which
 the stop-loss should be placed.</p></li>
-<li><p><strong>data_handler</strong> (<a class="reference internal" href="qf_lib.backtesting.data_handler.data_handler.DataHandler.html#qf_lib.backtesting.data_handler.data_handler.DataHandler" title="qf_lib.backtesting.data_handler.data_handler.DataHandler"><em>DataHandler</em></a>) – DataHandler which provides data for the ticker</p></li>
+<li><p><strong>data_provider</strong> (<a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><em>DataProvider</em></a>) – DataProvider which provides data for the ticker. For backtesting purposes the Data Handler should be used.</p></li>
 <li><p><strong>cache_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – path to a directory, which could be used by the model for caching purposes. If provided, the model will cache
 the outputs of get_data function.</p></li>
 </ul>
@@ -210,7 +211,7 @@ the outputs of get_data function.</p></li>
 <tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_data" title="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(ticker_str, end_date, aggregate_volume)</p></td>
 <td><p>Downloads the OHCLV Prices data frame for the given ticker.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal" title="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_signal</span></code></a>(ticker, current_exposure)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal" title="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_signal</span></code></a>(ticker, current_exposure, …)</p></td>
 <td><p>Returns the Signal calculated for a specific AlphaModel and a set of data for a specified Ticker</p></td>
 </tr>
 </tbody>
@@ -235,7 +236,7 @@ the sum of all volumes of the existing contracts of the given future asset)</p><
 
 <dl class="py method">
 <dt id="qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal">
-<code class="sig-name descname">get_signal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a></span></em>, <em class="sig-param"><span class="n">current_exposure</span><span class="p">:</span> <span class="n">qf_lib.backtesting.alpha_model.exposure_enum.Exposure</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">qf_lib.backtesting.signals.signal.Signal</a><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/futures_model.html#FuturesModel.get_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_signal</code><span class="sig-paren">(</span><em class="sig-param">ticker: qf_lib.common.tickers.tickers.Ticker</em>, <em class="sig-param">current_exposure: qf_lib.backtesting.alpha_model.exposure_enum.Exposure</em>, <em class="sig-param">current_time: Optional[datetime.datetime] = None</em>, <em class="sig-param">frequency: qf_lib.common.enums.frequency.Frequency = &lt;Frequency.DAILY: 252&gt;</em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="qf_lib.backtesting.signals.signal.Signal.html#qf_lib.backtesting.signals.signal.Signal" title="qf_lib.backtesting.signals.signal.Signal">qf_lib.backtesting.signals.signal.Signal</a><a class="reference internal" href="../_modules/qf_lib/backtesting/alpha_model/futures_model.html#FuturesModel.get_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.backtesting.alpha_model.futures_model.FuturesModel.get_signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the Signal calculated for a specific AlphaModel and a set of data for a specified Ticker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -243,6 +244,10 @@ the sum of all volumes of the existing contracts of the given future asset)</p><
 <li><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a>) – A ticker of an asset for which the Signal should be generated</p></li>
 <li><p><strong>current_exposure</strong> (<em>Exposure</em>) – The actual exposure, based on which the AlphaModel should return its Signal. Can be different from previous
 Signal suggestions, but it should correspond with the current trading position</p></li>
+<li><p><strong>current_time</strong> (<em>Optional</em><em>[</em><em>datetime</em><em>]</em>) – current time, which is afterwards recorded inside each of the Signals. The parameter is optional and if not
+provided, defaults to the current user time.</p></li>
+<li><p><strong>frequency</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><em>Frequency</em></a><em>]</em>) – frequency of trading. Optional parameter, with the default value being equal to daily frequency. Used to
+obtain the last available price.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -266,7 +271,7 @@ Signal suggestions, but it should correspond with the current trading position</
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="qf_lib.backtesting.alpha_model.alpha_model_strategy.AlphaModelStrategy.html" class="btn btn-neutral float-right" title="AlphaModelStrategy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="qf_lib.backtesting.contract.contract.Contract.html" class="btn btn-neutral float-right" title="Contract" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="qf_lib.backtesting.alpha_model.alpha_model.AlphaModel.html" class="btn btn-neutral float-left" title="AlphaModel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

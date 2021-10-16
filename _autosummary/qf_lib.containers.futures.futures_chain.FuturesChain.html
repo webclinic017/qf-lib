@@ -191,7 +191,8 @@ automatically managing the contracts chaining.</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>data_provider</strong> (<a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><em>DataProvider</em></a>) – Reference to the data provider, necessary to download latest prices, returned by the get_price function.</p></li>
+<li><p><strong>data_provider</strong> (<a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html#qf_lib.data_providers.data_provider.DataProvider" title="qf_lib.data_providers.data_provider.DataProvider"><em>DataProvider</em></a>) – Reference to the data provider, necessary to download latest prices, returned by the get_price function.
+In case of backtests, the DataHandler wrapper should be used to avoid looking into the future.</p></li>
 <li><p><strong>method</strong> (<a class="reference internal" href="qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod.html#qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod" title="qf_lib.containers.futures.futures_adjustment_method.FuturesAdjustmentMethod"><em>FuturesAdjustmentMethod</em></a>) – FuturesAdjustmentMethod corresponding to one of two available methods of chaining the futures contracts.</p></li>
 </ul>
 </dd>

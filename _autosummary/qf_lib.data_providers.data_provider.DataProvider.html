@@ -94,6 +94,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">DataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html">AbstractPriceDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.html">BloombergDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html">BloombergBeapHapiDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.preset_data_provider.PresetDataProvider.html">PresetDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider.html">PrefetchingDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.general_price_provider.GeneralPriceProvider.html">GeneralPriceProvider</a></li>
@@ -191,8 +192,14 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.get_history" title="qf_lib.data_providers.data_provider.DataProvider.get_history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_history</span></code></a>(tickers, …)</p></td>
 <td><p>Gets historical attributes (fields) of different securities (tickers).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.get_price" title="qf_lib.data_providers.data_provider.DataProvider.get_price"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_price</span></code></a>(tickers, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.get_last_available_price" title="qf_lib.data_providers.data_provider.DataProvider.get_last_available_price"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_last_available_price</span></code></a>(tickers, …)</p></td>
+<td><p>Gets the latest available price for given assets as of end_time.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.get_price" title="qf_lib.data_providers.data_provider.DataProvider.get_price"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_price</span></code></a>(tickers, …)</p></td>
 <td><p>Gets adjusted historical Prices (Open, High, Low, Close) and Volume</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.historical_price" title="qf_lib.data_providers.data_provider.DataProvider.historical_price"><code class="xref py py-obj docutils literal notranslate"><span class="pre">historical_price</span></code></a>(tickers, …)</p></td>
+<td><p>Returns the latest available data samples, which simply correspond to the last available &lt;nr_of_bars&gt; number of bars.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.data_provider.DataProvider.supported_ticker_types" title="qf_lib.data_providers.data_provider.DataProvider.supported_ticker_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supported_ticker_types</span></code></a>()</p></td>
 <td><p>Returns classes of tickers which are supported by this DataProvider.</p></td>
@@ -263,6 +270,31 @@ If no data is available in the database or an non existing ticker was provided a
 </dd></dl>
 
 <dl class="py method">
+<dt id="qf_lib.data_providers.data_provider.DataProvider.get_last_available_price">
+<code class="sig-name descname">get_last_available_price</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tickers</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">, </span>Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency">qf_lib.common.enums.frequency.Frequency</a></span></em>, <em class="sig-param"><span class="n">end_time</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>datetime.datetime<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>float<span class="p">, </span><a class="reference internal" href="qf_lib.containers.series.qf_series.QFSeries.html#qf_lib.containers.series.qf_series.QFSeries" title="qf_lib.containers.series.qf_series.QFSeries">qf_lib.containers.series.qf_series.QFSeries</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/data_providers/data_provider.html#DataProvider.get_last_available_price"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.data_provider.DataProvider.get_last_available_price" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the latest available price for given assets as of end_time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tickers</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a><em>, </em><em>Sequence</em><em>[</em><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a><em>]</em>) – tickers of the securities which prices should be downloaded</p></li>
+<li><p><strong>frequency</strong> (<a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency"><em>Frequency</em></a>) – frequency of the data</p></li>
+<li><p><strong>end_time</strong> (<em>datetime</em>) – date which should be used as a base to compute the last available price. The parameter is optional and if
+not provided, the end_date will point to the current user time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>last_prices series where:
+- last_prices.name contains a date of current prices,
+- last_prices.index contains tickers
+- last_prices.data contains latest available prices for given tickers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, pandas.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="qf_lib.data_providers.data_provider.DataProvider.get_price">
 <em class="property">abstract </em><code class="sig-name descname">get_price</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tickers</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">, </span>Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField">qf_lib.common.enums.price_field.PriceField</a><span class="p">, </span>Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField">qf_lib.common.enums.price_field.PriceField</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">start_date</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">end_date</span><span class="p">:</span> <span class="n">datetime.datetime</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency">qf_lib.common.enums.frequency.Frequency</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union[None, qf_lib.containers.series.prices_series.PricesSeries, qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame, qf_lib.containers.qf_data_array.QFDataArray]<a class="reference internal" href="../_modules/qf_lib/data_providers/data_provider.html#DataProvider.get_price"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.data_provider.DataProvider.get_price" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets adjusted historical Prices (Open, High, Low, Close) and Volume</p>
@@ -287,6 +319,37 @@ with 1 dimension: dates. All the containers will be indexed with PriceField when
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>None, <a class="reference internal" href="qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">PricesSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame">PricesDataFrame</a>, <a class="reference internal" href="qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">QFDataArray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="qf_lib.data_providers.data_provider.DataProvider.historical_price">
+<code class="sig-name descname">historical_price</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tickers</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">, </span>Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker">qf_lib.common.tickers.tickers.Ticker</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField">qf_lib.common.enums.price_field.PriceField</a><span class="p">, </span>Sequence<span class="p">[</span><a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField">qf_lib.common.enums.price_field.PriceField</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">nr_of_bars</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">end_date</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>datetime.datetime<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">frequency</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.enums.frequency.Frequency.html#qf_lib.common.enums.frequency.Frequency" title="qf_lib.common.enums.frequency.Frequency">qf_lib.common.enums.frequency.Frequency</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference internal" href="qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">qf_lib.containers.series.prices_series.PricesSeries</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame">qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame</a><span class="p">, </span><a class="reference internal" href="qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">qf_lib.containers.qf_data_array.QFDataArray</a><span class="p">]</span><a class="reference internal" href="../_modules/qf_lib/data_providers/data_provider.html#DataProvider.historical_price"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.data_provider.DataProvider.historical_price" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the latest available data samples, which simply correspond to the last available &lt;nr_of_bars&gt; number
+of bars.</p>
+<p>In case of intraday data and N minutes frequency, the most recent data may not represent exactly N minutes
+(if the whole bar was not available at this time). The time ranges are always aligned to the market open time.
+Non-zero seconds and microseconds are in the above case omitted (the output at 11:05:10 will be exactly
+the same as at 11:05).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tickers</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a><em>, </em><em>Sequence</em><em>[</em><a class="reference internal" href="qf_lib.common.tickers.tickers.Ticker.html#qf_lib.common.tickers.tickers.Ticker" title="qf_lib.common.tickers.tickers.Ticker"><em>Ticker</em></a><em>]</em>) – ticker or sequence of tickers of the securities</p></li>
+<li><p><strong>fields</strong> (<a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField"><em>PriceField</em></a><em>, </em><em>Sequence</em><em>[</em><a class="reference internal" href="qf_lib.common.enums.price_field.PriceField.html#qf_lib.common.enums.price_field.PriceField" title="qf_lib.common.enums.price_field.PriceField"><em>PriceField</em></a><em>]</em>) – PriceField or sequence of PriceFields of the securities</p></li>
+<li><p><strong>nr_of_bars</strong> (<em>int</em>) – number of data samples (bars) to be returned.
+Note: while requesting more than one ticker, some tickers may have fewer than n_of_bars data points</p></li>
+<li><p><strong>end_date</strong> (<em>Optional</em><em>[</em><em>datetime</em><em>]</em>) – last date which should be considered in the query, the nr_of_bars that should be returned will always point
+to the time before end_date. The parameter is optional and if not provided, the end_date will point to the
+current user time.</p></li>
+<li><p><strong>frequency</strong> – frequency of the data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="qf_lib.containers.series.prices_series.PricesSeries.html#qf_lib.containers.series.prices_series.PricesSeries" title="qf_lib.containers.series.prices_series.PricesSeries">PricesSeries</a>, <a class="reference internal" href="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame.html#qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame" title="qf_lib.containers.dataframe.prices_dataframe.PricesDataFrame">PricesDataFrame</a>, <a class="reference internal" href="qf_lib.containers.qf_data_array.QFDataArray.html#qf_lib.containers.qf_data_array.QFDataArray" title="qf_lib.containers.qf_data_array.QFDataArray">QFDataArray</a></p>
 </dd>
 </dl>
 </dd></dl>

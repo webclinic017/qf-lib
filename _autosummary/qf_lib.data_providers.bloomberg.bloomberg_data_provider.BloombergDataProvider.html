@@ -38,7 +38,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="PresetDataProvider" href="qf_lib.data_providers.preset_data_provider.PresetDataProvider.html" />
+    <link rel="next" title="BloombergBeapHapiDataProvider" href="qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html" />
     <link rel="prev" title="AbstractPriceDataProvider" href="qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html" /> 
 </head>
 
@@ -94,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.data_provider.DataProvider.html">DataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html">AbstractPriceDataProvider</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">BloombergDataProvider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html">BloombergBeapHapiDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.preset_data_provider.PresetDataProvider.html">PresetDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.prefetching_data_provider.PrefetchingDataProvider.html">PrefetchingDataProvider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qf_lib.data_providers.general_price_provider.GeneralPriceProvider.html">GeneralPriceProvider</a></li>
@@ -200,7 +201,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_history" title="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_history</span></code></a>(tickers, …)</p></td>
 <td><p>Gets historical data from Bloomberg from the (start_date - end_date) time range.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data" title="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tabular_data</span></code></a>(ticker, field)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data" title="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tabular_data</span></code></a>(ticker, field, …)</p></td>
 <td><p>Provides current tabular data from Bloomberg.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tickers_universe" title="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tickers_universe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tickers_universe</span></code></a>(universe_ticker, date)</p></td>
@@ -334,7 +335,7 @@ If no data is available in the database or an non existing ticker was provided a
 
 <dl class="py method">
 <dt id="qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data">
-<code class="sig-name descname">get_tabular_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker" title="qf_lib.common.tickers.tickers.BloombergTicker">qf_lib.common.tickers.tickers.BloombergTicker</a></span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<a class="reference internal" href="../_modules/qf_lib/data_providers/bloomberg/bloomberg_data_provider.html#BloombergDataProvider.get_tabular_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_tabular_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ticker</span><span class="p">:</span> <span class="n"><a class="reference internal" href="qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker" title="qf_lib.common.tickers.tickers.BloombergTicker">qf_lib.common.tickers.tickers.BloombergTicker</a></span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">override_names</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>Sequence<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">override_values</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>Sequence<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<a class="reference internal" href="../_modules/qf_lib/data_providers/bloomberg/bloomberg_data_provider.html#BloombergDataProvider.get_tabular_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qf_lib.data_providers.bloomberg.bloomberg_data_provider.BloombergDataProvider.get_tabular_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides current tabular data from Bloomberg.</p>
 <p>Was tested on ‘INDX_MEMBERS’ and ‘MERGERS_AND_ACQUISITIONS’ requests. There is no guarantee that
 all other request will be handled, as returned data structures might vary.</p>
@@ -343,6 +344,8 @@ all other request will be handled, as returned data structures might vary.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ticker</strong> (<a class="reference internal" href="qf_lib.common.tickers.tickers.BloombergTicker.html#qf_lib.common.tickers.tickers.BloombergTicker" title="qf_lib.common.tickers.tickers.BloombergTicker"><em>BloombergTicker</em></a>) – ticker for security that should be retrieved</p></li>
 <li><p><strong>field</strong> (<em>str</em>) – field of security that should be retrieved</p></li>
+<li><p><strong>override_names</strong> (<em>str</em>) – </p></li>
+<li><p><strong>override_values</strong> (<em>str</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -421,7 +424,7 @@ get_history method to get appropriate type of price series.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="qf_lib.data_providers.preset_data_provider.PresetDataProvider.html" class="btn btn-neutral float-right" title="PresetDataProvider" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="qf_lib.data_providers.bloomberg_beap_hapi.bloomberg_beap_hapi_data_provider.BloombergBeapHapiDataProvider.html" class="btn btn-neutral float-right" title="BloombergBeapHapiDataProvider" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="qf_lib.data_providers.abstract_price_data_provider.AbstractPriceDataProvider.html" class="btn btn-neutral float-left" title="AbstractPriceDataProvider" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -1,0 +1,9 @@
+VolumeOrdersFilter
+========================================================================
+
+.. currentmodule:: qf_lib.backtesting.orders_filter.volume_orders_filter
+
+.. autoclass:: VolumeOrdersFilter
+	:show-inheritance:
+	:autosummary:
+	:members:
